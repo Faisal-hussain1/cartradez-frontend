@@ -1,0 +1,56 @@
+{
+  "settings": {
+    "title": "Settings",
+    "updateButton": "Update",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "Thank you {{customerName}} for your payment",
+    "emailDescriptionLabel": "Description",
+    "emailTemplate": "Email Template",
+    "emailTemplateHelp": "How to use",
+    "previewEmailTemplate": "Send Preview"
+  },
+
+  "emailTemplateInstructions": {
+    "howToUse": "How to use this template:",
+    "useOnlyAllowed": "Use only the allowed variables listed below.",
+    "wrapVariables": "Wrap variables with double curly braces:",
+    "supportsFormatting": "The template supports plain text or rich text formatting.",
+    "invalidVariables": "Invalid variables will not be replaced and will appear as-is.",
+    "variablesUsageNote": "These variables can be used in both the subject and description fields.",
+    "availableVariables": "Available Variables:",
+    "exampleTemplate": "Example Template:",
+    "exampleTemplateText": "Hi {{customerName}},\nThank you for your payment. Your payment of {{amount}} has been received.\n\nOrder Details:\nOrder Id: {{orderId}}\nPayment Date & Time: {{paymentDateAndTime}}\nNumber of keys: {{numberOfKeys}}\nPrice per key: {{pricePerKey}}\nTotal Amount: {{amount}}",
+    "allowedVariables": [
+      "customerName",
+      "numberOfKeys",
+      "pricePerKey",
+      "amount",
+      "orderId",
+      "paymentDateAndTime"
+    ],
+    "variablesInstructions": "Click on a variable below to insert it into the subject or description:"
+  },
+
+  "personalDetailsForm": {
+    "title": "Personal Details"
+  },
+  "changePasswordForm": {
+    "title": "Change Password",
+    "currentPasswordLabel": "Current Password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password"
+  },
+  "bankDetails": {
+    "title": "Bank Details",
+    "onBoardingText": "You haven’t completed your onboarding yet. To view bank details, please finish the",
+    "onBoardingLinkText": "Onboarding Process"
+  },
+  "walletDetails": {
+    "title": "Wallet Details",
+    "onBoardingText": "You haven’t created your wallet yet.",
+    "createWalletText": "Create Wallet",
+    "name": "Name",
+    "accountNumber": "Account Number",
+    "routingNumber": "Routing Number"
+  }
+}

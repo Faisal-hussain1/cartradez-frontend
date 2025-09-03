@@ -1,0 +1,21 @@
+.error-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid #f5c6cb;
+  background-color: #f8d7da;
+  border-radius: 4px;
+}
+
+.error-title {
+  color: #721c24;
+  margin-top: 8px;
+}
+
+.error-icon {
+  color: #721c24;
+  width: 24px;
+  height: 24px;
+}

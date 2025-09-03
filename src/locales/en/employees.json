@@ -1,0 +1,16 @@
+{
+  "employeesTableHeader": {
+    "employeeName": "Employee Name",
+    "email": "Email Address"
+  },
+  "employees": {
+    "addEmployee": "Add Employee",
+    "updateEmployee": "Update Employee"
+  },
+
+  "deleteEmployeeModal": {
+    "title": "Confirm Removal",
+    "sendRequest": "Yes Remove",
+    "description": "This action will permanently remove the employee from your records. Are you sure you want to continue?"
+  }
+}

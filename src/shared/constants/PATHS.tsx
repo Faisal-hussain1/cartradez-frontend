@@ -1,0 +1,111 @@
+import {UsersIcon} from '@/shared/components/icons';
+import {SidebarRoute, SiteMapLink} from '@/shared/interfaces/utils';
+import {ROLES} from './users';
+import {extractRoutes} from '@/shared/utils/general';
+
+// const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+
+const path = (root: string, path: string): string => `${root}${path}`;
+
+// const pathWithAppUrl = ({root, route}: {root: string; route: string}) =>
+//   `${APP_URL}${path(root, route)}`;
+
+export const removeFirstSlash = (path: string): string => {
+  const [_, ...rest] = path.split('/');
+
+  return rest.join('/');
+};
+
+export const ROOT_ROUTE = '/';
+
+export const AUTH_ROOT = '/auth';
+
+export const DASHBOARD_ROOT = '/dashboard';
+
+export const PRODUCT_ROOT = '/products';
+
+export const AUTH_ROUTES = {
+  login: path(AUTH_ROOT, '/login'),
+  register: path(AUTH_ROOT, '/register'),
+  reset: path(AUTH_ROOT, '/reset'),
+  unverifiedLoginAttempt: path(AUTH_ROOT, '/unverified-login-attempt'),
+  verify: path(AUTH_ROOT, '/verify'),
+  forgotPassword: path(AUTH_ROOT, '/forgot-password'),
+  registerVerifyRequest: path(AUTH_ROOT, '/link-sent/verify'),
+  resetPasswordRequest: path(AUTH_ROOT, '/link-sent/reset'),
+};
+
+export const ADMIN_ROUTES = {
+  temp: {
+    all: path(DASHBOARD_ROOT, '/temp'),
+  },
+};
+
+export const MANAGER_ROUTES = {
+  login: path(AUTH_ROOT, '/login'),
+};
+
+export const USER_ROUTES = {
+  products: path(PRODUCT_ROOT, '/'),
+  AddProduct: path(PRODUCT_ROOT, '/add'),
+};
+
+// extractRoutes was created specifically to recursively extract every string path from those nested route objects
+
+// Flatten and collect all route paths from the SELLER_ROUTES, EMPLOYEE_ROUTES, and ADMIN_ROUTES objects.
+// These are "spread" into separate arrays so we can easily search through them when performing tasks like:
+// - Access control (checking if a user can access a given route)
+// - Conditional rendering (e.g., hiding or showing sidebar items based on route match)
+// - Logging, auditing, or analytics based on route visits
+
+export const ADMIN_ROUTES_LIST = extractRoutes({routeObj: ADMIN_ROUTES});
+
+export const MANGER_ROUTES_LIST = extractRoutes({routeObj: MANAGER_ROUTES});
+
+export const USER_ROUTES_LIST = extractRoutes({routeObj: USER_ROUTES});
+
+export const AUTH_ROUTES_LIST = extractRoutes({routeObj: AUTH_ROUTES});
+
+export const SIDEBAR_ROUTES = (
+  t: (key: string) => string
+): {[key: string]: SidebarRoute} => ({
+  sellers: {
+    value: 'sellers',
+    label: t('navigationRoutes.sellers'),
+    path: ADMIN_ROUTES.temp.all,
+    icon: UsersIcon,
+    roles: [ROLES.admin.value],
+  },
+
+  // settings: {
+  //   value: 'settings',
+  //   label: t('navigationRoutes.settings'),
+  //   path: SELLER_ROUTES.settings.all,
+  //   icon: SettingIcon,
+  //   roles: [ROLES.seller.value, ROLES.employee.value],
+  // },
+});
+
+export const SIDEBAR_ROUTES_LIST = (t: (key: any) => any): SidebarRoute[] =>
+  Object.values(SIDEBAR_ROUTES(t));
+
+export const SITE_MAP_LINKS: {[key: string]: SiteMapLink} = {
+  home: {
+    url: ROOT_ROUTE,
+    priority: 1,
+    changeFrequency: 'daily',
+    lastModified: new Date(),
+  },
+  login: {
+    url: AUTH_ROUTES.login,
+    priority: 0.8,
+    changeFrequency: 'daily',
+    lastModified: new Date(),
+  },
+  register: {
+    url: AUTH_ROUTES.register,
+    priority: 0.8,
+    changeFrequency: 'daily',
+    lastModified: new Date(),
+  },
+};

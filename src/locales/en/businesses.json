@@ -1,0 +1,21 @@
+{
+  "businesses": {
+    "add": "Add New Business",
+    "addBtn": "Add Business",
+    "chooseTheme": "Choose Theme Color",
+    "slug": "Slug",
+    "name": "Business Name",
+    "emailAddress": "Email Address",
+    "noBusinesses": "No Businesses Available",
+    "selectBusinesses": "Select Businesses"
+  },
+  "businessCard": {
+    "paymentLink": "Payment Link",
+    "themeColor": "Theme Color"
+  },
+  "deleteBusinessModal": {
+    "title": "Confirm Deletion",
+    "sendRequest": "Yes Delete",
+    "description": "This action will permanently remove the Business from your records. Are you sure you want to continue?"
+  }
+}

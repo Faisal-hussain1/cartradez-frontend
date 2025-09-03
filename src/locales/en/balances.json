@@ -1,0 +1,21 @@
+{
+  "balancesContent": {
+    "title": "Balance",
+    "totalEarnings": "Total Earnings",
+    "totalBalances": "Total Balances",
+    "inTransit": "In Transit",
+    "upComing": "Upcoming"
+  },
+  "totalEarnings": {
+    "title": "Total Earnings",
+    "paymentLinkText": "Earnings based on payment link",
+    "dateRangeError": "Please select a date range between 1 and 7 days."
+  },
+  "payoutsTableHeader": {
+    "title": "Payouts",
+    "amount": "Amount",
+    "status": "Status",
+    "destination": "Destination",
+    "arriveBy": "Arrive by"
+  }
+}

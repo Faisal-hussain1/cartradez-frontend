@@ -1,0 +1,72 @@
+{
+  "commonContent": {
+    "previous": "Previous",
+    "next": "Next",
+    "reset": "Reset",
+    "apply": "Apply",
+    "paymentSuccess": "Your payment has been completed",
+    "brokenPaymentLink": "Broken Payment Link",
+    "brokenPaymentLinkDescription": "Your payment link has either expired or doesn't exist. Please contact the seller to get a new one.",
+    "paymentFailed": "Your  payment has failed",
+    "paymentSuccessDescription": "Thank you for your payment. An automated payment receipt will be sent to your registered email.",
+    "paymentFailedDescription": "Your Payment has Failed",
+    "inactiveAccount": "Seller Account Is Currently InActive",
+    "inactiveDescription": "Please be patient and check back once the seller has completed the onboarding process.",
+    "welcome": "Welcome aboard!",
+    "welcomeDescription": "Your Account Has Been Successfully Onboarded",
+    "notFounded": "Not Founded",
+    "sellerNotFound": "Seller Not Found",
+    "sellerNotFoundedDescription": "Seller is Not Founded.",
+    "alreadyVerified": "Already Verified",
+    "sellerAlreadyVerifiedDescription": "Seller is Already Verified",
+    "invalidFileFormat": "This file format is invalid",
+    "copyClipboard": "Copy to clipboard",
+    "remove": "Remove",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "loginLoader": {
+    "message": "Loading....."
+  },
+  "modal": {
+    "confirmLabel": "OK",
+    "deleteLabel": "Delete",
+    "dismissLabel": "Cancel"
+  },
+  "errorResponse": {
+    "message": "Something went wrong"
+  },
+  "submitButton": {
+    "text": "Submit"
+  },
+  "SelectType": {
+    "placeholder": "Select a Type"
+  },
+  "error": {
+    "message": "'An error occurred"
+  },
+  "navigationRoutes": {
+    "sellers": "Sellers",
+    "businesses": "Businesses",
+    "transactions": "Transactions",
+    "balances": "Balances",
+    "settings": "Settings",
+    "employees": "Employees"
+  },
+  "roles": {
+    "admin": "Admin",
+    "seller": "Seller",
+    "employee": "Employee"
+  },
+  "tableContent": {
+    "businesses": "Businesses",
+    "transactions": "Transactions",
+    "employees": "Employees"
+  },
+  "tablePlaceholder": {
+    "imageAlt": "No {{title}} data to display",
+    "heading": "No {{title}} Yet",
+    "description1": "There are currently no {{title}} to display.",
+    "description2": "As soon as activity begins, your {{title}} history will be shown in this section."
+  }
+}

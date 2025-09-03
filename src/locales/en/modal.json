@@ -1,0 +1,7 @@
+{
+  "modalButtons": {
+    "cancelLabel": "Cancel",
+    "confirmLabel": "Confirm",
+    "deleteLabel": "Delete"
+  }
+}
