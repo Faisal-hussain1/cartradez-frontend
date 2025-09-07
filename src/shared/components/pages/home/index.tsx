@@ -2,7 +2,6 @@ import FullWidthContainer from '@/shared/components/common/containers/FullWidthC
 import translationUtilsValues from '@/shared/utils/translationsUtils';
 
 import ProductListing from './products';
-import Banner from '../../common/banner';
 
 export default async function Home() {
   /* Fetch translations server-side using the locale from params. Keeping this logic server-side helps ensure the component remains a server component rather than being converted to a client component.
@@ -12,7 +11,7 @@ export default async function Home() {
 
   return (
     <div>
-      <Banner heading='Welcome to Car Tradez' />
+      {/* <Banner heading='Welcome to Car Tradez' /> */}
       <ProductListing />
     </div>
   );
