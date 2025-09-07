@@ -1,3 +1,5 @@
+import {Product} from './common';
+
 export interface ProductPayload {
   title: string;
   description: string;
@@ -11,4 +13,8 @@ export interface ProductPayload {
   fuelType: 'petrol' | 'diesel' | 'electric' | 'hybrid';
   transmission: 'manual' | 'automatic';
   images: File[];
+}
+
+export interface ProductCardProps {
+  product: Product;
 }

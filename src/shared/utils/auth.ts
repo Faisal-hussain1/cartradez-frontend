@@ -1,7 +1,7 @@
 import {
   ADMIN_ROUTES,
   MANAGER_ROUTES,
-  USER_ROUTES,
+  ROOT_ROUTE,
 } from '@/shared/constants/PATHS';
 import {ROLES} from '@/shared/constants/users';
 import {RoleType} from '@/shared/types/auth';
@@ -20,6 +20,7 @@ export const getRedirectUrl = ({role}: RoleType): string => {
 
   if (isAdmin) return ADMIN_ROUTES.temp.all;
   if (isManager) return MANAGER_ROUTES.login;
+  if (isUser || isDealer) return ROOT_ROUTE;
 
-  return USER_ROUTES.home;
+  return ROOT_ROUTE;
 };

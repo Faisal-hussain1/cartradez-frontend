@@ -20,6 +20,7 @@ export const i18nNamespaces: string[] = [
   'employees',
   'businesses',
   'checkbook',
+  'products',
 ];
 
 // i18nNamespaces contains the list of namespaces (JSON files) created in the locales directory.

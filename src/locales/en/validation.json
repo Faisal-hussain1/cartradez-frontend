@@ -17,7 +17,9 @@
     "nameRequired": "Name is required",
     "nameMinCharacters": "Name must be at least 3 characters",
     "nameMaxCharacters": "Name must be less than 50 characters",
-    "nameRegex": "Name must only contain letters and spaces"
+    "nameRegex": "Name must only contain letters and spaces",
+    "phoneMin": "Phone number must be at least 12 numbers",
+    "phoneRequired": "Phone Number is required"
   },
 
   "paymentValidation": {

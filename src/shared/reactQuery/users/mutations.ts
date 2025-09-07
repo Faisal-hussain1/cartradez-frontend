@@ -54,7 +54,15 @@ export const useMutations = () => {
       useMutationHandler({
         endpoint: USERS.SIGNUP,
         method: POST,
-        callBackFuncs,
+        callBackFuncs: {
+          ...callBackFuncs,
+          onSuccessAlways: ({message} = {}) => {
+            showToast({type: 'success', message});
+          },
+          onErrorAlways: ({message}) => {
+            showToast({type: 'error', message});
+          },
+        },
       }),
 
     useResetPasswordMutation: ({

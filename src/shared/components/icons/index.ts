@@ -26,6 +26,7 @@ import DeleteIcon from './deleteIcon';
 import ExternalLinkIcon from './externalLinkIcon';
 import BackIcon from './backIcon';
 import WalletIcon from '@/shared/components/icons/walletIcon';
+import ArrowUpRightIcon from './arrowUpRightIcon';
 
 export {
   SuccessIcon,
@@ -56,4 +57,5 @@ export {
   ExternalLinkIcon,
   BackIcon,
   WalletIcon,
+  ArrowUpRightIcon,
 };

@@ -3,7 +3,7 @@ import {cn} from '@/shared/utils/shadCNUtils';
 
 export default function Container({children, className = ''}: ContainerProps) {
   return (
-    <div className={cn('w-full max-w-[1440px] px-5 md:px-10', className)}>
+    <div className={cn('w-full max-w-[1440px] px-2 md:4', className)}>
       {children}
     </div>
   );

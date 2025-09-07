@@ -50,6 +50,12 @@ export const USER_ROUTES = {
   AddProduct: path(PRODUCT_ROOT, '/add'),
 };
 
+export const PUBLIC_ROUTES = {
+  products: {
+    all: path(PRODUCT_ROOT, '/all'),
+  },
+};
+
 // extractRoutes was created specifically to recursively extract every string path from those nested route objects
 
 // Flatten and collect all route paths from the SELLER_ROUTES, EMPLOYEE_ROUTES, and ADMIN_ROUTES objects.
@@ -107,5 +113,48 @@ export const SITE_MAP_LINKS: {[key: string]: SiteMapLink} = {
     priority: 0.8,
     changeFrequency: 'daily',
     lastModified: new Date(),
+  },
+};
+
+export const LANDING_MENU_BAR_LINKS = {
+  home: {
+    value: 'home',
+    label: 'Home',
+    url: '/',
+  },
+  salesVehicles: {
+    value: 'salesVehicles',
+    label: 'Vehicles In Sales',
+    url: '/about',
+  },
+  newVehicles: {
+    value: 'newVehicles',
+    label: 'New Vehicles',
+    url: '/about',
+  },
+  tools: {
+    value: 'tools',
+    label: 'Tools',
+    url: '/about',
+  },
+  resources: {
+    value: 'resources',
+    label: 'Resources',
+    url: '/about',
+  },
+  services: {
+    value: 'services',
+    label: 'Tools & Services',
+    url: '/about',
+  },
+  about: {
+    value: 'about',
+    label: 'About Us',
+    url: '/about',
+  },
+  contact: {
+    value: 'contact',
+    label: 'Contact Us',
+    url: '/about',
   },
 };

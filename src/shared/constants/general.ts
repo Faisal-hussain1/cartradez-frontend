@@ -41,6 +41,30 @@ export const LIST_TYPES = {
     },
     path: ADMIN_ROUTES.temp.all,
   },
+
+  products: {
+    value: 'products',
+    search: {
+      keys: ['title'],
+    },
+    sort: {
+      options: {
+        name: {
+          label: 'Title',
+          value: 'title',
+        },
+      },
+      directions: {
+        asc: 'asc',
+        desc: 'desc',
+      },
+    },
+    page: {
+      pageNo: FILTERS_CONFIG.pageNo,
+      pageLimit: FILTERS_CONFIG.pageLimit,
+    },
+    path: ADMIN_ROUTES.temp.all,
+  },
 };
 
 export const PRICE_PER_KEY = 1;

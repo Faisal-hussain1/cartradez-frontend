@@ -1,19 +1,11 @@
 'use client';
 
 import {useState} from 'react';
-
 import Image from 'next/image';
-import {useForm, Controller} from 'react-hook-form';
+import {useForm, Controller, SubmitHandler} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
-import {
-  AuthSectionContainer,
-  LeftSideContainer,
-  RightSideContainer,
-} from '@/shared/components/common/containers/auth';
-import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
-import TextInput from '@/shared/components/common/inputs/textInput';
-import Logo from '@/shared/components/common/logo';
 import {
   Select,
   SelectTrigger,
@@ -22,37 +14,78 @@ import {
   SelectItem,
 } from '@/shared/components/ui/select';
 import {ProductPayload} from '@/shared/interfaces/products';
+import Container from '@/shared/components/common/containers';
+import {productsMutations} from '@/shared/reactQuery';
+import useTranslation from '@/shared/hooks/useTranslation';
+import {newProductSchema} from '@/shared/schemas/products';
+import TextInput from '@/shared/components/common/inputs/textInput';
+import Logo from '@/shared/components/common/logo';
+import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
 
 export default function AddProductForm() {
-  const {control, handleSubmit, setValue, watch} = useForm<ProductPayload>({
-    defaultValues: {
-      title: '',
-      description: '',
-      price: 0,
-      condition: 'new',
-      location: '',
-      brand: '',
-      model: '',
-      year: new Date().getFullYear(),
-      mileage: 0,
-      fuelType: 'petrol',
-      transmission: 'manual',
-      images: [],
-    },
-  });
+  const {t} = useTranslation();
+
+  const {control, handleSubmit, reset, watch, setValue} =
+    useForm<ProductPayload>({
+      resolver: yupResolver(newProductSchema(t)),
+      defaultValues: {
+        title: '',
+        description: '',
+        price: 0,
+        condition: 'new',
+        location: '',
+        brand: '',
+        model: '',
+        year: new Date().getFullYear(),
+        mileage: 0,
+        fuelType: 'petrol',
+        transmission: 'manual',
+        images: [],
+      },
+    });
 
   const images = watch('images');
   const [error, setError] = useState('');
 
-  const onSubmit = ({data}: any) => {
-    if (data.images.length === 0) {
-      setError('At least 1 image is required');
+  const {useAddNewProductMutation} = productsMutations();
 
-      return;
-    }
+  const onSuccess = () => {
+    reset();
   };
 
-  const handleImageUpload = ({files}: any) => {
+  const {mutate: executeAddNewProductMutation, isPending} =
+    useAddNewProductMutation({
+      callBackFuncs: {onSuccess},
+    });
+
+  // ✅ Build FormData for API (backend expects `files`)
+  const onSubmit: SubmitHandler<ProductPayload> = (data) => {
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('price', data.price.toString());
+    formData.append('condition', data.condition);
+    formData.append('location', data.location);
+    formData.append('brand', data.brand);
+    formData.append('model', data.model);
+    formData.append('year', data.year.toString());
+    formData.append('mileage', data.mileage.toString());
+    formData.append('fuelType', data.fuelType);
+    formData.append('transmission', data.transmission);
+
+    formData.append('color', 'red');
+
+    // 👇 use "files" to match multer backend
+    data.images.forEach((file, idx) => {
+      formData.append('files', file, file.name || `image-${idx}.jpg`);
+    });
+
+    executeAddNewProductMutation({payload: formData});
+  };
+
+  // Image upload handler
+  const handleImageUpload = (files: FileList | null) => {
     if (!files) return;
     const newFiles = Array.from(files);
     const currentImages = watch('images');
@@ -63,30 +96,23 @@ export default function AddProductForm() {
       return;
     }
 
-    // setValue('images', [...currentImages, ...newFiles]);
+    setValue('images', [...currentImages, ...newFiles]);
     setError('');
   };
 
   return (
-    <AuthSectionContainer>
-      <LeftSideContainer>
-        <Image
-          src='/images/auth/login-image.png'
-          alt='product-image'
-          width={400}
-          height={700}
-          className='h-screen fixed w-[30%] object-cover'
-        />
-      </LeftSideContainer>
-
-      <RightSideContainer>
-        <Logo width={200} height={100} />
+    <div className='w-full flex justify-center'>
+      <Container>
+        <div className='flex justify-center'>
+          <Logo width={200} height={100} />
+        </div>
 
         <AuthFormContainer
           heading='Add New Product'
           subHeading='Fill in the details below to list your product'
           handleSubmit={handleSubmit(onSubmit)}
         >
+          {/* Text Inputs */}
           <TextInput
             name='title'
             label='Title'
@@ -105,6 +131,8 @@ export default function AddProductForm() {
             control={control}
             placeholder='Enter price'
           />
+
+          {/* Condition Select */}
           <Controller
             name='condition'
             control={control}
@@ -125,6 +153,7 @@ export default function AddProductForm() {
               </div>
             )}
           />
+
           <TextInput
             name='location'
             label='Location'
@@ -155,6 +184,8 @@ export default function AddProductForm() {
             control={control}
             placeholder='Enter mileage'
           />
+
+          {/* Fuel Type */}
           <Controller
             name='fuelType'
             control={control}
@@ -177,6 +208,8 @@ export default function AddProductForm() {
               </div>
             )}
           />
+
+          {/* Transmission */}
           <Controller
             name='transmission'
             control={control}
@@ -228,9 +261,9 @@ export default function AddProductForm() {
             </div>
           </div>
 
-          <SubmitButton loading={false} buttonText='Add Product' />
+          <SubmitButton loading={isPending} buttonText='Add Product' />
         </AuthFormContainer>
-      </RightSideContainer>
-    </AuthSectionContainer>
+      </Container>
+    </div>
   );
 }

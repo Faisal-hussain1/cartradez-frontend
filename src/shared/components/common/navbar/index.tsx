@@ -16,7 +16,7 @@ import {Sheet, SheetContent, SheetTrigger} from '@/shared/components/ui/sheet';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import useTranslation from '@/shared/hooks/useTranslation';
 import Container from '@/shared/components/common/containers';
-import {USER_ROUTES} from '@/shared/constants/PATHS';
+import {LANDING_MENU_BAR_LINKS, USER_ROUTES} from '@/shared/constants/PATHS';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from '@/shared/redux/slices/users';
 import {userMutations} from '@/shared/reactQuery';
@@ -38,37 +38,35 @@ export default function Navbar() {
       <Container className='max-w-[1200px] 2xl:max-w-[1440px]'>
         <div className='flex items-center justify-between py-3'>
           {/* Logo */}
-          <h2 className='text-black font-semibold text-lg'>Car Tradez</h2>
+          {/* <h2 className='text-black font-semibold text-lg'>Car Tradez</h2> */}
+          <Image
+            src={'/images/logo-black.png'}
+            alt='pic'
+            width={80}
+            height={60}
+
+            // className='mt-[30px] md:mt-[98px] w-[204px] h-[224px] md:w-[318px] md:h-[342px]'
+          />
 
           {/* Desktop Navigation */}
           <NavigationMenu className='hidden md:flex'>
-            <NavigationMenuList className='space-x-10'>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href='/'
-                  className='text-black hover:text-amber-700 transition'
-                >
-                  Home
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              {/* Example more nav items */}
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href='/about'
-                  className='text-black hover:text-amber-700 transition'
-                >
-                  About
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href='/contact'
-                  className='text-black hover:text-amber-700 transition'
-                >
-                  Contact
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+            <NavigationMenuList className='space-x-5'>
+              {Object.values(LANDING_MENU_BAR_LINKS).map((item) => (
+                <NavigationMenuItem key={item.value}>
+                  {item.url ? (
+                    <NavigationMenuLink
+                      href={item.url}
+                      className='text-black hover:text-amber-700 transition'
+                    >
+                      {item.label}
+                    </NavigationMenuLink>
+                  ) : (
+                    <span className='text-black opacity-50 cursor-not-allowed'>
+                      {item.label}
+                    </span>
+                  )}
+                </NavigationMenuItem>
+              ))}
 
               <NavigationMenuItem>
                 <PrimaryButton
@@ -100,43 +98,30 @@ export default function Navbar() {
                 />
               </SheetTrigger>
               <SheetContent side='left' className='w-64'>
-                <nav className='flex flex-col gap-4 mt-8'>
-                  <Link
-                    href='/'
-                    className='text-lg text-black hover:text-amber-700'
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    href='/web'
-                    className='text-lg text-black hover:text-amber-700'
-                  >
-                    Web Development
-                  </Link>
-                  <Link
-                    href='/mobile'
-                    className='text-lg text-black hover:text-amber-700'
-                  >
-                    Mobile Apps
-                  </Link>
-                  <Link
-                    href='/design'
-                    className='text-lg text-black hover:text-amber-700'
-                  >
-                    UI/UX Design
-                  </Link>
-                  <Link
-                    href='/about'
-                    className='text-lg text-black hover:text-amber-700'
-                  >
-                    About
-                  </Link>
-                  <Link
-                    href='/contact'
-                    className='text-lg text-black hover:text-amber-700'
-                  >
-                    Contact
-                  </Link>
+                <nav className='flex flex-col gap-4 mt-8 px-5'>
+                  {Object.values(LANDING_MENU_BAR_LINKS).map((item) => (
+                    <Link
+                      key={item.url}
+                      href={item.url}
+                      className='text-lg text-black hover:text-amber-700 transition'
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+
+                  {/* Extra Actions */}
+                  <div className='flex flex-col gap-2 mt-4'>
+                    <PrimaryButton
+                      buttonText='Post an Ad'
+                      onClick={() => router.push('/add-product')}
+                    />
+                    {isLoggedIn && (
+                      <PrimaryButton
+                        buttonText='Logout'
+                        onClick={() => executeSignOutMutation({})}
+                      />
+                    )}
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>

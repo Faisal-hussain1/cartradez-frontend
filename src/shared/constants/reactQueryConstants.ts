@@ -198,3 +198,11 @@ export const CHECKBOOK = {
     activeServerSidePagination: false,
   },
 };
+
+export const PRODUCTS = {
+  fetchAllProductsList: {
+    queryKey: 'getAllProducts',
+    endpoint: (params: any) =>
+      buildDynamicURL(API_ENDPOINTS.PRODUCTS.GET_PRODUCTS_LIST, params),
+  },
+};

@@ -24,6 +24,9 @@ export const registerUserSchema = (t: TranslateFunction) =>
       .min(1, t('authValidation.lastNameMin'))
       .max(255, t('authValidation.lastNameMax'))
       .required(t('authValidation.lastNameRequired')),
+    phoneNumber: Yup.string()
+      .min(12, t('paymentValidation.phoneMin'))
+      .required(t('paymentValidation.phoneRequired')),
   });
 
 // Send Reset Password Link Schema

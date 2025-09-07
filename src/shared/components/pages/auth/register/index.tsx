@@ -13,6 +13,13 @@ import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFo
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {RegisterPayload} from '@/shared/interfaces/auth';
 import {userMutations} from '@/shared/reactQuery';
+import {
+  AuthSectionContainer,
+  LeftSideContainer,
+  RightSideContainer,
+} from '@/shared/components/common/containers/auth';
+import Image from 'next/image';
+import Logo from '@/shared/components/common/logo';
 
 export default function RegisterForm() {
   const {t, ct} = useTranslation();
@@ -20,7 +27,7 @@ export default function RegisterForm() {
   const {useSignupMutation} = userMutations();
 
   const onSuccess = () => {
-    router.push(AUTH_ROUTES.registerVerifyRequest);
+    router.push(AUTH_ROUTES.login);
   };
 
   const {mutate: executeSignupMutation, isPending} = useSignupMutation({
@@ -33,6 +40,7 @@ export default function RegisterForm() {
       firstName: '',
       lastName: '',
       email: '',
+      phoneNumber: '',
       password: '',
     },
   });
@@ -42,36 +50,56 @@ export default function RegisterForm() {
   };
 
   return (
-    <AuthFormContainer
-      heading={t('auth.signup')}
-      handleSubmit={handleSubmit(onSubmit)}
-    >
-      <TextInput
-        label={t('auth.firstName')}
-        placeholder={t('auth.firstNamePlaceholder')}
-        control={control}
-        name='firstName'
-      />
-      <TextInput
-        label={t('auth.lastName')}
-        placeholder={t('auth.lastNamePlaceholder')}
-        control={control}
-        name='lastName'
-      />
-      <TextInput
-        name='email'
-        label={t('auth.emailLabel')}
-        control={control}
-        placeholder={t('auth.emailPlaceholder')}
-      />
-      <PasswordInput
-        name='password'
-        control={control}
-        label={t('auth.passwordLabel')}
-        placeholder={t('auth.passwordPlaceholder')}
-      />
-      <SubmitButton loading={isPending} buttonText={t('auth.signup')} />
-      <Link href={AUTH_ROUTES.login}>{t('auth.allReadyAccount')}</Link>
-    </AuthFormContainer>
+    <AuthSectionContainer>
+      <LeftSideContainer>
+        <Image
+          src='/images/auth/login-image.png'
+          alt='login-image'
+          width={400}
+          height={700}
+          className='h-screen fixed w-[25%]'
+        />
+      </LeftSideContainer>
+      <RightSideContainer>
+        <Logo width={204} height={109} />
+        <AuthFormContainer
+          heading={t('auth.signup')}
+          handleSubmit={handleSubmit(onSubmit)}
+        >
+          <TextInput
+            label={t('auth.firstName')}
+            placeholder={t('auth.firstNamePlaceholder')}
+            control={control}
+            name='firstName'
+          />
+          <TextInput
+            label={t('auth.lastName')}
+            placeholder={t('auth.lastNamePlaceholder')}
+            control={control}
+            name='lastName'
+          />
+          <TextInput
+            name='email'
+            label={t('auth.emailLabel')}
+            control={control}
+            placeholder={t('auth.emailPlaceholder')}
+          />
+          <TextInput
+            name='phoneNumber'
+            label={t('auth.phoneNumberLabel')}
+            control={control}
+            placeholder={t('auth.phoneNumberPlaceholder')}
+          />
+          <PasswordInput
+            name='password'
+            control={control}
+            label={t('auth.passwordLabel')}
+            placeholder={t('auth.passwordPlaceholder')}
+          />
+          <SubmitButton loading={isPending} buttonText={t('auth.signup')} />
+          <Link href={AUTH_ROUTES.login}>{t('auth.allReadyAccount')}</Link>
+        </AuthFormContainer>
+      </RightSideContainer>
+    </AuthSectionContainer>
   );
 }

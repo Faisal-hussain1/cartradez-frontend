@@ -166,3 +166,27 @@ export interface truncateWordsProps {
   text: string;
   limit?: number;
 }
+
+export interface BannerProps {
+  heading: string;
+}
+
+export interface Product {
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  condition: string;
+  location: string;
+  brand: string;
+  model: string;
+  year: number;
+  mileage: number;
+  fuelType: string;
+  transmission: string;
+  color: string;
+  status: string;
+  isFeatured: boolean;
+  images: [{key: string; url: string}];
+  badge: string;
+}

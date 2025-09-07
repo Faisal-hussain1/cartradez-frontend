@@ -94,4 +94,9 @@ export const API_ENDPOINTS = {
       `/checkbooks/requests/${id}/decision`,
     GET_CHECKBOOK_PAYMENT_INFO: '/checkbooks/deposit/token',
   },
+
+  PRODUCTS: {
+    GET_PRODUCTS_LIST: '/products',
+    ADD_PRODUCT: '/products/add',
+  },
 };
