@@ -2,6 +2,9 @@
 const {withSentryConfig} = require('@sentry/nextjs');
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
+// Ensure bucketHost is defined. If AWS_BUCKET_HOSTNAME is not set,
+// it will default to the provided value.
+// It's crucial that this value is a valid hostname string.
 const bucketHost =
   process.env.AWS_BUCKET_HOSTNAME || 'terrix-dev-1744109738.s3.amazonaws.com';
 
@@ -22,14 +25,17 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        // Make sure bucketHost is a valid string here.
+        // If bucketHost is undefined or not a string, this will cause issues.
         hostname: bucketHost,
       },
     ],
   },
 };
-module.exports = nextConfig;
+
+// The Sentry configuration part remains the same.
 module.exports = withSentryConfig(
-  module.exports,
+  nextConfig, // Pass the nextConfig object here
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
