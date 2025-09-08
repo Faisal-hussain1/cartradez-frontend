@@ -5,7 +5,6 @@ import appReducer from './slices/app';
 import userReducer from './slices/users';
 import paymentReducer from './slices/payments';
 import defaultBusinessReducer from './slices/defaultBusiness';
-import checkbookBackdropReducer from './slices/checkbookBackdrop';
 import {clearStore} from '@/shared/redux/utils';
 import {RootState} from './store';
 
@@ -72,7 +71,6 @@ const reduxAppReducer = combineReducers({
     defaultBusinessPersistConfig,
     defaultBusinessReducer
   ),
-  checkbookBackdrop: checkbookBackdropReducer,
 });
 
 const rootReducer: Reducer<any> = (state, action) => {
