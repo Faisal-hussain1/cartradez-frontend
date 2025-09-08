@@ -1,6 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const {withSentryConfig} = require('@sentry/nextjs');
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+
+const bucketHost =
+  process.env.AWS_BUCKET_HOSTNAME || 'terrix-dev-1744109738.s3.amazonaws.com';
+
 const nextConfig = {
   turbopack: {
     // Configure how specific file types (like SVGs) should be processed
@@ -18,7 +22,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: process.env.AWS_BUCKET_HOSTNAME,
+        hostname: bucketHost,
       },
     ],
   },
