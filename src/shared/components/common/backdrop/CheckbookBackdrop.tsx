@@ -1,7 +1,6 @@
 'use client';
 import {usePathname} from 'next/navigation';
 import {useSelector} from 'react-redux';
-import {CHECKBOOK_ROOT} from '@/shared/constants/PATHS';
 import GeneralBackdrop from './GeneralBackdrop';
 import useTranslation from '@/shared/hooks/useTranslation';
 import {ADMIN_CONTACT_PARAMS} from '@/shared/constants/general';
@@ -15,10 +14,8 @@ export default function CheckbookBackdrop() {
   const backDropOpened = useSelector(getCheckbookBackDropStatus);
   const {closeCheckBackdrop} = useCheckbookPaymentAccess();
 
-  const {isLoading, isSeller, isFirstTimeDisabled, isCheckbookEnabled} =
+  const {isLoading, isFirstTimeDisabled, isCheckbookEnabled} =
     useGetLoginUserData();
-
-  if (!pathname.includes(CHECKBOOK_ROOT)) return null;
 
   if (isLoading) return null;
 
@@ -34,12 +31,6 @@ export default function CheckbookBackdrop() {
   const contentDescriptionForOthers = isCheckbookEnabled
     ? t('features.checkbook.noWallet.descriptionForOthers')
     : t('features.checkbook.disabled.descriptionForOthers');
-
-  const content = [
-    <p key='description' className='text-gray-600 mb-4'>
-      {isSeller ? sellerContentDescription : contentDescriptionForOthers}
-    </p>,
-  ];
 
   const backdropButtons = backDropOpened
     ? [
