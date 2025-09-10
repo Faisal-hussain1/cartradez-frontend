@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import {usePathname} from 'next/navigation';
-import {tablePlaceHolderTitle} from '@/shared/constants/checkbook';
+import {tablePlaceHolderTitle} from '@/shared/constants/general';
 import useTranslation from '@/shared/hooks/useTranslation';
 
 export default function TablePlaceholder() {

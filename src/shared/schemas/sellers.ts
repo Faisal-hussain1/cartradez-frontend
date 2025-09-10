@@ -15,8 +15,4 @@ export const addSellerSchema = (t: TranslateFunction) =>
       .min(3, t('sellerValidation.usernameMinCharacters'))
       .max(20, t('sellerValidation.usernameMaxCharacters'))
       .matches(/^[^#]*$/, t('sellerValidation.usernameNoHash')), // Disallow '#'
-    enabledFeatures: Yup.object().shape({
-      // For now I only add checkbook but in future there will be stripe and other features if any
-      checkbook: Yup.boolean().default(false),
-    }),
   });

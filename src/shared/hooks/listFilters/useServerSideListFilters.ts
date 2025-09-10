@@ -10,8 +10,8 @@ import {
   FilterProps,
   RequestsStatus,
   StatusOption,
-} from '@/shared/interfaces/checkbook';
-import {STATUS_OPTIONS} from '@/shared/constants/checkbook';
+} from '@/shared/interfaces/common';
+import {STATUS_OPTIONS} from '@/shared/constants/general';
 
 import useTranslation from '@/shared/hooks/useTranslation';
 import {IdBasedPaginationOptions} from '@/shared/types/utils';

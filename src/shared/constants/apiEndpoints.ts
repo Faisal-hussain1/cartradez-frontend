@@ -81,19 +81,6 @@ export const API_ENDPOINTS = {
     UPDATE_EMAIL_TEMPLATE: ({id}: {id: string}) => `/email/template/${id}`,
     PREVIEW_EMAIL_TEMPLATE: '/email/template/preview',
   },
-  CHECKBOOK: {
-    GET_CHECKBOOK_CONTACTS_LIST: '/checkbooks/contacts',
-    MAKE_NEW_CHECKBOOK_CONTACT: '/checkbooks/contacts',
-    GET_CHECKBOOK_BALANCES: '/checkbooks/balances',
-    MAKE_NEW_PAYMENT_REQUEST: '/checkbooks/requests',
-    GET_CHECKBOOK_REQUESTS_LIST: `/checkbooks/requests`,
-    CREATE_CHECKBOOK_ACCOUNT: '/checkbooks/account',
-    CREATE_CHECKBOOK_WALLET: '/checkbooks/wallet',
-    GET_CHECKBOOK_TRANSFERS_LIST: `/checkbooks/transfers`,
-    APPROVE_AND_REJECT_CHECKBOOK_REQUEST: ({id}: {id: string}) =>
-      `/checkbooks/requests/${id}/decision`,
-    GET_CHECKBOOK_PAYMENT_INFO: '/checkbooks/deposit/token',
-  },
 
   PRODUCTS: {
     GET_PRODUCTS_LIST: '/products',

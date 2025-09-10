@@ -1,6 +1,6 @@
 import Select from 'react-select';
-import {ReactSelectProps} from '@/shared/interfaces/checkbook';
-import {STATUS_OPTIONS_LIST} from '@/shared/constants/checkbook';
+import {ReactSelectProps} from '@/shared/interfaces/common';
+import {STATUS_OPTIONS_LIST} from '@/shared/constants/general';
 
 import useTranslation from '@/shared/hooks/useTranslation';
 import {THEME} from '@/shared/constants/theme';

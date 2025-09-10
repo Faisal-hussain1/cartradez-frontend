@@ -43,7 +43,7 @@ const SearchInput = ({
           if (e.target.value) setSearch(e.target.value);
           else clearFilters();
         }}
-        placeholder={placeholder || t('checkbook.requests.filters.typeHere')}
+        placeholder={placeholder || t('asdasda')}
         className={inputClassName}
         onKeyDown={(e) => {
           if (e.key === 'Enter') handleSearch();
@@ -61,7 +61,7 @@ const SearchInput = ({
       )}
 
       <PrimaryButton
-        buttonText={t('checkbook.requests.filters.search')}
+        buttonText={t('asddasd')}
         onClick={handleSearch}
         styles={buttonClassName}
       />

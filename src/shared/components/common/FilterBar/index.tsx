@@ -2,8 +2,8 @@ import useTranslation from '@/shared/hooks/useTranslation';
 import ReactSelect from '@/shared/components/common/inputs/ReactSelect';
 import SearchInput from '@/shared/components/common/inputs/searchInput';
 
-import {FiltersBarProps} from '@/shared/interfaces/checkbook';
-import {STATUS_OPTIONS} from '@/shared/constants/checkbook';
+import {FiltersBarProps} from '@/shared/interfaces/common';
+import {STATUS_OPTIONS} from '@/shared/constants/general';
 
 const FiltersBar = ({
   setFilters,
@@ -16,7 +16,7 @@ const FiltersBar = ({
 
   const selectValue = {
     ...(requestStatus || defaultSelectValue),
-    label: `${t('checkbook.requests.filters.status')} ${(requestStatus || ct(STATUS_OPTIONS).all).label}`,
+    label: `${t('aaaa')} ${(requestStatus || ct(STATUS_OPTIONS).all).label}`,
   };
 
   const handleSearch = (searchValue: string) => {
@@ -39,7 +39,7 @@ const FiltersBar = ({
       <SearchInput
         initialValue={searchValue}
         onSearch={handleSearch}
-        placeholder={t('checkbook.requests.filters.typeHere')}
+        placeholder={t('aaa')}
       />
     </div>
   );

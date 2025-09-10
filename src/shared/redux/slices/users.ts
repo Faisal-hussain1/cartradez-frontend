@@ -1,10 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {
-  CheckbookAccount,
-  CheckbookWallet,
-  User,
-  UsersState,
-} from '@/shared/types/redux';
+import {User, UsersState} from '@/shared/types/redux';
 
 const defaultState: UsersState = {
   currentUser: null,
@@ -18,22 +13,6 @@ const slice = createSlice({
     resetUserState: () => defaultState,
     setCurrentUser(state, action: PayloadAction<User | null>) {
       state.currentUser = action.payload;
-    },
-
-    addUserWallet(state, action: PayloadAction<CheckbookWallet>) {
-      if (state.currentUser?.features?.checkbook) {
-        state.currentUser.features.checkbook.wallets = [
-          ...(state.currentUser.features.checkbook.wallets || []),
-          action.payload,
-        ];
-        state.currentUser.features.checkbook.onboarding.status = true;
-      }
-    },
-
-    updateCheckbookAccount(state, action: PayloadAction<CheckbookAccount>) {
-      if (state.currentUser?.features?.checkbook) {
-        state.currentUser.features.checkbook.account = action.payload;
-      }
     },
   },
 });

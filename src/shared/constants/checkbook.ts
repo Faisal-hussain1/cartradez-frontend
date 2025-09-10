@@ -42,51 +42,6 @@ export const STATUS_OPTIONS = (t: any) => ({
     label: t('checkbook.requests.statuses.all'),
     cssClasses: '',
   },
-  paid: {
-    value: 'paid',
-    label: t('checkbook.requests.statuses.paid'),
-    cssClasses: 'bg-green-100 text-green-800',
-  },
-  unpaid: {
-    value: 'unpaid',
-    label: t('checkbook.requests.statuses.unpaid'),
-    cssClasses: 'bg-yellow-100 text-yellow-800',
-  },
-  rejected: {
-    value: 'rejected',
-    label: t('checkbook.requests.statuses.rejected'),
-    cssClasses: 'bg-red-100 text-red-800',
-  },
-  waitingApproval: {
-    value: 'waitingApproval',
-    label: t('checkbook.requests.statuses.waitingApproval'),
-    cssClasses: 'bg-blue-100 text-blue-800',
-  },
-  expired: {
-    value: 'expired',
-    label: t('checkbook.requests.statuses.expired'),
-    cssClasses: 'bg-gray-200 text-gray-700',
-  },
-  failed: {
-    value: 'failed',
-    label: t('checkbook.requests.statuses.failed'),
-    cssClasses: 'bg-red-200 text-red-800',
-  },
-  refunded: {
-    value: 'refunded',
-    label: t('checkbook.requests.statuses.refunded'),
-    cssClasses: 'bg-purple-100 text-purple-800',
-  },
-  inProcess: {
-    value: 'inProcess',
-    label: t('checkbook.requests.statuses.inProcess'),
-    cssClasses: 'bg-blue-200 text-blue-800',
-  },
-  void: {
-    value: 'void',
-    label: t('checkbook.requests.statuses.canceled'),
-    cssClasses: 'bg-gray-200 text-gray-700',
-  },
 });
 
 export const STATUS_OPTIONS_LIST = (t: any) => Object.values(STATUS_OPTIONS(t));

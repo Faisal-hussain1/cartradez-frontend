@@ -1,4 +1,4 @@
-import {ADMIN_ROUTES} from '@/shared/constants/PATHS';
+import {ADMIN_ROUTES, USER_ROUTES} from '@/shared/constants/PATHS';
 import {FILTERS_CONFIG} from './reactQueryConstants';
 import translationUtilsValues from '@/shared/utils/translationsUtils';
 
@@ -110,11 +110,25 @@ export const EMAIL_TEMPLATES_TYPES = {
 
 export const NEW_ITEM_SLUG = 'add';
 
-export const ADMIN_EMAIL = 'support@terrixpay.io';
+export const ADMIN_EMAIL = 'abc@gmail.com';
 
 export const ADMIN_PHONE_NUMBER = '+1234567890';
 
 export const ADMIN_CONTACT_PARAMS = {
   adminEmail: ADMIN_EMAIL,
   adminPhoneNumber: ADMIN_PHONE_NUMBER,
+};
+
+export const STATUS_OPTIONS = (t: any) => ({
+  all: {
+    value: 'all',
+    label: t('asdadasd'),
+    cssClasses: '',
+  },
+});
+
+export const STATUS_OPTIONS_LIST = (t: any) => Object.values(STATUS_OPTIONS(t));
+
+export const tablePlaceHolderTitle = {
+  [USER_ROUTES.products]: 'users.product',
 };

@@ -153,52 +153,6 @@ export const BUSINESSES = {
   },
 };
 
-export const CHECKBOOK = {
-  getCheckbookContactsList: {
-    queryKey: 'getCheckbookContactsList',
-    endpoint: (params: any) =>
-      buildDynamicURL(
-        API_ENDPOINTS.CHECKBOOK.GET_CHECKBOOK_CONTACTS_LIST,
-        params
-      ),
-    activeServerSidePagination: true,
-  },
-
-  getCheckbookBalances: {
-    queryKey: 'getCheckbookBalances',
-    endpoint: API_ENDPOINTS.CHECKBOOK.GET_CHECKBOOK_BALANCES,
-    activeServerSidePagination: false,
-  },
-
-  getCheckbookRequestsList: {
-    queryKey: 'getCheckbookRequestsList',
-    endpoint: (params: any) =>
-      buildDynamicURL(
-        API_ENDPOINTS.CHECKBOOK.GET_CHECKBOOK_REQUESTS_LIST,
-        params
-      ),
-    activeServerSidePagination: true,
-  },
-  getCheckbookTransfersList: {
-    queryKey: 'getCheckbookTransfersList',
-    endpoint: (params: any) =>
-      buildDynamicURL(
-        API_ENDPOINTS.CHECKBOOK.GET_CHECKBOOK_TRANSFERS_LIST,
-        params
-      ),
-    activeServerSidePagination: true,
-  },
-  getCheckbookPaymentInfo: {
-    queryKey: 'getCheckbookPaymentInfo',
-    endpoint: (params: any) =>
-      buildDynamicURL(
-        API_ENDPOINTS.CHECKBOOK.GET_CHECKBOOK_PAYMENT_INFO,
-        params
-      ),
-    activeServerSidePagination: false,
-  },
-};
-
 export const PRODUCTS = {
   fetchAllProductsList: {
     queryKey: 'getAllProducts',

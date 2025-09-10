@@ -190,3 +190,31 @@ export interface Product {
   images: [{key: string; url: string}];
   badge: string;
 }
+
+export type RequestsStatus = {
+  value: string;
+  label: string;
+};
+
+export type FilterProps = {
+  searchValue?: string;
+  requestStatus?: RequestsStatus;
+  businessId?: string | null;
+};
+
+export interface FiltersBarProps {
+  setFilters: (filters: FilterProps) => void;
+  filters: FilterProps;
+  hideSelect?: boolean;
+}
+
+export interface StatusOption {
+  value: string;
+  label: string;
+}
+
+export interface ReactSelectProps {
+  value: StatusOption;
+  onChange: (value: StatusOption | null) => void;
+  className?: string;
+}

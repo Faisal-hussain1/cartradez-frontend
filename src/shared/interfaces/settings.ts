@@ -1,5 +1,4 @@
 import {ReactNode} from 'react';
-import {CheckbookWallet} from '../types/redux';
 
 export interface SettingsContainerProps {
   children: ReactNode;
@@ -33,15 +32,6 @@ export interface EmailTemplateProps {
 export interface BankDetailsProps {
   isSellerOnboarded: boolean;
   userId: string;
-}
-
-export interface WalletDetailsProps {
-  isCheckbookAccountCreated: boolean;
-  wallets: CheckbookWallet[];
-}
-
-export interface WalletInformationProps {
-  wallets: CheckbookWallet[];
 }
 
 export interface PersonalDetailsFormProps {

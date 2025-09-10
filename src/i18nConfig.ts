@@ -19,7 +19,6 @@ export const i18nNamespaces: string[] = [
   'settings',
   'employees',
   'businesses',
-  'checkbook',
   'products',
 ];
 

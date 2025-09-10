@@ -108,18 +108,6 @@
     "title": "Employees",
     "description": "Employees Page"
   },
-  "checkbookContacts": {
-    "title": "Contacts",
-    "description": "Contacts Page"
-  },
-  "checkbookRequests": {
-    "title": "Requests",
-    "description": "Requests Page"
-  },
-  "checkbookTransfers": {
-    "title": "Transfers",
-    "description": "Transfers Page"
-  },
   "paymentClaim": {
     "title": "Payment Claim",
     "description": "Payment Page"

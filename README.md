@@ -7,7 +7,7 @@ This is a **Next.js** cartradez project with essential dependencies and configur
 ### 1️⃣ Clone the Repository
 
 ```sh
-git clone https://github.com/desolintdev/frontend-boilerplate.git
+git clone https://github.com/kabeer-dev/cartradez-frontend.git
 cd frontend-cartradez
 ```
 

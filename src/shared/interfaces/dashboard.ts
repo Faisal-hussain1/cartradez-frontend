@@ -2,7 +2,6 @@ import React, {ReactNode} from 'react';
 import {Control, UseFormHandleSubmit, UseFormWatch} from 'react-hook-form';
 import {Crop} from 'react-image-crop';
 import {SidebarRoute} from './utils';
-import {Features} from '../types/redux';
 
 export interface UsersPageProps {
   params: Promise<{id: string}>;
@@ -19,9 +18,6 @@ export interface AddSellerPayload {
   commissionRate: number;
   themeColor: string;
   isProfileImageRemoved?: boolean;
-  enabledFeatures: {
-    checkbook?: boolean;
-  };
 }
 
 export interface AddEmployeePayload {
@@ -97,7 +93,6 @@ export interface Seller {
   permissions: Permission[];
   businesses?: BasicBusinessFields[];
   maxBusinesses?: number;
-  features: Features;
 }
 
 export interface Permission {

@@ -24,7 +24,7 @@
     "username": "User Name",
     "usernamePlaceholder": "Eg: John24508",
     "email": "Email Address",
-    "emailPlaceholder": "Eg: example@terrixpay.io",
+    "emailPlaceholder": "Eg: abc@gmail.com",
     "commission": "Commission Rate",
     "commissionPlaceholder": "Eg: 20%",
     "colorTheme": "Choose Color Theme",
@@ -33,8 +33,7 @@
     "addSeller": "Add Seller",
     "selectTheme": "Select Theme Color",
     "cropImage": "Crop your image",
-    "chooseColor": "Choose the color theme",
-    "allowCheckbookAccount": "Do you want to allow the seller to create a Checkbook Account?"
+    "chooseColor": "Choose the color theme"
   },
   "sellerList": {
     "name": "Full Name",

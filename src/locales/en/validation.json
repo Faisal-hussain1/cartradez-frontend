@@ -62,12 +62,5 @@
   },
   "typeErrors": {
     "number": "Please enter a valid number"
-  },
-  "checkbookValidation": {
-    "amountRequired": "Amount is required",
-    "amountMin": "Amount must be at least 1",
-    "fullNameRequired": "Full name is required",
-    "fullNameMin": "Full name must be at least 3 characters",
-    "fullNameMax": "Full name must be less than 50 characters"
   }
 }
