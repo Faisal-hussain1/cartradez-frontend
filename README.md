@@ -1,4 +1,4 @@
-# Frontend Car Tradez
+# Frontend Car Tradez Staging
 
 This is a **Next.js** cartradez project with essential dependencies and configurations to get started quickly.
 
