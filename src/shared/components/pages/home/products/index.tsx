@@ -1,3 +1,5 @@
+'use client';
+
 import Container from '@/shared/components/common/containers';
 import {ArrowUpRightIcon} from '@/shared/components/icons';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
