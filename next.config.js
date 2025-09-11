@@ -2,8 +2,7 @@
 const {withSentryConfig} = require('@sentry/nextjs');
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
-const bucketHost =
-  process.env.AWS_BUCKET_HOSTNAME || 'terrix-dev-1744109738.s3.amazonaws.com';
+const bucketHost = process.env.AWS_BUCKET_HOSTNAME;
 
 const nextConfig = {
   turbopack: {

@@ -58,7 +58,6 @@ export const PUBLIC_ROUTES = {
 
 // extractRoutes was created specifically to recursively extract every string path from those nested route objects
 
-// Flatten and collect all route paths from the SELLER_ROUTES, EMPLOYEE_ROUTES, and ADMIN_ROUTES objects.
 // These are "spread" into separate arrays so we can easily search through them when performing tasks like:
 // - Access control (checking if a user can access a given route)
 // - Conditional rendering (e.g., hiding or showing sidebar items based on route match)
@@ -88,7 +87,6 @@ export const SIDEBAR_ROUTES = (
   //   label: t('navigationRoutes.settings'),
   //   path: SELLER_ROUTES.settings.all,
   //   icon: SettingIcon,
-  //   roles: [ROLES.seller.value, ROLES.employee.value],
   // },
 });
 

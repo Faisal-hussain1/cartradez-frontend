@@ -10,18 +10,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   let {pathname: newPath} = request.nextUrl;
   const cookieStore = await cookies();
 
-  const cookieToken = cookieStore.get('x-auth-token')?.value;
-
-  const {unprotectedRoutes} = getRouteType({pathname: newPath});
-
-  // Redirect to login only if the user is trying to access a private page without a token
-  if (!unprotectedRoutes && !cookieToken) {
-    const newRequestUrl = new URL(request.nextUrl.origin);
-    newRequestUrl.pathname = AUTH_ROUTES.login;
-    const nextResponse = NextResponse.redirect(newRequestUrl);
-
-    return nextResponse;
-  }
   const cookieLocale = cookieStore.get('NEXTJS_LOCALE')?.value;
 
   // Ensure locale handling for all requests

@@ -8,7 +8,6 @@ import {
 import {ColorResult} from 'react-color';
 import {IconBaseProps} from 'react-icons';
 import {Crop} from 'react-image-crop';
-import {Seller} from './dashboard';
 import {LogoVariation} from '@/shared/types/common';
 import {ButtonProps} from './dialogs';
 
@@ -99,7 +98,6 @@ export interface HeadingProps {
 export interface StepperProps {
   steps: {label: string}[];
   currentStep: number;
-  seller?: Seller;
   buttonTextColor: string;
   themeColor: string;
 }
@@ -124,10 +122,6 @@ export interface MessageProps {
   description?: string;
   descriptionStyle?: string;
   containerStyle?: string;
-}
-
-export interface SellerCardProps {
-  seller: Seller;
 }
 
 export interface TableHeadingProps {
@@ -189,4 +183,31 @@ export interface Product {
   isFeatured: boolean;
   images: [{key: string; url: string}];
   badge: string;
+}
+
+export type RequestsStatus = {
+  value: string;
+  label: string;
+};
+
+export type FilterProps = {
+  searchValue?: string;
+  requestStatus?: RequestsStatus;
+};
+
+export interface FiltersBarProps {
+  setFilters: (filters: FilterProps) => void;
+  filters: FilterProps;
+  hideSelect?: boolean;
+}
+
+export interface StatusOption {
+  value: string;
+  label: string;
+}
+
+export interface ReactSelectProps {
+  value: StatusOption;
+  onChange: (value: StatusOption | null) => void;
+  className?: string;
 }
