@@ -7,7 +7,6 @@ import {resetAllSlices} from '@/shared/utils/resetAllSlices';
 import {getQueryClient} from '@/shared/utils/queryClient';
 import {MutationCallbacks} from '@/shared/interfaces/hooks';
 import {AppDispatch} from '@/shared/redux/store';
-import {USERS as USERS_API} from '@/shared/constants/reactQueryConstants';
 import {showToast} from '@/shared/utils/toasts';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {getRedirectUrl} from '@/shared/utils/auth';
@@ -143,9 +142,6 @@ export const useMutations = () => {
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({message}) => {
-            queryClient.invalidateQueries({
-              queryKey: [USERS_API.fetchAllSellersList.queryKey],
-            });
             showToast({type: 'success', message});
           },
           onErrorAlways: ({message}) => {
@@ -163,9 +159,6 @@ export const useMutations = () => {
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({message}) => {
-            queryClient.invalidateQueries({
-              queryKey: [USERS_API.fetchAllSellersList.queryKey],
-            });
             showToast({type: 'success', message});
           },
           onErrorAlways: ({message}) => {

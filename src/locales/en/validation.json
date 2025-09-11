@@ -21,45 +21,6 @@
     "phoneMin": "Phone number must be at least 12 numbers",
     "phoneRequired": "Phone Number is required"
   },
-
-  "paymentValidation": {
-    "numberOfKeysMin": "Must be at least 10 keys",
-    "numberOfKeysMax": "Must be at most 999999 keys",
-    "numberOfKeysRequired": "Number of keys is required",
-    "phoneMin": "Phone number must be at least 12 digits",
-    "nameMin": "Name must be at least 3 characters",
-    "nameMax": "Name must not exceed 50 characters",
-    "nameRequired": "Name is required"
-  },
-
-  "sellerValidation": {
-    "invalidColor": "Invalid color code",
-    "colorRequired": "Theme color is required",
-    "usernameRequired": "Username is required",
-    "usernameMinCharacters": "Username must be at least 3 characters",
-    "usernameMaxCharacters": "Username must be less than 20 characters",
-    "commissionRequired": "Commission rate is required",
-    "commissionMinDigits": "Commission rate cannot be less than 1",
-    "commissionMaxDigits": "Commission rate cannot exceed 100",
-    "usernameNoHash": "Username cannot contain the '#' character"
-  },
-
-  "emailTemplateValidation": {
-    "descriptionRequired": "Description is required",
-    "descriptionMin": "Must be 50 characters",
-    "subjectRequired": "Subject is required",
-    "subjectMin": "Must be 3 characters"
-  },
-  "businessValidation": {
-    "nameRequired": "Business Name is required",
-    "emailRequired": "Email is required",
-    "emailInvalid": "Invalid email address",
-    "themeColorRequired": "Theme Color is required",
-    "invalidThemeColor": "Invalid Theme Color"
-  },
-  "employeeValidation": {
-    "atLeastOneBusinessRequired": "At least one business ID is required"
-  },
   "typeErrors": {
     "number": "Please enter a valid number"
   }

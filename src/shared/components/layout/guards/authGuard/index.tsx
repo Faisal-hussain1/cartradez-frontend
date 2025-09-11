@@ -1,6 +1,6 @@
 'use client';
 
-import {ReactNode, useEffect} from 'react';
+import {ReactNode, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import useRouteType from '@/shared/hooks/useRouterType';
 import {getCurrentUser} from '@/shared/redux/slices/users';
@@ -8,6 +8,7 @@ import {AUTH_ROUTES} from '@/shared/constants/PATHS';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {NodeChildrenProps} from '@/shared/interfaces/common';
 import {getRedirectUrl, getRoleFlags} from '@/shared/utils/auth';
+import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
 
 const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
   const {
@@ -21,6 +22,8 @@ const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
   const currentUser = useSelector(getCurrentUser);
   const isLoggedIn = Boolean(currentUser?._id);
 
+  const [mount, setMount] = useState(false);
+
   useEffect(() => {
     const role = currentUser?.currentActiveOrganization.role;
 
@@ -33,36 +36,18 @@ const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
     const isAuthorizeRoutes = isAdminRoute || isManagerRoute || isUserRoute;
 
     // if there are public routes then do nothing
-    if (isPublicRoute && !isAuthRoute) {
-      console.log('1');
-
-      return;
-    }
+    if (isPublicRoute && !isAuthRoute) return setMount(true);
 
     // if not logged in and authorize routes then return to login
-    if (!isLoggedIn && isAuthorizeRoutes) {
-      console.log('2');
-
-      return router.push(AUTH_ROUTES.login);
-    }
-
-    // if logged in and auth routes then return to authorized pages
-    if (isLoggedIn && isAuthRoute) {
-      console.log('3');
-
-      return router.push(url);
-    }
-
-    // if different roles try to access other roles pages then return to its own pages
-    if (
+    if (!isLoggedIn && isAuthorizeRoutes) return router.push(AUTH_ROUTES.login);
+    else if (isLoggedIn && isAuthRoute) return router.push(url);
+    else if (
       (isAdmin && !isAdminRoute) ||
       (isManager && !isManagerRoute) ||
       (isUser && !isUserRoute)
-    ) {
-      console.log('4');
-
+    )
       return router.push(url);
-    }
+    else setMount(true);
   }, [
     isLoggedIn,
     isAuthRoute,
@@ -73,6 +58,10 @@ const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
     router,
     currentUser,
   ]);
+
+  if (!mount) {
+    return <GlobalLoader />;
+  }
 
   return children;
 };

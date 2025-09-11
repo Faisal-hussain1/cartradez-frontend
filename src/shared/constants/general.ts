@@ -99,15 +99,6 @@ export const EMAIL_TEMPLATES_FIELD_NAMES = {
   description: 'description',
 };
 
-export const EMAIL_TEMPLATES_TYPES = {
-  seller: {
-    value: 'seller',
-  },
-  business: {
-    value: 'business',
-  },
-};
-
 export const NEW_ITEM_SLUG = 'add';
 
 export const ADMIN_EMAIL = 'abc@gmail.com';

@@ -208,7 +208,6 @@ export interface ServerSideListFiltersProps<T> {
       pageLimit?: number;
       query?: string;
       nextPageStartAfter?: string | null;
-      businessId?: string;
     };
   }) => QueryResponse<T>;
   dataKey?: string;

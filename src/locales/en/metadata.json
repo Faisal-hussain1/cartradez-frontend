@@ -15,7 +15,6 @@
     "title": "Reset Password",
     "description": "Reset Password Page"
   },
-
   "verify": {
     "title": "Verify User",
     "description": "Verify User Page"
@@ -52,68 +51,8 @@
     "title": "Dashboard",
     "description": "Dashboard Page"
   },
-  "sellers": {
-    "title": "Sellers",
-    "description": "Sellers Page"
-  },
-  "payment": {
-    "title": "Payment",
-    "description": "Payment Page"
-  },
-  "paymentSuccessful": {
-    "title": "Payment Successful",
-    "description": "Successful payment page"
-  },
-  "inactiveAccount": {
-    "title": "Inactive Account",
-    "description": "Inactive account page"
-  },
-  "welcomeOnboard": {
-    "title": "Welcome Onboard",
-    "description": "Welcome Onboard page"
-  },
-  "generateOnboardingLink": {
-    "title": "Generate Onboarding Link",
-    "description": "Welcome Generate Onboarding Link page"
-  },
-  "paymentStatus": {
-    "title": "Payment Status",
-    "description": "Check payment status page"
-  },
-  "paymentFailed": {
-    "title": "Payment Failed",
-    "description": "Failed payment page"
-  },
-  "businesses": {
-    "title": "Businesses",
-    "description": "Businesses page"
-  },
-  "transactions": {
-    "title": "Transactions",
-    "description": "Transactions page"
-  },
-  "seller": {
-    "title": "Seller",
-    "description": "Seller Page"
-  },
-  "balances": {
-    "title": "Balances",
-    "description": "Balances Page"
-  },
   "settings": {
     "title": "Settings",
     "description": "Settings Page"
-  },
-  "employees": {
-    "title": "Employees",
-    "description": "Employees Page"
-  },
-  "paymentClaim": {
-    "title": "Payment Claim",
-    "description": "Payment Page"
-  },
-  "paymentClaimSuccessful": {
-    "title": "Payment Claim Successful",
-    "description": "Payment Claim Successful Page"
   }
 }

@@ -46,22 +46,16 @@
     "message": "'An error occurred"
   },
   "navigationRoutes": {
-    "sellers": "Sellers",
-    "businesses": "Businesses",
-    "transactions": "Transactions",
-    "balances": "Balances",
-    "settings": "Settings",
-    "employees": "Employees"
+    "settings": "Settings"
   },
   "roles": {
     "admin": "Admin",
-    "seller": "Seller",
-    "employee": "Employee"
+    "manager": "manager",
+    "dealer": "dealer",
+    "user": "user"
   },
   "tableContent": {
-    "businesses": "Businesses",
-    "transactions": "Transactions",
-    "employees": "Employees"
+    "products": "products"
   },
   "tablePlaceholder": {
     "imageAlt": "No {{title}} data to display",

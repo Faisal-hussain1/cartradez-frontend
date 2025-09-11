@@ -4,7 +4,6 @@ import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import appReducer from './slices/app';
 import userReducer from './slices/users';
 import paymentReducer from './slices/payments';
-import defaultBusinessReducer from './slices/defaultBusiness';
 import {clearStore} from '@/shared/redux/utils';
 import {RootState} from './store';
 
@@ -57,20 +56,10 @@ const paymentPersistConfig: PersistConfig<any> = {
   blacklist: ['paymentDetails'],
 };
 
-const defaultBusinessPersistConfig: PersistConfig<any> = {
-  key: 'defaultBusiness',
-  storage,
-  keyPrefix: 'redux-',
-};
-
 const reduxAppReducer = combineReducers({
   app: persistReducer(appPersistConfig, appReducer),
   users: persistReducer(userPersistConfig, userReducer),
   payments: persistReducer(paymentPersistConfig, paymentReducer),
-  defaultBusiness: persistReducer(
-    defaultBusinessPersistConfig,
-    defaultBusinessReducer
-  ),
 });
 
 const rootReducer: Reducer<any> = (state, action) => {
@@ -79,7 +68,6 @@ const rootReducer: Reducer<any> = (state, action) => {
     storage.removeItem('persist:app');
     storage.removeItem('persist:users');
     storage.removeItem('persist:payments');
-    storage.removeItem('persist:defaultBusiness');
     if (typeof localStorage !== 'undefined') {
       localStorage.clear();
     }

@@ -14,11 +14,7 @@ export const i18nNamespaces: string[] = [
   'metadata',
   'modal',
   'payment',
-  'sellers',
-  'balances',
   'settings',
-  'employees',
-  'businesses',
   'products',
 ];
 

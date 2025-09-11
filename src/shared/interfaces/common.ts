@@ -8,7 +8,6 @@ import {
 import {ColorResult} from 'react-color';
 import {IconBaseProps} from 'react-icons';
 import {Crop} from 'react-image-crop';
-import {Seller} from './dashboard';
 import {LogoVariation} from '@/shared/types/common';
 import {ButtonProps} from './dialogs';
 
@@ -99,7 +98,6 @@ export interface HeadingProps {
 export interface StepperProps {
   steps: {label: string}[];
   currentStep: number;
-  seller?: Seller;
   buttonTextColor: string;
   themeColor: string;
 }
@@ -124,10 +122,6 @@ export interface MessageProps {
   description?: string;
   descriptionStyle?: string;
   containerStyle?: string;
-}
-
-export interface SellerCardProps {
-  seller: Seller;
 }
 
 export interface TableHeadingProps {
@@ -199,7 +193,6 @@ export type RequestsStatus = {
 export type FilterProps = {
   searchValue?: string;
   requestStatus?: RequestsStatus;
-  businessId?: string | null;
 };
 
 export interface FiltersBarProps {

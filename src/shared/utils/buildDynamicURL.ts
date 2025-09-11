@@ -15,7 +15,6 @@ export const buildDynamicURL = (
     status = '',
     id = '',
     nextPageStartAfter = '',
-    businessId = '',
   } = params || {};
   const queryParams = new URLSearchParams();
 
@@ -23,7 +22,6 @@ export const buildDynamicURL = (
   if (sort) queryParams.append('sort', sort);
   if (pageNo > 0) queryParams.append('page', pageNo.toString());
   if (pageLimit) queryParams.append('limit', pageLimit.toString());
-  if (businessId) queryParams.append('businessId', businessId);
   if (pageToken) queryParams.append('pageToken', pageToken);
   if (startDate) queryParams.append('startDate', startDate);
   if (endDate) queryParams.append('endDate', endDate);

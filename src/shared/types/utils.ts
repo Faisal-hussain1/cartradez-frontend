@@ -9,7 +9,6 @@ export type BuildDynamicUrlParamsType = {
   status?: string;
   id?: string;
   nextPageStartAfter?: string;
-  businessId?: string;
 };
 
 export type DecodeTokenResult = {
@@ -34,15 +33,6 @@ export type GetTextColorBasedOnBgParams = {
 export type DateWithTimeType = {
   date: string;
   time: string;
-};
-
-export type TransactionRefType = {
-  date: string | null;
-  time: string | null;
-};
-
-export type TransactionType = {
-  transactionTimestamp: number;
 };
 
 export type DateWithTimeFromTimestampType = {

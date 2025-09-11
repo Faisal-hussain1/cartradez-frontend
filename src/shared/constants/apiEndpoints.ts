@@ -19,69 +19,6 @@ export const API_ENDPOINTS = {
     UPDATE_PROFILE: '/users/profile',
     GET_SELLER_BANK_ACCOUNT: '/users/sellers/bank-account',
   },
-  PAYMENTS: {
-    CREATE_PAYMENT: ({id}: {id: string}) => `/payments/${id}`,
-    CREATE_PAYMENT_INTENT: () => `/payments/intent`,
-    UPDATE_PAYMENT_INTENT_CUSTOMER: ({id}: {id: string}) =>
-      `/payments/customer/${id}`,
-    UPDATE_PAYMENT_INTENT_AMOUNT: ({id}: {id: string}) =>
-      `/payments/amount/${id}`,
-    GET_PAYMENT_INTENT_STATUS: ({
-      id,
-      sellerConnectedAccountId,
-    }: {
-      id: string;
-      sellerConnectedAccountId: string;
-    }) => `/payments/status/${id}/${sellerConnectedAccountId}`,
-  },
-  TRANSACTIONS: {
-    GET_TRANSACTIONS_LIST: ({query}: {query: string}) =>
-      `/transactions${query}`,
-    MARK_ORDER_FULFILLED: ({id}: {id: string}) =>
-      `/transactions/fulfilled/${id}`,
-    REFUND_TRANSACTION: ({id}: {id: string}) => `/transactions/refund/${id}`,
-  },
-  BALANCES: {
-    GET_TOTAL_BALANCES: '/balances',
-    GET_TOTAL_EARNINGS_LIST: ({query}: {query: string}) =>
-      `/balances/earnings${query}`,
-  },
-  PAYOUTS: {
-    GET_PAYOUTS_LIST: ({query}: {query: string}) => `/payouts${query}`,
-  },
-
-  EMPLOYEES: {
-    GET_EMPLOYEES_LIST: ({query}: {query: string}) =>
-      `/users/employees${query}`,
-    ADD_EMPLOYEE: '/users/employees',
-    UPDATE_EMPLOYEE: ({id}: {id: string}) => `/users/employees/${id}`,
-    DELETE_EMPLOYEE: ({id}: {id: string}) => `/users/employees/${id}`,
-  },
-  BUSINESSES: {
-    CREATE_BUSINESS: '/businesses',
-    GET_BUSINESSES_LIST: '/businesses',
-    GET_SINGLE_BUSINESS: ({id}: {id: string}) => `/businesses/${id}`,
-    DELETE_BUSINESS: ({id}: {id: string}) => `/businesses/${id}`,
-    UPDATE_BUSINESS: ({id}: {id: string}) => `/businesses/${id}`,
-    UPDATE_BUSINESS_STATUS: ({id}: {id: string}) =>
-      `/businesses/toggle-active/${id}`,
-    GET_BUSINESS_BY_SELLER_USERNAME_AND_SLUG: ({
-      username,
-      businessSlug,
-    }: {
-      username: string;
-      businessSlug: string;
-    }) => {
-      return businessSlug
-        ? `/businesses/slug/${username}/${businessSlug}`
-        : `/businesses/slug/${username}/`;
-    },
-  },
-  EMAIL_TEMPLATE: {
-    UPDATE_EMAIL_TEMPLATE: ({id}: {id: string}) => `/email/template/${id}`,
-    PREVIEW_EMAIL_TEMPLATE: '/email/template/preview',
-  },
-
   PRODUCTS: {
     GET_PRODUCTS_LIST: '/products',
     ADD_PRODUCT: '/products/add',

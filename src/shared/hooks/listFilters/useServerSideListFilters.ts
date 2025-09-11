@@ -44,10 +44,6 @@ ServerSideListFiltersProps<T> & {
   const [serverSideComputedTotalPage, setServerSideComputedTotalPage] =
     useState(1);
 
-  const [businessId, setBusinessId] = useQueryState('businessId', {
-    defaultValue: '',
-  });
-
   const [searchValue, setSearchValue] = useQueryState(
     'search',
     parseAsString.withDefault(FILTERS_CONFIG.search)
@@ -85,7 +81,6 @@ ServerSideListFiltersProps<T> & {
     queryToCall({
       params: {
         ...pageOptions,
-        ...(businessId && {businessId}),
         ...(paginationType === PAGINATION_TYPES.cursorBased.value && {
           pageToken: getCurrentPageToken(),
         }),
@@ -131,18 +126,9 @@ ServerSideListFiltersProps<T> & {
         setRequestStatusValue(status.value);
       }
 
-      if ('businessId' in updates) {
-        setBusinessId(updates.businessId as string);
-      }
-
       resetPaginationOptions();
     },
-    [
-      setSearchValue,
-      setRequestStatusValue,
-      resetPaginationOptions,
-      setBusinessId,
-    ]
+    [setSearchValue, setRequestStatusValue, resetPaginationOptions]
   );
 
   return {
@@ -150,7 +136,6 @@ ServerSideListFiltersProps<T> & {
     PaginationComponent,
     filters: {
       pageOptions,
-      businessId,
       searchValue,
       requestStatus,
     },

@@ -1,7 +1,6 @@
 import {THEME} from '@/shared/constants/theme';
 import {IdType} from '@/shared/types/common';
 import {GetTextColorBasedOnBgParams, HexCodeParams} from '@/shared/types/utils';
-import {DEFAULT_LOGO} from '../constants/sellers';
 import {truncateWordsProps} from '../interfaces/common';
 
 export const getBaseUrl = () =>
@@ -93,28 +92,6 @@ export function extractRoutes({
   recurse({value: routeObj}); // Begin recursion from the root
 
   return result; // Return the list of all extracted routes
-}
-
-const DEFAULT_STYLES = {
-  themeColor: THEME.color.primary,
-  logo: DEFAULT_LOGO,
-  profileImage: DEFAULT_LOGO,
-};
-
-export function getValueByKeyFromObject({
-  key,
-  obj1,
-  obj2,
-}: {
-  key: keyof typeof DEFAULT_STYLES;
-  obj1?: Record<string, any> | null;
-  obj2?: Record<string, any> | null;
-}): string {
-  if (key === 'logo' || key === 'profileImage') {
-    return obj1?.[key]?.url || obj2?.[key]?.url || DEFAULT_STYLES.logo;
-  }
-
-  return obj1?.[key] || obj2?.[key] || DEFAULT_STYLES[key];
 }
 
 export function truncateWords({text, limit = 30}: truncateWordsProps) {

@@ -2,66 +2,14 @@
   "dashboard": {
     "message": "Welcome to dashboard",
     "admin": "Admin",
-    "menu": "Menu",
-    "sellerDetails": "Seller Details",
-    "addSeller": "Add New Seller",
-    "businessDetails": "Business Details"
+    "menu": "Menu"
   },
   "buttons": {
-    "addSeller": "Add New Seller",
     "cancel": "Cancel",
     "updateLogo": "Update Logo",
     "removeLogo": "Remove Logo",
     "confirm": "Confirm",
     "edit": "Edit",
-    "addNewSeller": "Add Seller",
-    "updateSeller": "Update Seller",
     "save": "Save"
-  },
-  "addSellerForm": {
-    "name": "Full Name",
-    "namePlaceholder": "Eg: John Doe",
-    "username": "User Name",
-    "usernamePlaceholder": "Eg: John24508",
-    "email": "Email Address",
-    "emailPlaceholder": "Eg: abc@gmail.com",
-    "commission": "Commission Rate",
-    "commissionPlaceholder": "Eg: 20%",
-    "colorTheme": "Choose Color Theme",
-    "onBoardingLink": "Onboarding Link",
-    "paymentLink": "Payment Link",
-    "addSeller": "Add Seller",
-    "selectTheme": "Select Theme Color",
-    "cropImage": "Crop your image",
-    "chooseColor": "Choose the color theme"
-  },
-  "sellerList": {
-    "name": "Full Name",
-    "username": "User Name",
-    "commissionRate": "Commission Rate",
-    "email": "Email Address",
-    "themeColor": "Theme Color",
-    "onboardingLink": "Onboarding Link",
-    "paymentLink": "Payment Link",
-    "incompleteBoarding": "Incomplete Seller Onboarding",
-    "noSellers": "Sellers not found",
-    "sellerVerified": "Seller Verified",
-    "paymentLinkCopy": "Payment link copy to clipboard",
-    "paymentLinkCopyFailed": "Payment link failed to copy",
-    "onBoardingLinkCopy": "Onboarding link copy to clipboard",
-    "onBoardingLinkCopyFailed": "Onboarding link failed to copy",
-    "editSellerTooltip": "Edit Seller",
-    "viewBusinessesTooltip": "View seller's businesses"
-  },
-  "manageSellerBusinesses": {
-    "maxBusinessesRequired": "Max Businesses is required",
-    "maxBusinessesMinDigits": "Max Businesses cannot be less than 1",
-    "maxBusinessesMaxDigits": "Max Businesses cannot exceed 100",
-    "maxBusinessesLabel": "Max Businesses",
-    "maxBusinessesPlaceholder": "e.g. 5",
-    "copyBusinessLink": "Copy business link",
-    "noBusinesses": "No Businesses for this seller",
-    "maxBusinessesUpdatedSuccessfully": "Max Businesses Updated Successfully",
-    "businessDisabled": "Business Disabled"
   }
 }
