@@ -1,6 +1,4 @@
-'use client';
 import Container from '@/shared/components/common/containers';
-import {DUMMY_CARS_DATA} from '@/shared/constants/dummy';
 import {ArrowUpRightIcon} from '@/shared/components/icons';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {PUBLIC_ROUTES} from '@/shared/constants/PATHS';
