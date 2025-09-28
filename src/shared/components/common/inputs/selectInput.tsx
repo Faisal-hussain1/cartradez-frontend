@@ -10,6 +10,7 @@ function SelectInput({
   control,
   name,
   placeholder = 'Select a Type',
+  isRequired = false,
   ...rest
 }: SelectInputProps) {
   const id = useId();
@@ -21,7 +22,12 @@ function SelectInput({
       render={({field: {value, onChange}, fieldState: {error}}) => {
         return (
           <div className='flex flex-col relative'>
-            {label && <label className='ml-[2px] mt-[3px]'>{label}</label>}
+            {label && (
+              <label className='text-[14px] mb-[5px] text-secondary font-semibold'>
+                {label}
+                {isRequired && <span className='text-red100 pl-0.5'>*</span>}
+              </label>
+            )}
             <Select
               onChange={(selectedOption) => {
                 onChange(selectedOption?.value);
@@ -34,20 +40,29 @@ function SelectInput({
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: 'var(--mist)',
-                  minHeight: '43px',
-                  minWidth: '180px',
-                  borderRadius: '8px',
+                  backgroundColor: error
+                    ? 'var(--error-light)'
+                    : value
+                      ? 'var(--success-light)'
+                      : 'var(--white)',
+                  minHeight: '50px',
+                  minWidth: '200px',
+                  borderRadius: '4px',
                   cursor: 'pointer',
                   color: 'black',
-                  border: '1px solid var(--gray20)',
+                  border: error
+                    ? '1px solid var(--error-light)'
+                    : value
+                      ? '1px solid var(--success-light)'
+                      : '1px solid var(--gray20)',
                   transition: 'transform 0.2s',
                   boxShadow: state.isFocused
                     ? '0 0 0 1px var(--primary)'
                     : base.boxShadow,
                   '&:hover': {
-                    color: 'white',
-                    backgroundColor: 'var(--primary)',
+                    // color: 'white',
+                    // backgroundColor: 'var(--primary)',
+                    border: '1px solid var(--primary)',
                   },
                 }),
                 singleValue: (base) => ({
@@ -58,7 +73,7 @@ function SelectInput({
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: 'black',
+                  color: 'var(--gray60)',
                 }),
                 dropdownIndicator: (base) => ({
                   ...base,

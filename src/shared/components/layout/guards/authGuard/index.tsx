@@ -36,18 +36,34 @@ const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
     const isAuthorizeRoutes = isAdminRoute || isManagerRoute || isUserRoute;
 
     // if there are public routes then do nothing
-    if (isPublicRoute && !isAuthRoute) return setMount(true);
+    if (isPublicRoute && !isAuthRoute) {
+      console.log('1');
+
+      return setMount(true);
+    }
 
     // if not logged in and authorize routes then return to login
-    if (!isLoggedIn && isAuthorizeRoutes) return router.push(AUTH_ROUTES.login);
-    else if (isLoggedIn && isAuthRoute) return router.push(url);
-    else if (
+    if (!isLoggedIn && isAuthorizeRoutes) {
+      setMount(true);
+      console.log('2', AUTH_ROUTES.login);
+
+      return router.push(AUTH_ROUTES.login);
+    } else if (isLoggedIn && isAuthRoute) {
+      console.log('3', url);
+
+      return router.push(url);
+    } else if (
       (isAdmin && !isAdminRoute) ||
       (isManager && !isManagerRoute) ||
       (isUser && !isUserRoute)
-    )
+    ) {
+      console.log('4', url);
+
       return router.push(url);
-    else setMount(true);
+    } else {
+      console.log('5', url);
+      setMount(true);
+    }
   }, [
     isLoggedIn,
     isAuthRoute,

@@ -1,0 +1,41 @@
+{
+  "vehicleForm": {
+    "heading": "Add New Vehicle",
+    "subHeading": "Fill in the details below to list your vehicle",
+    "uploadLabel": "Upload Images (Max 9)",
+    "maxImagesError": "You can upload a maximum of 9 images",
+    "button": "Add Vehicle",
+
+    "make": "Make",
+    "model": "Model",
+    "body": "Body",
+    "doors": "Doors",
+    "year": "Year",
+    "seats": "Seats",
+    "mileage": "Mileage",
+    "color": "Color",
+    "numberPlate": "Number Plate",
+    "engineSize": "Engine Size",
+    "modelDetail": "Model Detail",
+    "importHistory": "Import History",
+    "transmission": "Transmission",
+    "fuelType": "Fuel Type",
+    "cylinder": "Cylinder",
+    "currency": "Currency",
+    "price": "Price",
+    "location": "Location",
+
+    "placeholders": {
+      "year": "Enter vehicle year",
+      "seats": "Enter vehicle total seats",
+      "mileage": "Enter vehicle mileage in km",
+      "color": "Enter vehicle color",
+      "numberPlate": "Enter vehicle Number Plate",
+      "engineSize": "Enter vehicle Engine Size in cc",
+      "modelDetail": "Enter vehicle Model Detail",
+      "importHistory": "Enter vehicle Import History",
+      "price": "Enter vehicle price",
+      "location": "Enter location"
+    }
+  }
+}

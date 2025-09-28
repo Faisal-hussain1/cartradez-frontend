@@ -1,94 +1,119 @@
-import {ChangeEvent, useEffect} from 'react';
+'use client';
+
+import {useState} from 'react';
 import Image from 'next/image';
-import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
-import useTranslation from '@/shared/hooks/useTranslation';
-import {ProfileImageUploadProps} from '@/shared/interfaces/dashboard';
-import {ALLOWED_FILE_TYPES} from '@/shared/constants/general';
-import {showToast} from '@/shared/utils/toasts';
+import {UseFormSetValue, UseFormWatch} from 'react-hook-form';
+import {cn} from '@/shared/utils/shadCNUtils';
+import {Button} from '@/shared/components/ui/button'; // ✅ using your shadcn button
 
-const ImageUpload = ({
-  setIsCropModalOpen,
-  setImagePreview,
-  setCrop,
-  imagePreview,
-  setFile,
-  setIsProfileImageRemoved,
-}: ProfileImageUploadProps) => {
-  const {t} = useTranslation();
+interface ImageUploadInputProps {
+  name: string;
+  setValue: UseFormSetValue<any>;
+  watch: UseFormWatch<any>;
+  min?: number;
+  max?: number;
+}
 
-  // Cleanup blob URL from memory when component unmounts or imagePreview changes
-  useEffect(() => {
-    return () => {
-      if (
-        imagePreview &&
-        typeof imagePreview === 'string' &&
-        imagePreview.startsWith('blob:')
-      ) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
-  }, [imagePreview]);
+export default function ImageUploadInput({
+  name,
+  setValue,
+  watch,
+  min = 3,
+  max = 9,
+}: ImageUploadInputProps) {
+  const [error, setError] = useState('');
+  const images: File[] = watch(name) || [];
 
-  const removeLogo = () => {
-    setImagePreview('/images/default-seller-logo.png');
-    setIsProfileImageRemoved(true);
-  };
+  const handleImageUpload = (files: FileList | null) => {
+    if (!files) return;
+    const newFiles = Array.from(files);
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    const file = files[0];
-
-    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      showToast({
-        type: 'error',
-        message: t('commonContent.invalidFileFormat'),
-      });
+    if (images.length + newFiles.length > max) {
+      setError(`You can upload a maximum of ${max} images`);
 
       return;
     }
 
-    setIsCropModalOpen(true);
-    setFile(file);
+    setValue(name, [...images, ...newFiles], {shouldValidate: true});
+    setError('');
+  };
 
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      if (event.target?.result) {
-        setImagePreview(event.target.result as string);
-        setCrop({unit: 'px', x: 0, y: 0, width: 50, height: 50});
-      }
-    };
-    reader.readAsDataURL(file);
+  const handleRemoveImage = (idx: number) => {
+    const updated = images.filter((_, i) => i !== idx);
+    setValue(name, updated, {shouldValidate: true});
   };
 
   return (
-    <div className='flex-col-center gap-[10px]'>
-      <input
-        type='file'
-        id='upload-dp'
-        className='hidden'
-        accept='.jpg, .jpeg, .png'
-        onChange={handleOnChange}
-      />
-      <div className='w-[115px] h-[115px] rounded-[10px] overflow-hidden'>
-        <Image src={imagePreview} alt='seller-logo' width={115} height={115} />
-      </div>
+    <div
+      className={cn(
+        'border-2 border-dashed rounded-md p-4 flex justify-center',
+        images.length <= 0
+          ? 'border-[var(--error-light)] bg-[var(--error-light)]/10'
+          : 'border-[var(--success-light)] bg-[var(--success-light)]/10'
+      )}
+    >
+      <div className='w-full'>
+        {/* <label className='block text-sm font-medium mb-2'>
+          Upload between{' '}
+          <span className='font-semibold'>
+            {min}–{max}
+          </span>{' '}
+          images
+          <span className='block text-xs text-gray-500'>
+            Supported formats: JPEG, JPG, PNG
+          </span>
+        </label> */}
 
-      <label
-        className='w-[115px] cursor-pointer h-10 rounded-[8px] text-white bg-primary text-sm flex-center'
-        htmlFor='upload-dp'
-      >
-        {t('buttons.updateLogo')}
-      </label>
-      <PrimaryButton
-        buttonText={t('buttons.removeLogo')}
-        onClick={removeLogo}
-        styles='w-[115px] h-5 underline text-secondary'
-        variant='link'
-      />
+        {/* Hidden file input */}
+        <input
+          id={`${name}-input`}
+          type='file'
+          accept='.jpg,.jpeg,.png'
+          multiple
+          className='hidden'
+          onChange={(e) => handleImageUpload(e.target.files)}
+        />
+
+        {/* Styled button that triggers input */}
+        <Button
+          type='button'
+          onClick={() => document.getElementById(`${name}-input`)?.click()}
+          className='bg-primary text-white hover:bg-primary/90'
+        >
+          + Upload Images
+        </Button>
+
+        {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+
+        {images.length < min && (
+          <p className='text-yellow-600 text-sm mt-1 text-center'>
+            Please add at least {min} images.
+          </p>
+        )}
+
+        <div className='grid grid-cols-3 gap-2 mt-4 justify-center'>
+          {images.map((file, idx) => (
+            <div
+              key={idx}
+              className='relative w-70 h-40 rounded-lg overflow-hidden border'
+            >
+              <Image
+                src={URL.createObjectURL(file)}
+                alt={`preview-${idx}`}
+                fill
+                className='object-cover'
+              />
+              <button
+                type='button'
+                onClick={() => handleRemoveImage(idx)}
+                className='absolute top-1 right-1 bg-black/60 text-white text-xs rounded px-1'
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ImageUpload;
+}

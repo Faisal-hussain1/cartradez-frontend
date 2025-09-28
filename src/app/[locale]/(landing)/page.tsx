@@ -1,4 +1,4 @@
-import Home from '@/shared/components/pages/home';
+import Home from '@/shared/components/pages/landing/home';
 import {generateMetadata} from '@/shared/utils/metadataUtils';
 
 export default function page() {

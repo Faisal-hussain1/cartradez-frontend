@@ -22,7 +22,7 @@ export const AUTH_ROOT = '/auth';
 
 export const DASHBOARD_ROOT = '/dashboard';
 
-export const PRODUCT_ROOT = '/products';
+export const VEHICLE_ROOT = '/vehicles';
 
 export const AUTH_ROUTES = {
   login: path(AUTH_ROOT, '/login'),
@@ -46,13 +46,14 @@ export const MANAGER_ROUTES = {
 };
 
 export const USER_ROUTES = {
-  products: path(PRODUCT_ROOT, '/'),
-  AddProduct: path(PRODUCT_ROOT, '/add'),
+  vehicles: path(VEHICLE_ROOT, '/'),
+  addVehicle: path(VEHICLE_ROOT, '/add'),
 };
 
 export const PUBLIC_ROUTES = {
-  products: {
-    all: path(PRODUCT_ROOT, '/all'),
+  vehicles: {
+    all: path(VEHICLE_ROOT, '/all'),
+    vehicleDetails: (vehicleId: string) => path(VEHICLE_ROOT, `/${vehicleId}`),
   },
 };
 

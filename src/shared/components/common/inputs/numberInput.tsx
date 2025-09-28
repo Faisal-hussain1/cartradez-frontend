@@ -11,12 +11,14 @@ const NumberField = ({
   label,
   placeholder,
   minValue = 0,
+  isRequired = false,
 }: {
   field: any;
   error: any;
   label?: string;
   placeholder?: string;
   minValue?: number;
+  isRequired?: boolean;
 }) => {
   const rawValue = field.value ?? minValue;
   const [localValue, setLocalValue] = useState(rawValue.toString());
@@ -42,8 +44,9 @@ const NumberField = ({
   return (
     <div className='flex flex-col relative'>
       {label && (
-        <label className='text-[14px] mb-[10px] text-secondary font-semibold'>
+        <label className='text-[14px] mb-[5px] text-secondary font-semibold'>
           {label}
+          {isRequired && <span className='text-red100 pl-0.5'>*</span>}
         </label>
       )}
       <Input
@@ -67,6 +70,7 @@ const NumberInput = ({
   label,
   placeholder,
   minValue = 0,
+  isRequired,
 }: NumberInputProps) => {
   return (
     <Controller
@@ -79,6 +83,7 @@ const NumberInput = ({
           label={label}
           placeholder={placeholder}
           minValue={minValue}
+          isRequired={isRequired}
         />
       )}
     />

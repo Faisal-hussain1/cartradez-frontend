@@ -19,8 +19,9 @@ export const API_ENDPOINTS = {
     UPDATE_PROFILE: '/users/profile',
     GET_SELLER_BANK_ACCOUNT: '/users/sellers/bank-account',
   },
-  PRODUCTS: {
-    GET_PRODUCTS_LIST: '/products',
-    ADD_PRODUCT: '/products/add',
+  VEHICLES: {
+    GET_VEHICLES_LIST: '/vehicles',
+    ADD_VEHICLE: '/vehicles/add',
+    GET_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
   },
 };

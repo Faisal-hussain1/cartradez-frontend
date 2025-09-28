@@ -21,6 +21,7 @@ import {LANDING_MENU_BAR_LINKS, USER_ROUTES} from '@/shared/constants/PATHS';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from '@/shared/redux/slices/users';
 import {userMutations} from '@/shared/reactQuery';
+import {HoverDropdown} from '../dropdown';
 
 export default function Navbar() {
   const {t} = useTranslation();
@@ -72,7 +73,7 @@ export default function Navbar() {
               <NavigationMenuItem>
                 <PrimaryButton
                   buttonText='Post an Ad'
-                  onClick={() => router.push(USER_ROUTES.AddProduct)}
+                  onClick={() => router.push(USER_ROUTES.addVehicle)}
                 />
               </NavigationMenuItem>
 
@@ -84,6 +85,19 @@ export default function Navbar() {
                   />
                 </NavigationMenuItem>
               )}
+
+              {/* <HoverDropdown
+                label='Menu'
+                items={[
+                  {
+                    label: 'Profile',
+                    onClick: () => console.log('Profile clicked'),
+                  },
+                  {label: 'Billing'},
+                  {label: 'Settings'},
+                  {label: 'Logout'},
+                ]}
+              /> */}
             </NavigationMenuList>
           </NavigationMenu>
 
@@ -114,7 +128,7 @@ export default function Navbar() {
                   <div className='flex flex-col gap-2 mt-4'>
                     <PrimaryButton
                       buttonText='Post an Ad'
-                      onClick={() => router.push('/add-product')}
+                      onClick={() => router.push('/add-vehicle')}
                     />
                     {isLoggedIn && (
                       <PrimaryButton

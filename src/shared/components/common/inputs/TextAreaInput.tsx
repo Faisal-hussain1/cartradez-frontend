@@ -15,23 +15,48 @@ const TextAreaInput = ({
     <Controller
       name={name}
       control={control}
-      render={({field, fieldState: {error}}) => (
-        <div className='flex flex-col relative w-full'>
-          {label && (
-            <label className='text-[14px] mb-[10px] text-secondary font-semibold'>
-              {label}
-            </label>
-          )}
-          <Textarea
-            {...field}
-            placeholder={placeholder}
-            className={error ? 'border-error focus-visible:ring-error' : ''}
-            disabled={disabled}
-            onFocus={onFocus}
-          />
-          {error && <ErrorMessage errorMsg={error.message} />}
-        </div>
-      )}
+      render={({field, fieldState: {error}}) => {
+        const hasValue = field.value && field.value.trim() !== '';
+
+        const baseClasses =
+          'w-full rounded-md border p-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 transition';
+        const errorClasses = 'border-red-500 bg-red-50 focus:ring-red-500';
+
+        const successClasses =
+          'border-green-500 bg-green-50 focus:ring-green-500';
+        const normalClasses = 'border-gray-300 bg-white focus:ring-primary';
+
+        return (
+          <div className='flex flex-col relative w-full'>
+            {label && (
+              <label className='text-sm mb-1 text-secondary font-semibold'>
+                {label}
+              </label>
+            )}
+
+            <Textarea
+              {...field}
+              placeholder={placeholder}
+              className={
+                error
+                  ? `${baseClasses} ${errorClasses}`
+                  : hasValue
+                    ? `${baseClasses} ${successClasses}`
+                    : `${baseClasses} ${normalClasses}`
+              }
+              disabled={disabled}
+              onFocus={onFocus}
+              rows={5}
+            />
+
+            {error && (
+              <div className='flex justify-start'>
+                <ErrorMessage errorMsg={error.message} />
+              </div>
+            )}
+          </div>
+        );
+      }}
     />
   );
 };

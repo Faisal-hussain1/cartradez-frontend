@@ -55,7 +55,7 @@
     "user": "user"
   },
   "tableContent": {
-    "products": "products"
+    "vehicles": "vehicles"
   },
   "tablePlaceholder": {
     "imageAlt": "No {{title}} data to display",
