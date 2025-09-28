@@ -41,6 +41,15 @@ export interface AuthFormContainerProps {
   heading: string;
   formStyles?: string;
   subHeading?: string;
+  fromContainerStyles?: string;
+}
+
+export interface BoxContainerProps {
+  children: ReactNode;
+  heading: string;
+  styles?: string;
+  subHeading?: string;
+  containerStyles?: string;
 }
 
 export interface ToasterComponentProps {
@@ -165,24 +174,30 @@ export interface BannerProps {
   heading: string;
 }
 
-export interface Product {
+export interface Vehicle {
   id: string;
-  title: string;
-  price: number;
-  description: string;
-  condition: string;
-  location: string;
-  brand: string;
+  make: string;
   model: string;
+  body: string;
+  doors?: string;
+  seats?: number;
   year: number;
   mileage: number;
-  fuelType: string;
+  color?: string;
+  numberPlate: string;
+  engineSize?: number;
   transmission: string;
-  color: string;
-  status: string;
-  isFeatured: boolean;
+  fuelType: string;
+  cylinder?: string;
+  currency: string;
+  price: number;
+  location?: string;
+  modelDetail?: string;
+  importHistory?: string;
+  isGreatPrice?: boolean;
+  isFeatured?: boolean;
+  badge?: string;
   images: [{key: string; url: string}];
-  badge: string;
 }
 
 export type RequestsStatus = {

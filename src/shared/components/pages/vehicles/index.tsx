@@ -3,21 +3,21 @@ import Container from '@/shared/components/common/containers';
 
 import useServerSideListFilters from '@/shared/hooks/listFilters/useServerSideListFilters';
 import {LIST_TYPES} from '@/shared/constants/general';
-import {productsQueries} from '@/shared/reactQuery';
+import {vehiclesQueries} from '@/shared/reactQuery';
 
 import Banner from '@/shared/components/common/banner';
-import {Product} from '@/shared/interfaces/common';
-import ProductListing from '@/shared/components/common/home/ProductListing';
+import {Vehicle} from '@/shared/interfaces/common';
+import VehicleListing from '@/shared/components/common/home/VehicleListing';
 import FiltersBar from '@/shared/components/common/FilterBar';
 
-export default function Products() {
-  const {useFetchAllProductList} = productsQueries();
+export default function Vehicles() {
+  const {useFetchAllVehicleList} = vehiclesQueries();
 
   const {PaginationComponent, filteredData, isLoading, filters, setFilters} =
-    useServerSideListFilters<Product>({
-      dataKey: 'products',
-      listType: LIST_TYPES.products,
-      queryToCall: useFetchAllProductList,
+    useServerSideListFilters<Vehicle>({
+      dataKey: 'vehicles',
+      listType: LIST_TYPES.vehicles,
+      queryToCall: useFetchAllVehicleList,
     });
 
   return (
@@ -44,7 +44,7 @@ export default function Products() {
             </p>
           </div>
 
-          <ProductListing
+          <VehicleListing
             PaginationComponent={PaginationComponent}
             filteredData={filteredData}
             isLoading={isLoading}

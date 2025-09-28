@@ -90,7 +90,7 @@
 }
 
 :root {
-  --scrollbar-thumb-color: #ed303a; /* Default color */
+  --scrollbar-thumb-color: #414279; /* Default color */
 }
 
 ::-webkit-scrollbar-thumb {
@@ -121,17 +121,20 @@
 
 /* ---break---  */
 :root {
-  --background: #ffffff;
+  --background: #f2f3f3;
   --foreground: #0a0a0a;
   --card: #ffffff;
   --card-foreground: #0a0a0a;
   --popover: #ffffff;
   --popover-foreground: #0a0a0a;
-  --primary: #ed303a;
-  --primary2: #414279;
+  --primary: #414279;
+  --primary2: #ed303a;
   --mist: #f0eeff;
   --primary-foreground: #fafafa;
   --secondary: #1e1e1e;
+  --error-light: #f2dede;
+  --success-light: #dff0d8;
+  --white: #ffffff;
   --gray90: #515151;
   --gray80: #929292;
   --gray70: #939393;

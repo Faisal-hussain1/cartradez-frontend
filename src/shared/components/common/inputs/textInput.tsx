@@ -9,29 +9,46 @@ const TextInput = ({
   label,
   placeholder,
   disabled = false,
+  isRequired = false,
   onFocus,
 }: TextInputProps) => {
   return (
     <Controller
       name={name}
       control={control}
-      render={({field, fieldState: {error}}) => (
-        <div className='flex flex-col relative w-full'>
-          {label && (
-            <label className='text-[14px] mb-[10px] text-secondary font-semibold'>
-              {label}
-            </label>
-          )}
-          <Input
-            {...field}
-            placeholder={placeholder}
-            className={error && 'border-error focus-visible:ring-error'}
-            disabled={disabled}
-            onFocus={onFocus}
-          />
-          {error && <ErrorMessage errorMsg={error.message} />}
-        </div>
-      )}
+      render={({field, fieldState: {error}}) => {
+        const hasValue = field.value && field.value.trim() !== '';
+
+        return (
+          <div className='flex flex-col relative w-full'>
+            {label && (
+              <label className='text-[14px] mb-[5px] text-secondary font-semibold'>
+                {label}
+                {isRequired && <span className='text-red100 pl-0.5'>*</span>}
+              </label>
+            )}
+            <Input
+              {...field}
+              placeholder={placeholder}
+              className={
+                error
+                  ? 'border-[var(--error-light)] bg-[var(--error-light)] focus-visible:ring-error'
+                  : hasValue
+                    ? 'border-[var(--success-light)] bg-[var(--success-light)] focus-visible:[var(--success-light)]'
+                    : 'border-gray-300 bg-white focus-visible:ring-primary' +
+                      'placeholder:[color:var(--gray60)]'
+              }
+              disabled={disabled}
+              onFocus={onFocus}
+            />
+            {error && (
+              <div className='flex justify-start'>
+                <ErrorMessage errorMsg={error.message} />
+              </div>
+            )}
+          </div>
+        );
+      }}
     />
   );
 };

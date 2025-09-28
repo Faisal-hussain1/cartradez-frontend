@@ -7,6 +7,7 @@ export interface TextInputProps {
   control: any;
   name: string;
   disabled?: boolean;
+  isRequired?: boolean;
   onFocus?: () => void;
 }
 
@@ -35,6 +36,7 @@ export interface NumberInputProps {
   control: any;
   name: string;
   minValue?: number;
+  isRequired?: boolean;
 }
 
 export interface SelectInputProps {
@@ -43,6 +45,7 @@ export interface SelectInputProps {
   control: any;
   name: string;
   placeholder?: string;
+  isRequired?: boolean;
   [key: string]: any; // Allow other props to be passed to react-select
 }
 

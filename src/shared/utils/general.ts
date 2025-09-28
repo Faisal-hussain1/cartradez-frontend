@@ -103,3 +103,13 @@ export function truncateWords({text, limit = 30}: truncateWordsProps) {
 
   return words.slice(0, limit).join(' ') + '...';
 }
+
+export function getYearsList({start = 1900}: {start?: number}) {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let year = currentYear; year >= start; year--) {
+    years.push({label: year.toString(), value: year.toString()});
+  }
+
+  return years;
+}

@@ -7,12 +7,10 @@ export default function LandingRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
-      <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <>
+      <Header />
+      <main>{children}</main>
+      <Footer />
+    </>
   );
 }

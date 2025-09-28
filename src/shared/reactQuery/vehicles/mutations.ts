@@ -8,7 +8,7 @@ import {getQueryClient} from '@/shared/utils/queryClient';
 import {MutationCallbacks} from '@/shared/interfaces/hooks';
 import {AppDispatch} from '@/shared/redux/store';
 import {
-  PRODUCTS,
+  VEHICLES,
   USERS as USERS_API,
 } from '@/shared/constants/reactQueryConstants';
 import {showToast} from '@/shared/utils/toasts';
@@ -24,17 +24,17 @@ export const useMutations = () => {
   const router = useLocaleRouter();
 
   return {
-    useAddNewProductMutation: ({
+    useAddNewVehicleMutation: ({
       callBackFuncs,
     }: {callBackFuncs?: MutationCallbacks} = {}) =>
       useMutationHandler({
-        endpoint: API_ENDPOINTS.PRODUCTS.ADD_PRODUCT,
+        endpoint: API_ENDPOINTS.VEHICLES.ADD_VEHICLE,
         method: POST,
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({data, message}) => {
             queryClient.invalidateQueries({
-              queryKey: [PRODUCTS.fetchAllProductsList.queryKey],
+              queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
             });
             if (data) showToast({type: 'success', message});
           },

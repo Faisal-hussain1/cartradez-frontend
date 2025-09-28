@@ -42,8 +42,8 @@ export const LIST_TYPES = {
     path: ADMIN_ROUTES.temp.all,
   },
 
-  products: {
-    value: 'products',
+  vehicles: {
+    value: 'vehicles',
     search: {
       keys: ['title'],
     },
@@ -121,5 +121,5 @@ export const STATUS_OPTIONS = (t: any) => ({
 export const STATUS_OPTIONS_LIST = (t: any) => Object.values(STATUS_OPTIONS(t));
 
 export const tablePlaceHolderTitle = {
-  [USER_ROUTES.products]: 'users.product',
+  [USER_ROUTES.vehicles]: 'users.vehicles',
 };

@@ -24,10 +24,21 @@ export const USERS = {
   },
 };
 
-export const PRODUCTS = {
-  fetchAllProductsList: {
-    queryKey: 'getAllProducts',
+export const VEHICLES = {
+  fetchAllVehiclesList: {
+    queryKey: 'getAllVehicles',
     endpoint: (params: any) =>
-      buildDynamicURL(API_ENDPOINTS.PRODUCTS.GET_PRODUCTS_LIST, params),
+      buildDynamicURL(API_ENDPOINTS.VEHICLES.GET_VEHICLES_LIST, params),
+  },
+  fetchVehicleById: {
+    queryKey: 'getVehicleByUId',
+    endpoint: (params: any) =>
+      buildDynamicURL(
+        API_ENDPOINTS.VEHICLES.GET_VEHICLE({
+          id: params.vehicleId,
+        }),
+        params
+      ),
+    activeServerSidePagination: false,
   },
 };

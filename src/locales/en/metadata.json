@@ -35,9 +35,17 @@
     "title": "Home",
     "description": "Home Page"
   },
-  "products": {
-    "title": "Product",
-    "description": "Product Page"
+  "vehicles": {
+    "title": "Vehicles",
+    "description": "Vehicles Page"
+  },
+  "addVehicles": {
+    "title": "Add Vehicle",
+    "description": "Add Vehicle Page"
+  },
+  "vehicleDetails": {
+    "title": "Vehicle Details",
+    "description": "Vehicle Details Page"
   },
   "unverifiedLogin": {
     "title": "Unverified Login",

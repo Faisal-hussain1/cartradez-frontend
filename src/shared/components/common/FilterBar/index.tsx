@@ -16,7 +16,7 @@ const FiltersBar = ({
 
   const selectValue = {
     ...(requestStatus || defaultSelectValue),
-    label: `${t('aaaa')} ${(requestStatus || ct(STATUS_OPTIONS).all).label}`,
+    label: `${t('search')} ${(requestStatus || ct(STATUS_OPTIONS).all).label}`,
   };
 
   const handleSearch = (searchValue: string) => {
@@ -39,7 +39,7 @@ const FiltersBar = ({
       <SearchInput
         initialValue={searchValue}
         onSearch={handleSearch}
-        placeholder={t('aaa')}
+        placeholder={t('search...')}
       />
     </div>
   );

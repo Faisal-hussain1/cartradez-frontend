@@ -23,5 +23,32 @@
   },
   "typeErrors": {
     "number": "Please enter a valid number"
+  },
+  "vehicleListingValidation": {
+    "makeRequired": "Vehicle make is required",
+    "modelRequired": "Vehicle model is required",
+    "yearRequired": "Vehicle year is required",
+    "yearMin": "Year must be after 1900",
+    "yearMax": "Year cannot be in the future",
+    "colorRequired": "Vehicle color is required",
+    "mileageRequired": "Mileage is required",
+    "mileageMin": "Mileage cannot be negative",
+    "priceRequired": "Price is required",
+    "priceMin": "Price must be at least 1",
+    "currencyRequired": "Vehicle currency plate is required",
+    "descriptionRequired": "Vehicle description is required",
+    "engineSizeRequired": "Vehicle Engine Size is required",
+    "fuelTypeRequired": "Fuel type is required",
+    "fuelTypeInvalid": "Invalid fuel type",
+    "transmissionRequired": "Transmission is required",
+    "transmissionInvalid": "Invalid transmission type",
+
+    "locationRequired": "Location is required",
+    "brandRequired": "Brand is required",
+    "descriptionMax": "Description too long",
+    "imageRequired": "At least one image is required",
+    "imageInvalid": "Invalid image file",
+    "numberPlateRequired": "Vehicle number plate is required",
+    "currencyInvalid": "Vehicle currency is invalid type"
   }
 }

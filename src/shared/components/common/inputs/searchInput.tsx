@@ -61,7 +61,7 @@ const SearchInput = ({
       )}
 
       <PrimaryButton
-        buttonText={t('asddasd')}
+        buttonText={t('Search')}
         onClick={handleSearch}
         styles={buttonClassName}
       />
