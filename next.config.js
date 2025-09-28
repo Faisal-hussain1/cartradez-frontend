@@ -1,8 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const {withSentryConfig} = require('@sentry/nextjs');
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
-const bucketHost = process.env.AWS_BUCKET_HOSTNAME;
+// const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+
+// const bucketHost = process.env.AWS_BUCKET_HOSTNAME;
 
 const nextConfig = {
   turbopack: {
@@ -17,13 +18,13 @@ const nextConfig = {
     resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
   },
   images: {
-    unoptimized: !isProduction,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: bucketHost,
+        hostname: process.env.NEXT_PUBLIC_AWS_BUCKET_HOSTNAME,
       },
     ],
+    unoptimized: true, // optional: avoids Next.js optimization issues with S3
   },
 };
 module.exports = nextConfig;
