@@ -22,12 +22,12 @@ function SelectInput({
       render={({field: {value, onChange}, fieldState: {error}}) => {
         return (
           <div className='flex flex-col relative'>
-            {label && (
-              <label className='text-[14px] mb-[5px] text-secondary font-semibold'>
-                {label}
-                {isRequired && <span className='text-red100 pl-0.5'>*</span>}
-              </label>
-            )}
+            <label className='font-medium text-gray-700 mb-[5px] inline-flex items-center gap-1'>
+              {label}
+              {isRequired && (
+                <span className='inline-flex md:hidden text-red100'>*</span>
+              )}
+            </label>
             <Select
               onChange={(selectedOption) => {
                 onChange(selectedOption?.value);

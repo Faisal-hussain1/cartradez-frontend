@@ -117,6 +117,13 @@
   }
 }
 
+/* globals.css or a module file */
+@media (max-width: 640px) {
+  .react-select__placeholder {
+    font-size: 12px !important;
+  }
+}
+
 /* shadCN theme palette  */
 
 /* ---break---  */

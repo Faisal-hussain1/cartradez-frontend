@@ -91,11 +91,11 @@ export default function ImageUploadInput({
           </p>
         )}
 
-        <div className='grid grid-cols-3 gap-2 mt-4 justify-center'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-3 gap-2 mt-4'>
           {images.map((file, idx) => (
             <div
               key={idx}
-              className='relative w-70 h-40 rounded-lg overflow-hidden border'
+              className='relative aspect-[4/3] w-full rounded-lg overflow-hidden border'
             >
               <Image
                 src={URL.createObjectURL(file)}

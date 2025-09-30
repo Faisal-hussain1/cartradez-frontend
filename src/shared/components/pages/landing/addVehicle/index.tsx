@@ -114,9 +114,9 @@ export default function AddVehicleForm() {
   return (
     <>
       <div>
-        <div className='flex justify-center bg-white mt-10 p-5'>
+        <div className='flex justify-center bg-white mt-10 md:mt-3 lg:mt-5  p-2'>
           <div>
-            <p className='text-3xl font-semibold text-center text-primary'>
+            <p className='text-md md:text-3xl font-semibold text-center text-primary'>
               Sell your Car With Easy & Simple Steps!
             </p>
             <p className='text-center mt-2'>
@@ -127,7 +127,7 @@ export default function AddVehicleForm() {
       </div>
       <div className='w-full flex justify-center'>
         <Container>
-          <div className='w-4/5 max-w-[1200px] mx-auto'>
+          <div className='w-full sm:w-4/5 max-w-[1200px] mx-auto'>
             <AuthFormContainer
               heading=''
               handleSubmit={handleSubmit(onSubmit)}
@@ -198,12 +198,15 @@ export default function AddVehicleForm() {
                 />
 
                 <div className='grid grid-cols-12 gap-4 mt-5'>
-                  <div className='col-span-2 flex items-start justify-end'>
+                  <div className='hidden md:col-span-3 lg:col-span-2 md:flex items-start justify-end'>
                     <Label text={'Add Description'} isRequired={true} />
                   </div>
 
-                  <div className='col-span-10'>
+                  <div className='col-span-12 md:col-span-9 lg:col-span-10'>
                     <DescriptionBox
+                      label={
+                        <span className='block md:hidden'>Add Description</span>
+                      }
                       name={'description'}
                       control={control}
                       isRequired={true}
@@ -260,7 +263,7 @@ export default function AddVehicleForm() {
                 <SubmitButton
                   loading={isPending}
                   buttonText='SUBMIT'
-                  styles='w-[180px]'
+                  styles='w-[100px] md:w-[180px]'
                 />
               </div>
             </AuthFormContainer>
