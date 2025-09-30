@@ -39,7 +39,7 @@ const FiltersBar = ({
       <SearchInput
         initialValue={searchValue}
         onSearch={handleSearch}
-        placeholder={t('search...')}
+        placeholder={t('search....')}
       />
     </div>
   );
