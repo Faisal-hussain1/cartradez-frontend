@@ -1,8 +1,9 @@
+import {ReactNode} from 'react';
 import {ControllerRenderProps, FieldError, FieldValues} from 'react-hook-form';
 import {Options} from 'react-select';
 
 export interface TextInputProps {
-  label?: string;
+  label?: ReactNode;
   placeholder?: string;
   control: any;
   name: string;
@@ -40,7 +41,7 @@ export interface NumberInputProps {
 }
 
 export interface SelectInputProps {
-  label?: string;
+  label?: ReactNode;
   options: Options<{value: any; label: string}>;
   control: any;
   name: string;

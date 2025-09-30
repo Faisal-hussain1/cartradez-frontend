@@ -1,5 +1,6 @@
 'use client';
 
+import {ReactNode} from 'react';
 import * as React from 'react';
 import {Button} from '@/shared/components/ui/button';
 import {cn} from '@/shared/utils/shadCNUtils';
@@ -7,7 +8,7 @@ import TextAreaInput from '../inputs/TextAreaInput';
 
 interface DescriptionBoxProps {
   name: string;
-  label?: string;
+  label?: ReactNode;
   placeholder?: string;
   control: any;
   suggestions?: string[];
@@ -49,8 +50,11 @@ export function DescriptionBox({
   return (
     <div className={cn('w-full space-y-3', className)}>
       {label && (
-        <label className='font-medium text-gray-700 mb-[5px]'>
-          {label} {isRequired && <span className='text-red100 pl-0.5'>*</span>}
+        <label className='font-medium text-gray-700 mb-[5px] inline-flex items-center gap-1'>
+          {label}
+          {isRequired && (
+            <span className='inline-flex md:hidden text-red100'>*</span>
+          )}
         </label>
       )}
 

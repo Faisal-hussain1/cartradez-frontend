@@ -22,9 +22,11 @@ const TextInput = ({
         return (
           <div className='flex flex-col relative w-full'>
             {label && (
-              <label className='text-[14px] mb-[5px] text-secondary font-semibold'>
+              <label className='font-medium text-gray-700 mb-[5px] inline-flex items-center gap-1'>
                 {label}
-                {isRequired && <span className='text-red100 pl-0.5'>*</span>}
+                {isRequired && (
+                  <span className='inline-flex md:hidden text-red100'>*</span>
+                )}
               </label>
             )}
             <Input
