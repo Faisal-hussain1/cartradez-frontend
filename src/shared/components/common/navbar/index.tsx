@@ -128,7 +128,7 @@ export default function Navbar() {
                   <div className='flex flex-col gap-2 mt-4'>
                     <PrimaryButton
                       buttonText='Post an Ad'
-                      onClick={() => router.push('/add-vehicle')}
+                      onClick={() => router.push(USER_ROUTES.addVehicle)}
                     />
                     {isLoggedIn && (
                       <PrimaryButton
