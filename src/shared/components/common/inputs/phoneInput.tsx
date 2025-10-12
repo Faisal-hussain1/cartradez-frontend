@@ -17,52 +17,61 @@ const PhoneInputText = ({
     <Controller
       name={name}
       control={control}
-      render={({field, fieldState: {error}}) => (
-        <div
-          className={cn(
-            'flex flex-col relative w-full group',
-            'focus-within:[&_.react-international-phone-country-selector-button]:border-ring',
-            'focus-within:[&_.react-international-phone-country-selector-button]:ring-1',
-            'focus-within:[&_.react-international-phone-country-selector-button]:ring-ring',
-            'focus-within:[&_.react-international-phone-country-selector-button]:ring-offset-0'
-          )}
-        >
-          {label && (
-            <label className='text-[14px] mb-[10px] text-secondary font-semibold'>
-              {label}
-            </label>
-          )}
+      render={({field, fieldState: {error}}) => {
+        const hasValue = field.value && field.value.trim() !== '';
 
-          <PhoneInput
-            placeholder={placeholder}
-            {...field}
-            inputProps={{
-              name,
-              className: cn(
-                'flex h-[52px] w-full rounded-tr-[10px] rounded-br-[10px] border-[1px] border-gray10 bg-transparent px-4 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-                error && 'border-error focus-visible:ring-error'
-              ),
-            }}
-            disabled={disabled}
+        return (
+          <div
             className={cn(
-              'rounded-[10px] h-[52px]',
-              error &&
-                'border-error [&_.react-international-phone-input-container]:border-error'
+              'flex flex-col relative w-full group',
+              'focus-within:[&_.react-international-phone-country-selector-button]:border-ring',
+              'focus-within:[&_.react-international-phone-country-selector-button]:ring-1',
+              'focus-within:[&_.react-international-phone-country-selector-button]:ring-ring',
+              'focus-within:[&_.react-international-phone-country-selector-button]:ring-offset-0'
             )}
-            style={
-              {
-                '--react-international-phone-border-top-left-radius': '10px',
-                '--react-international-phone-border-bottom-left-radius': '10px',
-                '--react-international-phone-height': '52px',
-                '--react-international-phone-border-color': error
-                  ? THEME.color.borderColor
-                  : THEME.color.gray10,
-              } as React.CSSProperties
-            }
-          />
-          {error && <ErrorMessage errorMsg={error.message} />}
-        </div>
-      )}
+          >
+            {label && (
+              <label className='text-[14px] mb-[10px] text-secondary font-semibold'>
+                {label}
+              </label>
+            )}
+
+            <PhoneInput
+              placeholder={placeholder}
+              {...field}
+              inputProps={{
+                name,
+                className: cn(
+                  'flex h-[52px] w-full rounded-br-[10px] border-gray-300 bg-white focus-visible:ring-primary' +
+                    'placeholder:[color:var(--gray60)] md:text-sm px-4',
+                  error &&
+                    'border-[var(--error-light)] bg-[var(--error-light)] focus-visible:ring-error',
+                  hasValue &&
+                    'border-[var(--success-light)] bg-[var(--success-light)] focus-visible:[var(--success-light)]'
+                ),
+              }}
+              disabled={disabled}
+              className={cn(
+                'rounded-[10px] h-[52px]',
+                error &&
+                  'border-error [&_.react-international-phone-input-container]:border-error'
+              )}
+              style={
+                {
+                  '--react-international-phone-border-top-left-radius': '10px',
+                  '--react-international-phone-border-bottom-left-radius':
+                    '10px',
+                  '--react-international-phone-height': '52px',
+                  '--react-international-phone-border-color': error
+                    ? THEME.color.borderColor
+                    : THEME.color.gray10,
+                } as React.CSSProperties
+              }
+            />
+            {error && <ErrorMessage errorMsg={error.message} />}
+          </div>
+        );
+      }}
     />
   );
 };
