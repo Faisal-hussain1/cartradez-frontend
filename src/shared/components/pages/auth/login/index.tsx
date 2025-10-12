@@ -96,14 +96,14 @@ export default function LoginForm() {
             label={t('auth.passwordLabel')}
             placeholder={t('auth.passwordPlaceholder')}
           />
-          {/* <div className='flex-end'>
+          <div className='flex-end'>
             <Link
               className='text-primary text-sm'
               href={AUTH_ROUTES.forgotPassword}
             >
               {t('auth.forgotPassword')}
             </Link>
-          </div> */}
+          </div>
           <SubmitButton loading={isPending} buttonText={t('auth.loginText')} />
           <div className='flex-end'>
             <Link className='text-primary text-sm' href={AUTH_ROUTES.register}>

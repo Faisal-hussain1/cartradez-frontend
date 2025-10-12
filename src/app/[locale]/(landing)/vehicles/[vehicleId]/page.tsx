@@ -1,6 +1,6 @@
 import {vehicleDetailsPageProps} from '@/shared/interfaces/vehicles';
 import {generateMetadata} from '@/shared/utils/metadataUtils';
-import VehicleDetails from '@/shared/components/pages/landing/home/vehicles/Details';
+import VehicleDetails from '@/shared/components/pages/landing/VehicleDetails';
 
 export default async function VehicleDetailsPage({
   params,

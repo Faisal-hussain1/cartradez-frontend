@@ -1,4 +1,4 @@
-import Vehicles from '@/shared/components/pages/vehicles';
+import Vehicles from '@/shared/components/pages/landing/viewAllVehicles';
 import {VEHICLES} from '@/shared/constants/reactQueryConstants';
 import ReactPrefetchQueryProvider from '@/shared/providers/ReactPrefetchQueryProvider';
 import {generateMetadata} from '@/shared/utils/metadataUtils';

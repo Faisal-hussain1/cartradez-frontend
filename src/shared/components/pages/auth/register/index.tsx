@@ -20,6 +20,7 @@ import {
 } from '@/shared/components/common/containers/auth';
 import Image from 'next/image';
 import Logo from '@/shared/components/common/logo';
+import PhoneInputText from '@/shared/components/common/inputs/phoneInput';
 
 export default function RegisterForm() {
   const {t, ct} = useTranslation();
@@ -84,12 +85,19 @@ export default function RegisterForm() {
             control={control}
             placeholder={t('auth.emailPlaceholder')}
           />
-          <TextInput
+          {/* <TextInput
             name='phoneNumber'
             label={t('auth.phoneNumberLabel')}
             control={control}
             placeholder={t('auth.phoneNumberPlaceholder')}
+          /> */}
+          <PhoneInputText
+            control={control}
+            name='phoneNumber'
+            label={t('auth.phoneNumberLabel')}
+            placeholder={t('auth.phoneNumberPlaceholder')}
           />
+
           <PasswordInput
             name='password'
             control={control}
