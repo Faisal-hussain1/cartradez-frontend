@@ -32,3 +32,17 @@ export interface vehicleDetailsPageProps {
 export interface vehicleDetailsLinkProps {
   vehicleId: string;
 }
+interface ContactCardProps {
+  vehicle?: Vehicle;
+  title?: string;
+  phoneNumber?: string;
+  whatsappNumber?: string;
+  whatsappMessage?: string;
+  contactMessage?: string;
+  showCallOption?: boolean;
+  showWhatsApp?: boolean;
+  showMessage?: boolean;
+  onCallClick?: () => void;
+  onWhatsAppClick?: () => void;
+  onMessageClick?: () => void;
+}
