@@ -32,3 +32,9 @@ export interface vehicleDetailsPageProps {
 export interface vehicleDetailsLinkProps {
   vehicleId: string;
 }
+
+export interface PanelProps {
+  title: string;
+  items: string[];
+  lightBg?: boolean;
+}
