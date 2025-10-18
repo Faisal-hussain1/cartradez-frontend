@@ -66,7 +66,7 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
                 <div className='whitespace-nowrap text-gray-500'>
                   {' '}
                   Published: Sept 14, 2025{' '}
-                </div>{' '}
+                </div>
               </div>
               {/* Vehicle Images */}
               <VehicleImages
