@@ -132,6 +132,7 @@ export default function VehicleImages({
         >
           {displayedThumbnails.map((image, index) => {
             const actualIndex = images.findIndex((img) => img.id === image.id);
+
             return (
               <div
                 key={image.id}

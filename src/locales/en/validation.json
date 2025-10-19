@@ -31,6 +31,8 @@
     "yearMin": "Year must be after 1900",
     "yearMax": "Year cannot be in the future",
     "colorRequired": "Vehicle color is required",
+    "conditionRequired": "Vehicle condition is required",
+    "driveTypeRequired": "Vehicle drive type is required",
     "mileageRequired": "Mileage is required",
     "mileageMin": "Mileage cannot be negative",
     "priceRequired": "Price is required",

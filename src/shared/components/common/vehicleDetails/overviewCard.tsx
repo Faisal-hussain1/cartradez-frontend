@@ -1,5 +1,6 @@
 'use client';
 
+import {stringToTitleCase} from '@/shared/utils/general';
 import {Calendar, Gauge, Fuel, Settings2} from 'lucide-react';
 
 interface OverviewCardProps {
@@ -51,7 +52,7 @@ export default function OverviewCard({
           </div>
           <div>
             <p className='text-xs text-gray-500'>Current Mileage</p>
-            <p className='font-semibold text-gray-800'>{mileage}</p>
+            <p className='font-semibold text-gray-800'>{mileage} KM</p>
           </div>
         </div>
 
@@ -62,7 +63,9 @@ export default function OverviewCard({
           </div>
           <div>
             <p className='text-xs text-gray-500'>Fuel Type</p>
-            <p className='font-semibold text-gray-800'>{fuelType}</p>
+            <p className='font-semibold text-gray-800'>
+              {stringToTitleCase({str: fuelType})}
+            </p>
           </div>
         </div>
 
@@ -73,13 +76,15 @@ export default function OverviewCard({
           </div>
           <div>
             <p className='text-xs text-gray-500'>Transmission</p>
-            <p className='font-semibold text-gray-800'>{transmission}</p>
+            <p className='font-semibold text-gray-800'>
+              {stringToTitleCase({str: transmission})}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Feature Tags */}
-      <div className='flex flex-wrap gap-2 mt-3'>
+      {/* <div className='flex flex-wrap gap-2 mt-3'>
         {features.map((feature) => (
           <span
             key={feature}
@@ -88,7 +93,7 @@ export default function OverviewCard({
             {feature}
           </span>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

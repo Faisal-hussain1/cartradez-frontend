@@ -27,13 +27,13 @@ export default function DescriptionCard({
         </p>
       ))}
 
-      {bullets && bullets.length > 0 && (
+      {/* {bullets && bullets.length > 0 && (
         <ul className='list-disc ml-6 text-sm text-gray-700 leading-relaxed space-y-2'>
           {bullets.map((bullet, idx) => (
             <li key={idx}>{bullet}</li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
   );
 }

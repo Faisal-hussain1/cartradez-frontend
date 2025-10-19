@@ -1,7 +1,8 @@
 'use client';
 
+import {stringToTitleCase} from '@/shared/utils/general';
+
 interface KeyInformationCardProps {
-  // you can type these fields more robustly if you use specific models / enums
   leftLabels?: string[];
   leftValues?: string[];
   rightLabels?: string[];
@@ -16,7 +17,7 @@ export default function KeyInformationCard({
     'Exterior Color',
     'Number of Owners',
   ],
-  leftValues = ['Bugatti', 'Coupe', '8.0L Quad-Turbo W16', 'Blue Dawn', '1'],
+  leftValues,
   rightLabels = [
     'Model',
     'Condition',
@@ -24,13 +25,7 @@ export default function KeyInformationCard({
     'Assembly',
     'Registration City',
   ],
-  rightValues = [
-    'Chiron Super Sport',
-    'Used',
-    'AWD',
-    'Imported (France)',
-    'Lusaka',
-  ],
+  rightValues,
 }: KeyInformationCardProps) {
   return (
     <div className='bg-white rounded-[16px] shadow-sm w-full p-6 flex flex-col gap-4'>
@@ -49,9 +44,9 @@ export default function KeyInformationCard({
         </div>
         {/* Left values column */}
         <div className='flex flex-col space-y-2'>
-          {leftValues.map((val, idx) => (
+          {leftValues?.map((val, idx) => (
             <span key={idx} className='font-semibold text-gray-800'>
-              {val}
+              {stringToTitleCase({str: val})}
             </span>
           ))}
         </div>
@@ -65,9 +60,9 @@ export default function KeyInformationCard({
         </div>
         {/* Right values column */}
         <div className='flex flex-col space-y-2'>
-          {rightValues.map((val, idx) => (
+          {rightValues?.map((val, idx) => (
             <span key={idx} className='font-semibold text-gray-800'>
-              {val}
+              {stringToTitleCase({str: val})}
             </span>
           ))}
         </div>

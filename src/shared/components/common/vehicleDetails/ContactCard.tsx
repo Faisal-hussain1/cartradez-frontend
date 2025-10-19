@@ -9,7 +9,7 @@ import {
 import {Phone, Send} from 'lucide-react';
 import {FaWhatsapp} from 'react-icons/fa'; // ✅ Official WhatsApp icon
 
-export default function ContactCard() {
+export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
   return (
     <Card className='w-full max-w-sm rounded-xl shadow-sm border border-gray-200 p-3'>
       {/* Header */}
@@ -28,7 +28,7 @@ export default function ContactCard() {
         <button className='flex items-center justify-center gap-2 bg-[#0B3E77] hover:bg-[#093360] text-white font-medium py-2.5 rounded-md transition-all text-[14px] leading-[100%]'>
           <Phone className='w-4 h-4' />{' '}
           {/* ✅ Removed py-4 for proper centering */}
-          <span>Call +260 97 654 3210</span>
+          <span>Call {phoneNumber}</span>
         </button>
 
         {/* WhatsApp + Send Message Buttons */}

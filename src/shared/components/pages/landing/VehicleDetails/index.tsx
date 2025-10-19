@@ -1,7 +1,6 @@
 'use client';
 
 import {vehicleDetailsLinkProps} from '@/shared/interfaces/vehicles';
-import Image from 'next/image';
 import {Heart, MapPin, Share2} from 'lucide-react';
 import VehicleDetailsSidebar from './vehicleDetailsSidebar';
 import VehicleImages from './vehicleImage';
@@ -9,8 +8,32 @@ import OverviewCard from '@/shared/components/common/vehicleDetails/overviewCard
 import DescriptionCard from '@/shared/components/common/vehicleDetails/descriptionCard';
 import KeyInformationCard from '@/shared/components/common/vehicleDetails/KeyInformationCard';
 import Container from '@/shared/components/common/containers'; // ✅ import Container
+import {vehiclesQueries} from '@/shared/reactQuery';
+import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import {ROOT_ROUTE} from '@/shared/constants/PATHS';
+import {stringToTitleCase} from '@/shared/utils/general';
 
 export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
+  const {useFetchVehicleById} = vehiclesQueries();
+  const router = useLocaleRouter();
+
+  const {
+    data: vehicleDetail,
+    isPending,
+    error,
+  } = useFetchVehicleById({
+    params: {vehicleId},
+  });
+
+  if (isPending) return <GlobalLoader />;
+
+  if (error) return router.push(ROOT_ROUTE);
+
+  if (!vehicleDetail) return router.push(ROOT_ROUTE);
+
+  console.log('vehicleDetail', vehicleDetail);
+
   return (
     <Container className='bg-[#F3F4F6] py-6'>
       <div className='flex flex-col gap-6'>
@@ -22,7 +45,8 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
               {/* Title + Icons */}
               <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-5'>
                 <h1 className='text-2xl md:text-3xl font-bold text-gray-900 leading-tight'>
-                  Bugatti Chiron Super Sport 2022
+                  {/* Bugatti Chiron Super Sport 2022 */}
+                  {`${stringToTitleCase({str: vehicleDetail.vehicle.make})} ${stringToTitleCase({str: vehicleDetail.vehicle.model})} ${vehicleDetail.vehicle.year}`}
                 </h1>
                 <div className='flex gap-4 mt-4 md:mt-0'>
                   <Share2 className='w-6 h-6 text-gray-400 hover:text-gray-600 cursor-pointer transition' />
@@ -31,7 +55,7 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
               </div>
 
               {/* Tags */}
-              <div className='flex flex-wrap gap-2 mb-5'>
+              {/* <div className='flex flex-wrap gap-2 mb-5'>
                 {[
                   'One Owner',
                   '8.0L W16 Engine',
@@ -45,11 +69,11 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
                     {tag}
                   </span>
                 ))}
-              </div>
+              </div> */}
 
               {/* Price */}
               <p className='text-[#0B3E77] font-bold text-2xl md:text-3xl mb-5'>
-                ZMW 104,000,000
+                {`${vehicleDetail.vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicleDetail.vehicle.price.toLocaleString()}`}
               </p>
 
               {/* Location + Date */}
@@ -70,50 +94,19 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
               </div>
               {/* Vehicle Images */}
               <VehicleImages
-                images={[
-                  {
-                    id: '1',
-                    url: '/images/vehicle/Frame 22.png',
-                    alt: 'Front view of Bugatti Chiron',
-                    isFeatured: true,
-                  },
-                  {
-                    id: '2',
-                    url: '/images/vehicle/Frame 22.png',
-                    alt: 'Side view of Bugatti Chiron',
-                  },
-                  {
-                    id: '3',
-                    url: '/images/vehicle/Frame 22.png',
-                    alt: 'Back view of Bugatti Chiron',
-                  },
-                  {
-                    id: '4',
-                    url: '/images/vehicle/Frame 22.png',
-                    alt: 'Interior dashboard',
-                  },
-                  {
-                    id: '5',
-                    url: '/images/vehicle/Frame 22.png',
-                    alt: 'Interior seats',
-                  },
-                  {
-                    id: '6',
-                    url: '/images/vehicle/engine.jpg',
-                    alt: 'Engine view',
-                  },
-                ]}
+                images={vehicleDetail.vehicle.images}
                 maxThumbnailsToShow={3}
               />
             </div>
 
             {/* ================= Overview ================= */}
             <OverviewCard
-              registrationYear='2021'
-              mileage='18,500 km'
-              fuelType='Hybrid'
-              transmission='Manual'
-              features={['Cruise Control', 'Heated Seats', 'Bluetooth']}
+              registrationYear='N/A'
+              mileage={vehicleDetail.vehicle.mileage}
+              fuelType={vehicleDetail.vehicle.fuelType}
+              transmission={vehicleDetail.vehicle.transmission}
+
+              // features={['Cruise Control', 'Heated Seats', 'Bluetooth']}
             />
 
             {/* ================= Key Info ================= */}
@@ -126,11 +119,11 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
                 'Number of Owners',
               ]}
               leftValues={[
-                'Bugatti',
-                'Coupe',
-                '8.0L Quad-Turbo W16',
-                'Blue Dawn',
-                '1',
+                `${vehicleDetail.vehicle.make}`,
+                `N/A`,
+                `${vehicleDetail.vehicle.engineSize}`,
+                'N/A',
+                'N/A',
               ]}
               rightLabels={[
                 'Model',
@@ -140,31 +133,31 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
                 'Registration City',
               ]}
               rightValues={[
-                'Chiron Super Sport',
-                'Used',
-                'AWD',
-                'Imported (France)',
-                'Lusaka',
+                `${vehicleDetail.vehicle.model}`,
+                `${vehicleDetail.vehicle.condition}`,
+                `${vehicleDetail.vehicle.driveType}`,
+                'N/A',
+                'N/A',
               ]}
             />
 
             {/* ================= Description ================= */}
             <DescriptionCard
               title='Description'
-              paragraphs={[
-                `Experience unmatched performance and craftsmanship with the Bugatti Chiron Super Sport 2022 — a masterpiece of engineering that pushes the limits of automotive excellence.`,
-                `Powered by an 8.0-liter quad-turbocharged W16 engine producing 1,577 horsepower, this machine delivers breathtaking acceleration and effortless control.`,
-              ]}
-              bullets={[
-                `Unmatched performance: 8.0L quad-turbocharged W16 engine delivering 1,577 horsepower.`,
-                `Record-breaking speed: Accelerates 0–100 km/h in just 2.4 seconds — pure engineering art.`,
-              ]}
+              paragraphs={[`N/A`]}
+
+              // bullets={[
+              //   `Unmatched performance: 8.0L quad-turbocharged W16 engine delivering 1,577 horsepower.`,
+              //   `Record-breaking speed: Accelerates 0–100 km/h in just 2.4 seconds — pure engineering art.`,
+              // ]}
             />
           </div>
 
           {/* ================= Sidebar ================= */}
           <div className='col-span-12 lg:col-span-3'>
-            <VehicleDetailsSidebar />
+            <VehicleDetailsSidebar
+              sellerDetails={vehicleDetail.vehicle.creatorId}
+            />
           </div>
         </div>
       </div>
