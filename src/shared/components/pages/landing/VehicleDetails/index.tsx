@@ -1,5 +1,6 @@
 'use client';
 
+import {JSX} from 'react';
 import {vehicleDetailsLinkProps} from '@/shared/interfaces/vehicles';
 import {Heart, MapPin, Share2} from 'lucide-react';
 import VehicleDetailsSidebar from './vehicleDetailsSidebar';
@@ -14,7 +15,9 @@ import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {ROOT_ROUTE} from '@/shared/constants/PATHS';
 import {stringToTitleCase} from '@/shared/utils/general';
 
-export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
+export default function VehicleDetails({
+  vehicleId,
+}: vehicleDetailsLinkProps): JSX.Element {
   const {useFetchVehicleById} = vehiclesQueries();
   const router = useLocaleRouter();
 
@@ -28,9 +31,17 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
 
   if (isPending) return <GlobalLoader />;
 
-  if (error) return router.push(ROOT_ROUTE);
+  // if (error) {
+  //   router.push(ROOT_ROUTE);
 
-  if (!vehicleDetail) return router.push(ROOT_ROUTE);
+  //   return null;
+  // }
+
+  // if (!vehicleDetail) {
+  //   router.push(ROOT_ROUTE);
+
+  //   return null;
+  // }
 
   console.log('vehicleDetail', vehicleDetail);
 
