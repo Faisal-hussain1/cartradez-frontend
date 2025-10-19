@@ -9,7 +9,7 @@ export const metadata = async () => {
 export default async function VehicleDetailsPage({
   params,
 }: vehicleDetailsPageProps) {
-  const {vehicleId} = params;
+  const {vehicleId} = await params;
 
   return <VehicleDetails vehicleId={vehicleId} />;
 }

@@ -8,7 +8,7 @@ import {TbAutomaticGearboxFilled} from 'react-icons/tb';
 import {Badge} from '@/shared/components/ui/badge';
 import {Card, CardContent} from '@/shared/components/ui/card';
 import {Separator} from '@/shared/components/ui/separator';
-import {truncateWords} from '@/shared/utils/general';
+import {stringToTitleCase, truncateWords} from '@/shared/utils/general';
 import {VehicleCardProps} from '@/shared/interfaces/vehicles';
 import PrimaryButton from '../buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
@@ -36,7 +36,7 @@ export default function VehicleCard({vehicle}: VehicleCardProps) {
       </div>
       <CardContent className='pt-5 pb-3'>
         <h3 className='text-lg font-semibold'>
-          {vehicle.model} – {vehicle.year}
+          {`${stringToTitleCase({str: vehicle.make})} ${stringToTitleCase({str: vehicle.model})}`}
         </h3>
         {/* <p className='text-sm text-gray-500'>
           {truncateWords({text: vehicle.description})}
