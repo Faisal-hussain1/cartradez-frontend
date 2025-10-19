@@ -113,3 +113,7 @@ export function getYearsList({start = 1900}: {start?: number}) {
 
   return years;
 }
+
+export function stringToTitleCase({str}: {str: string}) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
