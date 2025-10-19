@@ -8,7 +8,7 @@ import VehicleImages from './vehicleImage';
 import OverviewCard from '@/shared/components/common/vehicleDetails/overviewCard';
 import DescriptionCard from '@/shared/components/common/vehicleDetails/descriptionCard';
 import KeyInformationCard from '@/shared/components/common/vehicleDetails/KeyInformationCard';
-import Container from '@/shared/components/common/containers'; // ✅ import Container
+import Container from '@/shared/components/common/containers';
 import {vehiclesQueries} from '@/shared/reactQuery';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
@@ -42,8 +42,6 @@ export default function VehicleDetails({
 
   //   return null;
   // }
-
-  console.log('vehicleDetail', vehicleDetail);
 
   return (
     <Container className='bg-[#F3F4F6] py-6'>
@@ -89,7 +87,7 @@ export default function VehicleDetails({
 
               {/* Location + Date */}
               <div className='flex items-center justify-between text-sm md:text-base text-gray-600 mb-6'>
-                {' '}
+                {/* {' '}
                 <div className='flex items-center gap-2'>
                   {' '}
                   <MapPin className='w-4 h-4 text-gray-500' />{' '}
@@ -101,7 +99,7 @@ export default function VehicleDetails({
                 <div className='whitespace-nowrap text-gray-500'>
                   {' '}
                   Published: Sept 14, 2025{' '}
-                </div>
+                </div> */}
               </div>
               {/* Vehicle Images */}
               <VehicleImages
