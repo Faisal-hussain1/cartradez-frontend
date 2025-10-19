@@ -4,8 +4,10 @@ export interface VehiclePayload {
   make: string;
   model: string;
   year: number;
+  condition: string;
   mileage: number;
   color: string;
+  driveType: string;
   price: number;
   currency: string;
   description: string;
@@ -26,9 +28,26 @@ export interface VehicleCardProps {
 }
 
 export interface vehicleDetailsPageProps {
-  params: Promise<{vehicleId: string}>;
+  params: {
+    vehicleId: string;
+  };
 }
 
 export interface vehicleDetailsLinkProps {
   vehicleId: string;
 }
+
+// interface ContactCardProps {
+//   vehicle?: Vehicle;
+//   title?: string;
+//   phoneNumber?: string;
+//   whatsappNumber?: string;
+//   whatsappMessage?: string;
+//   contactMessage?: string;
+//   showCallOption?: boolean;
+//   showWhatsApp?: boolean;
+//   showMessage?: boolean;
+//   onCallClick?: () => void;
+//   onWhatsAppClick?: () => void;
+//   onMessageClick?: () => void;
+// }
