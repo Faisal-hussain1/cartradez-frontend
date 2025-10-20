@@ -7,6 +7,7 @@ import {
   CardContent,
 } from '@/shared/components/ui/card';
 import useTranslation from '@/shared/hooks/useTranslation';
+import {formatDate} from '@/shared/utils/dateUtils';
 import {
   CheckCircle,
   BadgeCheck,
@@ -22,6 +23,8 @@ interface SellerDetailsType {
   lastName: string;
   phoneNumber: string;
   profileImage?: string;
+  totalActiveVehicles: number;
+  createdAt: string;
 }
 
 export default function SellerDetailsCard({
@@ -53,7 +56,7 @@ export default function SellerDetailsCard({
             </p>
             <div className='flex items-center gap-2 flex-wrap'>
               {/* {(sellerType === 'verified' || sellerType === 'both') && ( */}
-              <div className='flex items-center gap-1.5 border border-green-500 bg-green-50 text-green-600 px-3 py-1 rounded-full text-[13px] font-medium leading-[100%]'>
+              <div className='flex items-center gap-1.5 border border-green100 bg-green-50 text-green100 px-3 py-1 rounded-full text-[13px] font-medium leading-[100%]'>
                 <CheckCircle className='w-4 h-4' />
                 <span>Verified Seller</span>
               </div>
@@ -70,17 +73,17 @@ export default function SellerDetailsCard({
         </div>
 
         <div className='space-y-3 text-sm text-gray-700 border-t border-gray-100 pt-4'>
-          {/* <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-3'>
             <Car className='w-4 h-4 text-gray-500 flex-shrink-0' />
             <div className='flex items-center gap-1'>
               <span className='text-blue-600 hover:underline cursor-pointer font-medium'>
-                {3} Cars
+                {sellerDetails.totalActiveVehicles} Cars
               </span>
               <span className='text-gray-700'>
                 currently listed on {t('mainPageTitle.appName')}
               </span>
             </div>
-          </div> */}
+          </div>
 
           <div className='flex items-center gap-3'>
             <Phone className='w-4 h-4 text-gray-500 flex-shrink-0' />
@@ -92,10 +95,13 @@ export default function SellerDetailsCard({
             </a>
           </div>
 
-          {/* <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-3'>
             <Calendar className='w-4 h-4 text-gray-500 flex-shrink-0' />
-            <span>Member since {2014}</span>
-          </div> */}
+            <span>
+              Member since{' '}
+              {formatDate({date: sellerDetails.createdAt, format: 'LLL yyyy'})}
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>

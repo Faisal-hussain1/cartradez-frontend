@@ -14,6 +14,7 @@ import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {ROOT_ROUTE} from '@/shared/constants/PATHS';
 import {stringToTitleCase} from '@/shared/utils/general';
+import {formatDate} from '@/shared/utils/dateUtils';
 
 export default function VehicleDetails({
   vehicleId,
@@ -87,19 +88,17 @@ export default function VehicleDetails({
 
               {/* Location + Date */}
               <div className='flex items-center justify-between text-sm md:text-base text-gray-600 mb-6'>
-                {/* {' '}
                 <div className='flex items-center gap-2'>
-                  {' '}
                   <MapPin className='w-4 h-4 text-gray-500' />{' '}
-                  <span className='truncate'>
-                    {' '}
-                    Viscolo del buio (Grand Golf Road, London), Zambia{' '}
-                  </span>{' '}
-                </div>{' '}
+                  <span className='truncate'>N/A</span>
+                </div>
                 <div className='whitespace-nowrap text-gray-500'>
-                  {' '}
-                  Published: Sept 14, 2025{' '}
-                </div> */}
+                  Published:{' '}
+                  {formatDate({
+                    date: vehicleDetail.vehicle.createdAt,
+                    format: 'LLL dd, yyyy',
+                  })}
+                </div>
               </div>
               {/* Vehicle Images */}
               <VehicleImages
@@ -131,7 +130,7 @@ export default function VehicleDetails({
                 `${vehicleDetail.vehicle.make}`,
                 `N/A`,
                 `${vehicleDetail.vehicle.engineSize}`,
-                'N/A',
+                `${vehicleDetail.vehicle.color}`,
                 'N/A',
               ]}
               rightLabels={[
@@ -153,7 +152,7 @@ export default function VehicleDetails({
             {/* ================= Description ================= */}
             <DescriptionCard
               title='Description'
-              paragraphs={[`N/A`]}
+              paragraphs={[`${vehicleDetail.vehicle.description}`]}
 
               // bullets={[
               //   `Unmatched performance: 8.0L quad-turbocharged W16 engine delivering 1,577 horsepower.`,
