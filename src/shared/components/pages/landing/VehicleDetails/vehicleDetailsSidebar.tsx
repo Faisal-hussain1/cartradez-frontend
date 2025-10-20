@@ -10,6 +10,8 @@ interface SellerDetailsType {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  totalActiveVehicles: number;
+  createdAt: string;
 }
 
 export default function VehicleDetailsSidebar({
