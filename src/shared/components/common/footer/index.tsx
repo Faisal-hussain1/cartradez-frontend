@@ -10,7 +10,8 @@ export default function Footer() {
 
   return (
     <footer className='bg-card border-t border-border pt-12 text-foreground'>
-      <div className='max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10 pb-10 text-center sm:text-left'>
+      <div className='max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-12 lg:grid-cols-4 xl:grid-cols-5 gap-10 pb-10 text-center sm:text-left'>
+        {/* Logo */}
         <div className='col-span-1 flex flex-col items-center sm:items-start'>
           <Image
             src='/images/logo-black.png'
@@ -21,6 +22,7 @@ export default function Footer() {
           />
         </div>
 
+        {/* CarTradez Section */}
         <div>
           <h3 className='font-semibold text-x mb-4'>
             {t('footer.sections.cartradez')}
@@ -40,6 +42,8 @@ export default function Footer() {
             </li>
           </ul>
         </div>
+
+        {/* Buy a Car */}
         <div>
           <h3 className='font-semibold text-x mb-4'>
             {t('footer.sections.buyCar')}
@@ -59,6 +63,8 @@ export default function Footer() {
             </li>
           </ul>
         </div>
+
+        {/* Sell a Car */}
         <div>
           <h3 className='font-semibold text-x mb-4'>
             {t('footer.sections.sellCar')}
@@ -99,7 +105,6 @@ export default function Footer() {
       </div>
 
       <hr className='border-border' />
-
       <div className='mt-4'>
         <BottomBar />
       </div>
