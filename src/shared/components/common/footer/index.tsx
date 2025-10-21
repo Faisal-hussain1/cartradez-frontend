@@ -9,7 +9,7 @@ export default function Footer() {
   const {t} = useTranslation();
 
   return (
-    <footer className='bg-card border-t border-border pt-12 text-foreground'>
+    <footer className='bg-card  pt-12 text-foreground'>
       <div className='max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-12 lg:grid-cols-4 xl:grid-cols-5 gap-10 pb-10 text-center sm:text-left'>
         {/* Logo */}
         <div className='col-span-1 flex flex-col items-center sm:items-start'>
@@ -85,7 +85,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Social Links */}
         <div>
           <h3 className='font-semibold text-x mb-4'>
             {t('footer.sections.connect')}
@@ -104,8 +103,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <hr className='border-border' />
-      <div className='mt-4'>
+      <div>
         <BottomBar />
       </div>
     </footer>
