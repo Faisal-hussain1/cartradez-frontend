@@ -1,20 +1,22 @@
-// shared/components/pages/landing/guidelines.tsx
 'use client';
 import {PanelProps} from '@/shared/interfaces/vehicles';
 import React from 'react';
 
 // 🔹 Panel Component
 function Panel({title, items, lightBg = true}: PanelProps) {
-  const bgClass = lightBg ? 'bg-blue-50' : 'bg-yellow-50';
+  const bgClass = lightBg
+    ? 'bg-[var(--color-mist)]'
+    : 'bg-[var(--color-card)] border border-[var(--color-border)]';
 
   return (
     <div
-      className={`flex-1 min-w-[280px] sm:min-w-[320px] md:min-w-[45%] lg:min-w-[48%] p-4 sm:p-6 rounded-2xl shadow-md transition hover:shadow-lg ${bgClass}`}
+      className={`flex-1 min-w-[280px] sm:min-w-[320px] md:min-w-[45%] lg:min-w-[48%] 
+        p-4 sm:p-6 rounded-2xl shadow-md transition hover:shadow-lg ${bgClass}`}
     >
-      <h2 className='text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-blue-900'>
+      <h2 className='text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-black'>
         {title}
       </h2>
-      <ul className='list-disc list-inside space-y-2 text-sm sm:text-base text-gray-700'>
+      <ul className='list-disc list-inside space-y-2 text-sm sm:text-base text-[var(--color-gray90)]'>
         {items.map((item, idx) => (
           <li key={idx}>{item}</li>
         ))}
@@ -52,17 +54,17 @@ export default function Guidelines() {
         <img
           src='/images/DisclaimerPic.png'
           alt='Safety Guidelines Banner'
-          className='w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover rounded-2xl shadow'
+          className='w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover rounded-2xl shadow-glow'
         />
       </div>
 
       {/* 🔹 Content Section */}
       <div className='px-4 sm:px-6 lg:px-8 py-6 max-w-6xl mx-auto'>
-        <h1 className='text-xl sm:text-2xl lg:text-3xl mb-3 font-bold text-blue-900 text-center sm:text-left'>
+        <h1 className='text-xl sm:text-2xl lg:text-3xl mb-3 font-bold text-black text-center sm:text-left'>
           Buy & Sell Safety Guidelines (Disclaimer)
         </h1>
 
-        <p className='text-sm sm:text-base text-gray-600 mb-8 leading-relaxed text-center sm:text-left'>
+        <p className='text-sm sm:text-base text-[var(--color-gray80)] mb-8 leading-relaxed text-center sm:text-left'>
           CarTrader provides a secure platform for buyers and sellers to connect
           directly. While we facilitate the process, all transactions and
           communications take place between users. Please follow the safety
