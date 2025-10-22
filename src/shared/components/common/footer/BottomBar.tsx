@@ -16,8 +16,6 @@ export default function BottomBar() {
         </p>
 
         <p className='flex items-center space-x-1 text-white/90'>
-          <span>{t('footer.bottomBar.developedWith')}</span>
-          <Heart size={14} className='text-red100' />
           <span>
             {t('footer.bottomBar.by')}{' '}
             <a href='#' className='hover:underline font-semibold text-white'>
