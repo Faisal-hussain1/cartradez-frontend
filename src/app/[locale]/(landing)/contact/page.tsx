@@ -1,4 +1,4 @@
-import UnderDevelopment from '@/shared/components/pages/underDevelopment';
+import UnderDevelopment from '@/shared/components/pages/aboutUs';
 
 const Contact = () => <UnderDevelopment />;
 
