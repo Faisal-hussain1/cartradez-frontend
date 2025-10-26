@@ -12,7 +12,7 @@ import {truncateWords} from '@/shared/utils/general';
 import {VehicleCardProps} from '@/shared/interfaces/vehicles';
 import PrimaryButton from '../buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import {PUBLIC_ROUTES} from '@/shared/constants/PATHS';
+import {PUBLIC_ROUTES, USER_ROUTES} from '@/shared/constants/PATHS';
 
 export default function VehicleCard({vehicle}: VehicleCardProps) {
   const router = useLocaleRouter();
@@ -72,7 +72,7 @@ export default function VehicleCard({vehicle}: VehicleCardProps) {
           {vehicle.price.toLocaleString()}
           <PrimaryButton
             buttonText='View Details'
-            onClick={() => router.push('/')}
+            onClick={() => router.push(USER_ROUTES.vehicleDetails(vehicle.id))}
           />
         </div>
       </CardContent>
