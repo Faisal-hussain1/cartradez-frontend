@@ -1,0 +1,32 @@
+{
+  "footer": {
+    "sections": {
+      "cartradez": "CarTradez",
+      "buyCar": "Buy A Car",
+      "sellCar": "Sell A Car",
+      "connect": "Connect With Us"
+    },
+    "links": {
+      "aboutUs": "About Us",
+      "faqs": "FAQs",
+      "safety": "Buy & Sell Safety",
+      "contact": "Contact Us",
+      "browseCars": "Browse All Cars",
+      "featuredCars": "Featured Cars",
+      "managed": "Managed By CarTradez",
+      "buyersGuide": "Buyer's Guide",
+      "postAd": "Post Your Ad",
+      "pricingPlans": "Pricing Plans",
+      "sellersGuide": "Seller's Guide",
+      "verification": "Verification Process"
+    },
+    "bottomBar": {
+      "copyright": "Copyright © 2025",
+      "rights": "All rights reserved.",
+      "developedWith": "Developed with",
+      "by": "by",
+      "terms": "Terms & Condition",
+      "privacy": "Privacy Notice"
+    }
+  }
+}

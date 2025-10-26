@@ -1,15 +1,18 @@
 'use client';
 
 import Image from 'next/image';
+import {useTranslation} from 'react-i18next';
 import {Facebook, Instagram, Linkedin, Twitter} from 'lucide-react';
 import BottomBar from '@/shared/components/common/footer/BottomBar';
+import Link from 'next/link';
 
 export default function Footer() {
+  const {t} = useTranslation();
+
   return (
-    <footer className='bg-white border-t border-gray-200 pt-12'>
-      {/* Main Footer Content */}
-      <div className='max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10 pb-10'>
-        {/* Logo & Brand */}
+    <footer className='bg-card  pt-12 text-foreground'>
+      <div className='max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-12 lg:grid-cols-4 xl:grid-cols-5 gap-10 pb-10 text-center sm:text-left'>
+        {/* Logo */}
         <div className='col-span-1 flex flex-col items-center sm:items-start'>
           <Image
             src='/images/logo-black.png'
@@ -22,97 +25,88 @@ export default function Footer() {
 
         {/* CarTradez Section */}
         <div>
-          <h3 className='font-semibold text-gray-900 mb-4'>CarTradez</h3>
-          <ul className='space-y-2 text-sm text-gray-600'>
+          <h3 className='font-semibold text-x mb-4'>
+            {t('footer.sections.cartradez')}
+          </h3>
+          <ul className='space-y-2 text-sm text-gray80'>
             <li>
-              <a href='#'>About Us</a>
+              <Link href='/about'>{t('footer.links.aboutUs')}</Link>
             </li>
             <li>
-              <a href='#'>FAQs</a>
+              <Link href='/faq'>{t('footer.links.faqs')}</Link>
             </li>
             <li>
-              <a href='#'>Buy & Sell Safety</a>
+              <Link href='/under-development'>{t('footer.links.safety')}</Link>
             </li>
             <li>
-              <a href='#'>Contact Us</a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Buy A Car */}
-        <div>
-          <h3 className='font-semibold text-gray-900 mb-4'>Buy A Car</h3>
-          <ul className='space-y-2 text-sm text-gray-600'>
-            <li>
-              <a href='#'>Browse All Cars</a>
-            </li>
-            <li>
-              <a href='#'>Featured Cars</a>
-            </li>
-            <li>
-              <a href='#'>Managed By CarTradez</a>
-            </li>
-            <li>
-              <a href='#'>Buyer's Guide</a>
+              <Link href='/contact'>{t('footer.links.contact')}</Link>
             </li>
           </ul>
         </div>
 
-        {/* Sell A Car */}
+        {/* Buy a Car */}
         <div>
-          <h3 className='font-semibold text-gray-900 mb-4'>Sell A Car</h3>
-          <ul className='space-y-2 text-sm text-gray-600'>
+          <h3 className='font-semibold text-x mb-4'>
+            {t('footer.sections.buyCar')}
+          </h3>
+          <ul className='space-y-2 text-sm text-gray80'>
             <li>
-              <a href='#'>Post Your Ad</a>
+              <a href='#'>{t('footer.links.browseCars')}</a>
             </li>
             <li>
-              <a href='#'>Pricing Plans</a>
+              <a href='#'>{t('footer.links.featuredCars')}</a>
             </li>
             <li>
-              <a href='#'>Seller's Guide</a>
+              <a href='#'>{t('footer.links.managed')}</a>
             </li>
             <li>
-              <a href='#'>Verification Process</a>
+              <a href='#'>{t('footer.links.buyersGuide')}</a>
             </li>
           </ul>
         </div>
 
-        {/* Connect With Us */}
+        {/* Sell a Car */}
         <div>
-          <h3 className='font-semibold text-gray-900 mb-4'>Connect With Us</h3>
-          <div className='flex space-x-5'>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-[#0B3E77] transition'
-            >
-              <Facebook size={20} />
-            </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-[#0B3E77] transition'
-            >
-              <Instagram size={20} />
-            </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-[#0B3E77] transition'
-            >
-              <Twitter size={20} />
-            </a>
-            <a
-              href='#'
-              className='text-gray-500 hover:text-[#0B3E77] transition'
-            >
-              <Linkedin size={20} />
-            </a>
+          <h3 className='font-semibold text-x mb-4'>
+            {t('footer.sections.sellCar')}
+          </h3>
+          <ul className='space-y-2 text-sm text-gray80'>
+            <li>
+              <a href='#'>{t('footer.links.postAd')}</a>
+            </li>
+            <li>
+              <a href='#'>{t('footer.links.pricingPlans')}</a>
+            </li>
+            <li>
+              <a href='#'>{t('footer.links.sellersGuide')}</a>
+            </li>
+            <li>
+              <a href='#'>{t('footer.links.verification')}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className='font-semibold text-x mb-4'>
+            {t('footer.sections.connect')}
+          </h3>
+          <div className='flex justify-center sm:justify-start space-x-5'>
+            {[Facebook, Instagram, Twitter, Linkedin].map((Icon, i) => (
+              <a
+                key={i}
+                href='#'
+                className='text-gray80 hover:text-primary transition'
+              >
+                <Icon size={20} />
+              </a>
+            ))}
           </div>
         </div>
       </div>
 
-      <hr className='border-gray-200' />
-
-      {/* Bottom Bar */}
-      <BottomBar />
+      <div>
+        <BottomBar />
+      </div>
     </footer>
   );
 }

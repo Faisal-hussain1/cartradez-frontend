@@ -19,7 +19,6 @@ export default function UnderDevelopment() {
           priority
         />
       </div>
-
       <div className='w-full'>
         <h1 className='text-6xl font-bold text-primary mb-2'>
           Under Development
@@ -42,6 +41,7 @@ export default function UnderDevelopment() {
           onClick={() => router.push(ROOT_ROUTE)}
         />
       </div>
+         
     </div>
   );
 }

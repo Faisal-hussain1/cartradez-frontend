@@ -127,27 +127,27 @@ export const LANDING_MENU_BAR_LINKS = {
   salesVehicles: {
     value: 'salesVehicles',
     label: 'Vehicles In Sales',
-    url: '/about',
+    url: '/under-development',
   },
   newVehicles: {
     value: 'newVehicles',
     label: 'New Vehicles',
-    url: '/about',
+    url: '/under-development',
   },
   tools: {
     value: 'tools',
     label: 'Tools',
-    url: '/about',
+    url: '/under-development',
   },
   resources: {
     value: 'resources',
     label: 'Resources',
-    url: '/about',
+    url: '/under-development',
   },
   services: {
     value: 'services',
     label: 'Tools & Services',
-    url: '/about',
+    url: '/under-development',
   },
   about: {
     value: 'about',
@@ -157,6 +157,6 @@ export const LANDING_MENU_BAR_LINKS = {
   contact: {
     value: 'contact',
     label: 'Contact Us',
-    url: '/about',
+    url: '/contact',
   },
 };
