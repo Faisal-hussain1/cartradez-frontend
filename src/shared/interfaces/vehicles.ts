@@ -28,7 +28,9 @@ export interface VehicleCardProps {
 }
 
 export interface vehicleDetailsPageProps {
-  params: Promise<{vehicleId: string}>;
+  params: {
+    vehicleId: string;
+  };
 }
 
 export interface vehicleDetailsLinkProps {

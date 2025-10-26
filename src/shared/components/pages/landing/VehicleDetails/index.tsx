@@ -1,5 +1,6 @@
 'use client';
 
+import {JSX} from 'react';
 import {vehicleDetailsLinkProps} from '@/shared/interfaces/vehicles';
 import {Heart, MapPin, Share2} from 'lucide-react';
 import VehicleDetailsSidebar from './vehicleDetailsSidebar';
@@ -7,14 +8,17 @@ import VehicleImages from './vehicleImage';
 import OverviewCard from '@/shared/components/common/vehicleDetails/overviewCard';
 import DescriptionCard from '@/shared/components/common/vehicleDetails/descriptionCard';
 import KeyInformationCard from '@/shared/components/common/vehicleDetails/KeyInformationCard';
-import Container from '@/shared/components/common/containers'; // ✅ import Container
+import Container from '@/shared/components/common/containers';
 import {vehiclesQueries} from '@/shared/reactQuery';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {ROOT_ROUTE} from '@/shared/constants/PATHS';
 import {stringToTitleCase} from '@/shared/utils/general';
+import {formatDate} from '@/shared/utils/dateUtils';
 
-export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
+export default function VehicleDetails({
+  vehicleId,
+}: vehicleDetailsLinkProps): JSX.Element {
   const {useFetchVehicleById} = vehiclesQueries();
   const router = useLocaleRouter();
 
@@ -28,11 +32,17 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
 
   if (isPending) return <GlobalLoader />;
 
-  if (error) return router.push(ROOT_ROUTE);
+  // if (error) {
+  //   router.push(ROOT_ROUTE);
 
-  if (!vehicleDetail) return router.push(ROOT_ROUTE);
+  //   return null;
+  // }
 
-  console.log('vehicleDetail', vehicleDetail);
+  // if (!vehicleDetail) {
+  //   router.push(ROOT_ROUTE);
+
+  //   return null;
+  // }
 
   return (
     <Container className='bg-[#F3F4F6] py-6'>
@@ -78,18 +88,16 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
 
               {/* Location + Date */}
               <div className='flex items-center justify-between text-sm md:text-base text-gray-600 mb-6'>
-                {' '}
                 <div className='flex items-center gap-2'>
-                  {' '}
                   <MapPin className='w-4 h-4 text-gray-500' />{' '}
-                  <span className='truncate'>
-                    {' '}
-                    Viscolo del buio (Grand Golf Road, London), Zambia{' '}
-                  </span>{' '}
-                </div>{' '}
+                  <span className='truncate'>N/A</span>
+                </div>
                 <div className='whitespace-nowrap text-gray-500'>
-                  {' '}
-                  Published: Sept 14, 2025{' '}
+                  Published:{' '}
+                  {formatDate({
+                    date: vehicleDetail.vehicle.createdAt,
+                    format: 'LLL dd, yyyy',
+                  })}
                 </div>
               </div>
               {/* Vehicle Images */}
@@ -122,7 +130,7 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
                 `${vehicleDetail.vehicle.make}`,
                 `N/A`,
                 `${vehicleDetail.vehicle.engineSize}`,
-                'N/A',
+                `${vehicleDetail.vehicle.color}`,
                 'N/A',
               ]}
               rightLabels={[
@@ -144,7 +152,7 @@ export default function VehicleDetails({vehicleId}: vehicleDetailsLinkProps) {
             {/* ================= Description ================= */}
             <DescriptionCard
               title='Description'
-              paragraphs={[`N/A`]}
+              paragraphs={[`${vehicleDetail.vehicle.description}`]}
 
               // bullets={[
               //   `Unmatched performance: 8.0L quad-turbocharged W16 engine delivering 1,577 horsepower.`,

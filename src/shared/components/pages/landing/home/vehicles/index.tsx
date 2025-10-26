@@ -24,7 +24,7 @@ export default function HomeVehicles() {
     });
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center mb-10'>
       <Container>
         <p className='text-4xl font-bold text-center mt-10'>
           Find Your Dream Car
