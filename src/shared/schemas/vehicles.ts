@@ -15,7 +15,13 @@ export const newVehicleSchema = (t: TranslateFunction) =>
       .required(t('vehicleListingValidation.yearRequired'))
       .min(1900, t('vehicleListingValidation.yearMin'))
       .max(new Date().getFullYear(), t('vehicleListingValidation.yearMax')),
+    condition: Yup.string().required(
+      t('vehicleListingValidation.conditionRequired')
+    ),
     color: Yup.string().required(t('vehicleListingValidation.colorRequired')),
+    driveType: Yup.string().required(
+      t('vehicleListingValidation.driveTypeRequired')
+    ),
     mileage: Yup.number().required(
       t('vehicleListingValidation.mileageRequired')
     ),
