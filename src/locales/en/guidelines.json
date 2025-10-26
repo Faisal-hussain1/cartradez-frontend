@@ -1,0 +1,31 @@
+{
+  "guidelines": {
+    "title": "Buy & Sell Safety Guidelines (Disclaimer)",
+    "description": "CarTrader provides a secure platform for buyers and sellers to connect directly. While we facilitate the process, all transactions and communications take place between users. Please follow the safety guidelines below to ensure a transparent, fair, and risk-free experience when buying or selling a vehicle.",
+    "imageAlt": "Safety Guidelines Banner",
+    "buyer": {
+      "title": "For Buyer",
+      "items": [
+        "Check the vehicle’s details against official records, making sure the engine, chassis, and registration number match.",
+        "Before making a payment, always have a look at the vehicle. Never depend just on pictures or videos.",
+        "To look for hidden problems, request maintenance data and service histories.",
+        "Prices that look too good to be true should be avoided because they typically are.",
+        "During the Meeting: Meet the seller in a public, secure setting.",
+        "Payment & Documentation: Never transfer funds or make an advance payment without documentation.",
+        "After Purchase: Transfer ownership immediately to avoid liabilities."
+      ]
+    },
+    "seller": {
+      "title": "For Seller",
+      "items": [
+        "Give truthful details regarding the state of your vehicle; sincerity fosters trust.",
+        "Make use of actual, crisp, daylight-shot photographs. Don’t use old or stock photos.",
+        "Don’t publicly disclose personal information like your home address or NRC.",
+        "During Buyer Interaction: Use the official platform’s messaging first.",
+        "At the Meeting: Select a public, secure area to meet.",
+        "Payment & Handover: Use traceable payment methods instead of cash when possible.",
+        "After the Sale: Submit the ownership transfer immediately."
+      ]
+    }
+  }
+}

@@ -1,5 +1,8 @@
-import UnderDevelopment from '@/shared/components/pages/aboutUs';
+import {generateMetadata} from '@/shared/utils/metadataUtils';
+import ContactPage from '@/shared/components/pages/dashboard/contact';
 
-const Contact = () => <UnderDevelopment />;
+export default function Contact() {
+  return <ContactPage />;
+}
 
-export default Contact;
+export const metadata = async () => await generateMetadata('contact');

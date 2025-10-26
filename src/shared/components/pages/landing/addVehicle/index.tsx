@@ -23,13 +23,17 @@ import Logo from '@/shared/components/common/logo';
 import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
 import {
   VEHICLE_BODIES,
+  VEHICLE_COLORS,
+  VEHICLE_CONDITIONS,
   VEHICLE_CURRENCY_TYPES,
   VEHICLE_CYLINDERS,
   VEHICLE_DOORS,
+  VEHICLE_DRIVE,
   VEHICLE_FUEL_TYPES,
   VEHICLE_MAKES,
   VEHICLE_MODELS,
   VEHICLE_TRANSMISSION_TYPES,
+  VEHICLE_VARIANTS,
 } from '@/shared/constants/vehicles';
 import SelectInput from '@/shared/components/common/inputs/selectInput';
 import NumberInput from '@/shared/components/common/inputs/numberInput';
@@ -52,7 +56,9 @@ export default function AddVehicleForm() {
         make: '',
         model: '',
         year: 0,
+        condition: '',
         color: '',
+        driveType: '',
         mileage: 0,
         description: '',
         price: 0,
@@ -63,9 +69,6 @@ export default function AddVehicleForm() {
         images: [],
       },
     });
-
-  const images = watch('images');
-  const [error, setError] = useState('');
 
   const {useAddNewVehicleMutation} = vehiclesMutations();
 
@@ -86,7 +89,9 @@ export default function AddVehicleForm() {
     formData.append('make', data.make);
     formData.append('model', data.model);
     formData.append('year', data.year.toString());
+    formData.append('condition', data.condition);
     formData.append('color', data.color);
+    formData.append('driveType', data.driveType);
     formData.append('mileage', data.mileage.toString());
     formData.append('description', data.description);
     formData.append('price', data.price.toString());
@@ -155,6 +160,14 @@ export default function AddVehicleForm() {
                   isRequired={true}
                 />
 
+                {/* <CustomSelectInput
+                  label='Variant'
+                  name='variant'
+                  placeholder='Select Vehicle Variant'
+                  control={control}
+                  options={Object.values(VEHICLE_VARIANTS)}
+                /> */}
+
                 <CustomSelectInput
                   label='Year'
                   name='year'
@@ -164,11 +177,30 @@ export default function AddVehicleForm() {
                   isRequired={true}
                 />
 
-                <CustomTextInput
+                <CustomSelectInput
+                  label='Condition'
+                  name='condition'
+                  placeholder='Select Vehicle Condition'
+                  control={control}
+                  options={Object.values(VEHICLE_CONDITIONS)}
+                  isRequired={true}
+                />
+
+                <CustomSelectInput
                   label='Color'
                   name='color'
-                  placeholder='Type Vehicle Color'
+                  placeholder='Select Vehicle Color'
                   control={control}
+                  options={Object.values(VEHICLE_COLORS)}
+                  isRequired={true}
+                />
+
+                <CustomSelectInput
+                  label='Drive Type'
+                  name='driveType'
+                  placeholder='Select Vehicle Drive Type'
+                  control={control}
+                  options={Object.values(VEHICLE_DRIVE)}
                   isRequired={true}
                 />
 

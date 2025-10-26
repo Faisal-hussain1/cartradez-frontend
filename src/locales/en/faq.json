@@ -1,0 +1,37 @@
+{
+  "faq": {
+    "title": "FAQs",
+    "subtitle": "Find answers to common questions about buying, selling, and trading vehicles on CarTradez.",
+    "searchPlaceholder": "Search for answers",
+    "searchButton": "Search",
+    "noResults": "No results found for",
+    "categories": [
+      {
+        "category": "General",
+        "questions": [
+          {
+            "question": "What is CarTradez?",
+            "answer": "CarTradez is an online platform where you can buy, sell, or trade vehicles easily and safely."
+          },
+          {
+            "question": "How can I contact customer support?",
+            "answer": "You can reach our support team via the contact page or by emailing support@cartradez.com."
+          }
+        ]
+      },
+      {
+        "category": "Buying & Selling",
+        "questions": [
+          {
+            "question": "How do I list my car for sale?",
+            "answer": "Simply sign up, go to 'Sell a Car', fill out the form, and upload images to create your listing."
+          },
+          {
+            "question": "Can I negotiate the price?",
+            "answer": "Yes, you can directly message sellers to negotiate within our secure chat system."
+          }
+        ]
+      }
+    ]
+  }
+}
