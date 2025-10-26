@@ -1,5 +1,5 @@
-import UnderDevelopment from '@/shared/components/pages/underDevelopment';
+import AboutUs from '@/shared/components/pages/aboutUs/index';
 
-const About = () => <UnderDevelopment />;
+const About = () => <AboutUs />;
 
 export default About;
