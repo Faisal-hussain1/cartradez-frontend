@@ -15,6 +15,7 @@ export const i18nNamespaces: string[] = [
   'modal',
   'payment',
   'settings',
+  'about',
   'vehicles',
   'footer',
 ];
