@@ -148,10 +148,6 @@ export const VEHICLE_VARIANTS = {
     model: 'sportage',
   },
 
-  alphard: {
-    value: 'alphard',
-    label: 'Alphard',
-  }
   // Hyundai Tucson
   tucson_fwd: {value: 'tucson_fwd', label: 'Tucson FWD', model: 'tucson'},
   tucson_awd: {value: 'tucson_awd', label: 'Tucson AWD', model: 'tucson'},

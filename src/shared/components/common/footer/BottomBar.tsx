@@ -17,7 +17,7 @@ export default function BottomBar() {
 
         <p className='flex items-center space-x-1 text-white/90'>
           <span>
-            {t('footer.bottomBar.by')}{' '}
+            Developed by{' '}
             <a href='#' className='hover:underline font-semibold text-white'>
               Insols
             </a>

@@ -106,7 +106,7 @@ export default function ImageUploadInput({
               <button
                 type='button'
                 onClick={() => handleRemoveImage(idx)}
-                className='absolute top-1 right-1 bg-black/60 text-white text-xs rounded px-1'
+                className='absolute top-1 right-1 bg-black/60 text-white text-xs rounded px-1 cursor-pointer'
               >
                 ✕
               </button>

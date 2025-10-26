@@ -1,25 +1,15 @@
 'use client';
 
-import {useState} from 'react';
-import Image from 'next/image';
-import {useForm, Controller, SubmitHandler} from 'react-hook-form';
+import {useForm, SubmitHandler} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/shared/components/ui/select';
+
 import {VehiclePayload} from '@/shared/interfaces/vehicles';
 import Container from '@/shared/components/common/containers';
 import {vehiclesMutations} from '@/shared/reactQuery';
 import useTranslation from '@/shared/hooks/useTranslation';
 import {newVehicleSchema} from '@/shared/schemas/vehicles';
-import TextInput from '@/shared/components/common/inputs/textInput';
-import Logo from '@/shared/components/common/logo';
 import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
 import {
   VEHICLE_BODIES,
@@ -151,12 +141,11 @@ export default function AddVehicleForm() {
                   isRequired={true}
                 />
 
-                <CustomSelectInput
+                <CustomTextInput
                   label='Model'
                   name='model'
-                  placeholder='Select Vehicle Model'
+                  placeholder='Enter Vehicle Model'
                   control={control}
-                  options={Object.values(VEHICLE_MODELS)}
                   isRequired={true}
                 />
 

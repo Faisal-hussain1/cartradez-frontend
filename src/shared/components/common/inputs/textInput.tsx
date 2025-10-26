@@ -37,8 +37,7 @@ const TextInput = ({
                   ? 'border-[var(--error-light)] bg-[var(--error-light)] focus-visible:ring-error'
                   : hasValue
                     ? 'border-[var(--success-light)] bg-[var(--success-light)] focus-visible:[var(--success-light)]'
-                    : 'border-gray-300 bg-white focus-visible:ring-primary' +
-                      'placeholder:[color:var(--gray60)]'
+                    : 'border-[var(--gray20)] bg-white focus-visible:ring-primary placeholder-[color:var(--gray60)]'
               }
               disabled={disabled}
               onFocus={onFocus}
