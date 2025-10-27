@@ -4,6 +4,7 @@ import Image from 'next/image';
 import {useTranslation} from 'react-i18next';
 import {Facebook, Instagram, Linkedin, Twitter} from 'lucide-react';
 import BottomBar from '@/shared/components/common/footer/BottomBar';
+import Link from 'next/link';
 
 export default function Footer() {
   const {t} = useTranslation();
@@ -29,16 +30,16 @@ export default function Footer() {
           </h3>
           <ul className='space-y-2 text-sm text-gray80'>
             <li>
-              <a href='#'>{t('footer.links.aboutUs')}</a>
+              <Link href='/about'>{t('footer.links.aboutUs')}</Link>
             </li>
             <li>
-              <a href='#'>{t('footer.links.faqs')}</a>
+              <Link href='/faq'>{t('footer.links.faqs')}</Link>
             </li>
             <li>
-              <a href='#'>{t('footer.links.safety')}</a>
+              <Link href='/under-development'>{t('footer.links.safety')}</Link>
             </li>
             <li>
-              <a href='#'>{t('footer.links.contact')}</a>
+              <Link href='/contact'>{t('footer.links.contact')}</Link>
             </li>
           </ul>
         </div>

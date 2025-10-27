@@ -65,7 +65,7 @@ export default function HomeVehicles() {
           PaginationComponent={PaginationComponent}
           filteredData={filteredData}
           isLoading={isLoading}
-          isPaginationShow={false}
+          isPaginationShow={true}
         />
       </Container>
     </div>

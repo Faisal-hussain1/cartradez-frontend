@@ -46,6 +46,8 @@ export default function Navbar() {
             alt='pic'
             width={80}
             height={60}
+            onClick={() => router.push(LANDING_MENU_BAR_LINKS.home.url)}
+            className='cursor-pointer'
 
             // className='mt-[30px] md:mt-[98px] w-[204px] h-[224px] md:w-[318px] md:h-[342px]'
           />
