@@ -20,7 +20,7 @@ const ContactFAQs = () => {
 
         <Button
           onClick={() => router.push('/faq')}
-          className='bg-primary hover:bg-blue-900 text-white font-semibold px-6 py-2 rounded-md shadow'
+          className='bg-primary hover:bg-primary/97 text-white font-semibold px-6 py-2 rounded-md shadow'
         >
           <MessageSquare className='w-5 h-5 text-white' />
           Go to FAQs

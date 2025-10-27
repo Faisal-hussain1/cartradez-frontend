@@ -42,7 +42,7 @@ const ContactMessageBox = () => {
           <div>
             <button
               type='submit'
-              className='bg-primary hover:bg-blue-950 text-white font-semibold px-6 py-2 rounded-md shadow cursor-pointer'
+              className='bg-primary hover:bg-primary/97 text-white font-semibold px-6 py-2 rounded-md shadow cursor-pointer'
             >
               Submit Now
             </button>
