@@ -3,11 +3,10 @@ import React from 'react';
 import useTranslation from '@/shared/hooks/useTranslation';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import {ROOT_ROUTE} from '@/shared/constants/PATHS';
 
 export default function AboutUs() {
   const router = useLocaleRouter();
-  const {t, ct} = useTranslation();
+  const {t} = useTranslation();
 
   return (
     <div className='flex flex-col min-h-screen px-6 py-12 bg-white text-gray-800'>
@@ -50,11 +49,11 @@ export default function AboutUs() {
           <div className='flex flex-wrap gap-4 justify-center'>
             <PrimaryButton
               buttonText={t('contactSupport')}
-              onClick={() => router.push('/support')}
+              onClick={() => router.push('/contact')}
             />
             <button
               onClick={() => router.push('/faq')}
-              className='px-5 py-2.5 rounded-lg border border-primary text-primary font-medium hover:bg-primary hover:text-white transition'
+              className='px-5 py-2.5 rounded-lg border border-primary cursor-pointer text-primary font-medium hover:bg-primary hover:text-white transition'
             >
               {t('readFAQs')}
             </button>

@@ -13,7 +13,7 @@ const ContactReachOut = () => {
             <Phone className='w-6 h-6 text-black-600' />
             <div>
               <h3 className='block text-l font-medium'>Phone</h3>
-              <p className='text-gray-600'>+260 977 123 456</p>
+              <p className='text-gray-600 cursor-pointer'>+260 977 123 456</p>
             </div>
           </div>
 
@@ -22,7 +22,9 @@ const ContactReachOut = () => {
             <Mail className='w-10 h-6 text-black-600' />
             <div>
               <h3 className='block text-l font-medium'>Email</h3>
-              <p className='text-gray-600'>Cartradez@gmail.com</p>
+              <p className='text-gray-600 cursor-pointer'>
+                Cartradez@gmail.com
+              </p>
             </div>
           </div>
 
@@ -31,7 +33,9 @@ const ContactReachOut = () => {
             <MapPin className='w-6 h-6 text-black-600' />
             <div>
               <h3 className='block text-l font-medium'>Visit Us</h3>
-              <p className='text-gray-600'>123 Main Street, Lusaka, Zambia</p>
+              <p className='text-gray-600 cursor-pointer'>
+                123 Main Street, Lusaka, Zambia
+              </p>
             </div>
           </div>
 
