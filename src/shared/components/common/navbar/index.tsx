@@ -10,8 +10,6 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
 } from '@/shared/components/ui/navigation-menu';
 import {Sheet, SheetContent, SheetTrigger} from '@/shared/components/ui/sheet';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
@@ -21,7 +19,6 @@ import {LANDING_MENU_BAR_LINKS, USER_ROUTES} from '@/shared/constants/PATHS';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from '@/shared/redux/slices/users';
 import {userMutations} from '@/shared/reactQuery';
-import {HoverDropdown} from '../dropdown';
 
 export default function Navbar() {
   const {t} = useTranslation();

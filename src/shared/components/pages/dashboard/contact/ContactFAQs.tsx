@@ -13,7 +13,7 @@ const ContactFAQs = () => {
           away.
         </p>
 
-        <Button className='bg-blue-900 hover:bg-blue-950 text-white font-semibold px-6 py-2 rounded-md shadow'>
+        <Button className='bg-primary hover:bg-primary/97 text-white font-semibold px-6 py-2 rounded-md shadow'>
           <MessageSquare className='w-5 h-5 text-white' />
           Go to FAQs
         </Button>
