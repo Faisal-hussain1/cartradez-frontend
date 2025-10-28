@@ -30,6 +30,14 @@ export const VEHICLES = {
     endpoint: (params: any) =>
       buildDynamicURL(API_ENDPOINTS.VEHICLES.GET_VEHICLES_LIST, params),
   },
+  fetchAllCartradezVehiclesList: {
+    queryKey: 'getAllCartradezVehicles',
+    endpoint: (params: any) =>
+      buildDynamicURL(
+        API_ENDPOINTS.VEHICLES.GET_CARTRADEZ_VEHICLES_LIST,
+        params
+      ),
+  },
   fetchVehicleById: {
     queryKey: 'getVehicleByUId',
     endpoint: (params: any) =>

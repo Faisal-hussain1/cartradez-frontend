@@ -54,7 +54,7 @@ export default function RegisterForm() {
     <AuthSectionContainer>
       <LeftSideContainer>
         <Image
-          src='/images/auth/login-image.png'
+          src='/images/auth/register-image.png'
           alt='login-image'
           width={400}
           height={700}

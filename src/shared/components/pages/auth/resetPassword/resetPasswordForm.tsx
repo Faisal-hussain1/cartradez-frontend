@@ -46,7 +46,7 @@ export default function ResetPasswordForm({token}: {token: string}) {
     <AuthSectionContainer>
       <LeftSideContainer>
         <Image
-          src='/images/reset-password-image.png'
+          src='/images/auth/reset-password-image.png'
           alt='login-image'
           width={400}
           height={700}

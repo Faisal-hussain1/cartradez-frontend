@@ -1,7 +1,7 @@
 import {THEME} from '@/shared/constants/theme';
 import {IdType} from '@/shared/types/common';
 import {GetTextColorBasedOnBgParams, HexCodeParams} from '@/shared/types/utils';
-import {truncateWordsProps} from '../interfaces/common';
+import {TruncateCharProps} from '../interfaces/common';
 
 export const getBaseUrl = () =>
   process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_VERCEL_URL;
@@ -94,14 +94,18 @@ export function extractRoutes({
   return result; // Return the list of all extracted routes
 }
 
-export function truncateWords({text, limit = 30}: truncateWordsProps) {
-  const words = text.trim().split(/\s+/);
+export function truncateChars({text, limit = 30}: TruncateCharProps) {
+  if (!text || typeof text !== 'string') return '';
+  if (text.length <= limit) return text;
 
-  if (words.length <= limit) {
-    return text;
-  }
+  // Slice to the limit
+  const sliced = text.slice(0, limit);
 
-  return words.slice(0, limit).join(' ') + '...';
+  // Avoid cutting off in the middle of a word
+  const lastSpace = sliced.lastIndexOf(' ');
+  const safeText = lastSpace > 0 ? sliced.slice(0, lastSpace) : sliced;
+
+  return safeText + '...';
 }
 
 export function getYearsList({start = 1900}: {start?: number}) {
@@ -115,5 +119,11 @@ export function getYearsList({start = 1900}: {start?: number}) {
 }
 
 export function stringToTitleCase({str}: {str: string}) {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  if (!str) return '';
+
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }

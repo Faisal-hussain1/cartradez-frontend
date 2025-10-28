@@ -9,6 +9,7 @@ const FiltersBar = ({
   setFilters,
   filters: {requestStatus, searchValue},
   hideSelect = false,
+  placeholder = ' Search...',
 }: FiltersBarProps) => {
   const {ct, t} = useTranslation();
 
@@ -36,11 +37,14 @@ const FiltersBar = ({
           <ReactSelect value={selectValue} onChange={handleStatusChange} />
         </div>
       )}
-      <SearchInput
-        initialValue={searchValue}
-        onSearch={handleSearch}
-        placeholder={t('search....')}
-      />
+
+      <div className='flex-1 w-full'>
+        <SearchInput
+          initialValue={searchValue}
+          onSearch={handleSearch}
+          placeholder={placeholder}
+        />
+      </div>
     </div>
   );
 };

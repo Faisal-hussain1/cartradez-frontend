@@ -25,6 +25,27 @@ export const useQueries = () => {
         },
       }),
 
+    useFetchAllCartradezVehicleList: ({
+      callBackFuncs,
+      params,
+    }: {
+      callBackFuncs?: QueryCallbacks;
+      params?: any;
+    } = {}) =>
+      useQueryHandler({
+        queryKey: VEHICLES.fetchAllCartradezVehiclesList.queryKey,
+        endpoint: VEHICLES.fetchAllCartradezVehiclesList.endpoint(params),
+        params,
+        customQueryOptions: {
+          staleTime: 10 * 60 * 1000,
+          refetchOnWindowFocus: true,
+          gcTime: 0,
+        },
+        callbacks: {
+          ...callBackFuncs,
+        },
+      }),
+
     useFetchVehicleById: ({
       callBackFuncs,
       params,

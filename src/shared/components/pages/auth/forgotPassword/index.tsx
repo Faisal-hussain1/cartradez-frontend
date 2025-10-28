@@ -49,7 +49,7 @@ export default function ForgotPasswordForm() {
     <AuthSectionContainer>
       <LeftSideContainer>
         <Image
-          src='/images/forgot-password-image.png'
+          src='/images/auth/forgot-password-image.png'
           alt='login-image'
           width={400}
           height={700}
