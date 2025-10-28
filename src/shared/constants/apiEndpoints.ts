@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
   },
   VEHICLES: {
     GET_VEHICLES_LIST: '/vehicles',
+    GET_CARTRADEZ_VEHICLES_LIST: '/vehicles/cartradez',
     ADD_VEHICLE: '/vehicles/add',
     GET_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
   },

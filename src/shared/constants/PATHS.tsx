@@ -39,6 +39,10 @@ export const ADMIN_ROUTES = {
   temp: {
     all: path(DASHBOARD_ROOT, '/temp'),
   },
+  vehicles: path(VEHICLE_ROOT, '/'),
+  addVehicle: path(VEHICLE_ROOT, '/add'),
+  vehicleDetails: (vehicleId: string) =>
+    path(VEHICLE_ROOT, `/detail/${vehicleId}`),
 };
 
 export const MANAGER_ROUTES = {
