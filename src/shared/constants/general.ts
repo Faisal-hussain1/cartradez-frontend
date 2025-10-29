@@ -42,16 +42,20 @@ export const LIST_TYPES = {
     path: ADMIN_ROUTES.temp.all,
   },
 
-  vehicles: {
-    value: 'vehicles',
+  homePageVehicles: {
+    value: 'homePageVehicles',
     search: {
-      keys: ['title'],
+      keys: ['make', 'model'],
     },
     sort: {
       options: {
-        name: {
-          label: 'Title',
-          value: 'title',
+        make: {
+          label: 'Make',
+          value: 'make',
+        },
+        model: {
+          label: 'Model',
+          value: 'model',
         },
       },
       directions: {
@@ -61,7 +65,35 @@ export const LIST_TYPES = {
     },
     page: {
       pageNo: FILTERS_CONFIG.pageNo,
-      pageLimit: FILTERS_CONFIG.pageLimit,
+      pageLimit: FILTERS_CONFIG.homePageLimit,
+    },
+    path: ADMIN_ROUTES.temp.all,
+  },
+
+  managedByCartradezVehicles: {
+    value: 'managedByCartradezVehicles',
+    search: {
+      keys: ['make', 'model'],
+    },
+    sort: {
+      options: {
+        make: {
+          label: 'Make',
+          value: 'make',
+        },
+        model: {
+          label: 'Model',
+          value: 'model',
+        },
+      },
+      directions: {
+        asc: 'asc',
+        desc: 'desc',
+      },
+    },
+    page: {
+      pageNo: FILTERS_CONFIG.pageNo,
+      pageLimit: 5,
     },
     path: ADMIN_ROUTES.temp.all,
   },

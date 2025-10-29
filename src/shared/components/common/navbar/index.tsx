@@ -15,10 +15,15 @@ import {Sheet, SheetContent, SheetTrigger} from '@/shared/components/ui/sheet';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import useTranslation from '@/shared/hooks/useTranslation';
 import Container from '@/shared/components/common/containers';
-import {LANDING_MENU_BAR_LINKS, USER_ROUTES} from '@/shared/constants/PATHS';
+import {
+  AUTH_ROUTES,
+  LANDING_MENU_BAR_LINKS,
+  USER_ROUTES,
+} from '@/shared/constants/PATHS';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from '@/shared/redux/slices/users';
 import {userMutations} from '@/shared/reactQuery';
+import HoverAvatarDropdown from '../hoverAvatarDropdown';
 
 export default function Navbar() {
   const {t} = useTranslation();
@@ -55,12 +60,12 @@ export default function Navbar() {
                   {item.url ? (
                     <NavigationMenuLink
                       href={item.url}
-                      className='text-black hover:text-amber-700 transition'
+                      className='text-sm font-semibold text-black hover:text-primary transition'
                     >
                       {item.label}
                     </NavigationMenuLink>
                   ) : (
-                    <span className='text-black opacity-50 cursor-not-allowed'>
+                    <span className='text-sm text-semibold text-black opacity-50 cursor-not-allowed'>
                       {item.label}
                     </span>
                   )}
@@ -74,11 +79,20 @@ export default function Navbar() {
                 />
               </NavigationMenuItem>
 
-              {isLoggedIn && (
+              {isLoggedIn ? (
                 <NavigationMenuItem>
-                  <PrimaryButton
+                  {/* <PrimaryButton
                     buttonText='Logout'
                     onClick={() => executeSignOutMutation({})}
+                  /> */}
+
+                  <HoverAvatarDropdown />
+                </NavigationMenuItem>
+              ) : (
+                <NavigationMenuItem>
+                  <PrimaryButton
+                    buttonText='SignUp/Login'
+                    onClick={() => router.push(AUTH_ROUTES.login)}
                   />
                 </NavigationMenuItem>
               )}

@@ -36,7 +36,7 @@ export default function Home() {
   const {PaginationComponent, filteredData, isLoading, filters, setFilters} =
     useServerSideListFilters<Vehicle>({
       dataKey: 'vehicles',
-      listType: LIST_TYPES.vehicles,
+      listType: LIST_TYPES.homePageVehicles,
       queryToCall: useFetchAllVehicleList,
     });
 
@@ -45,7 +45,7 @@ export default function Home() {
     isLoading: getCartradezVehiclesLoading,
   } = useServerSideListFilters<CartradezVehicle>({
     dataKey: 'vehicles',
-    listType: LIST_TYPES.vehicles,
+    listType: LIST_TYPES.managedByCartradezVehicles,
     queryToCall: useFetchAllCartradezVehicleList,
   });
 

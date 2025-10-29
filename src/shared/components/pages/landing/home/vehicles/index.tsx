@@ -1,6 +1,7 @@
 'use client';
 
 import VehicleListing from '@/shared/components/common/vehicleListing';
+import VehicleListingWithListingType from '@/shared/components/common/vehicleListingWithListingType';
 import {Vehicle} from '@/shared/interfaces/common';
 
 export interface HomeVehiclesProps {
@@ -15,7 +16,7 @@ export default function HomeVehicles({
   isLoading,
 }: HomeVehiclesProps) {
   return (
-    <VehicleListing
+    <VehicleListingWithListingType
       PaginationComponent={PaginationComponent}
       filteredData={filteredData}
       isLoading={isLoading}

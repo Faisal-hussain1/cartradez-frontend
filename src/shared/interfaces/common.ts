@@ -181,6 +181,7 @@ export interface Vehicle {
   year: number;
   currency: string;
   price: number;
+  listingType: string;
   coverImage: {key: string; url: string};
 }
 

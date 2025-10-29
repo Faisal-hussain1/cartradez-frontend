@@ -1,8 +1,8 @@
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
-import VehicleCard from '@/shared/components/common/vehicleListing/VehicleCard';
 import {VehicleCardProps} from '@/shared/interfaces/vehicles';
 import EmptyDataPlaceholder from '@/shared/components/common/EmptyDataPlaceholder';
 import {Vehicle} from '@/shared/interfaces/common';
+import VehicleCard from '../vehicleCard';
 
 export default function VehicleListing({
   PaginationComponent,

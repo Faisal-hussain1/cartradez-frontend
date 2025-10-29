@@ -128,29 +128,24 @@ export const LANDING_MENU_BAR_LINKS = {
     label: 'Home',
     url: '/',
   },
-  salesVehicles: {
-    value: 'salesVehicles',
-    label: 'Vehicles In Sales',
-    url: '/under-development',
-  },
   newVehicles: {
     value: 'newVehicles',
     label: 'New Vehicles',
     url: '/under-development',
   },
-  tools: {
-    value: 'tools',
-    label: 'Tools',
+  managedByCartradez: {
+    value: 'managedByCartradez',
+    label: 'Managed By Cartradez',
     url: '/under-development',
   },
-  resources: {
-    value: 'resources',
-    label: 'Resources',
-    url: '/under-development',
+  buyerAndSellerGuide: {
+    value: 'buyerAndSellerGuide',
+    label: 'Buyer & Seller Guide',
+    url: '/guidlines',
   },
-  services: {
-    value: 'services',
-    label: 'Tools & Services',
+  pricingPlans: {
+    value: 'pricingPlans',
+    label: 'Pricing Plans',
     url: '/under-development',
   },
   about: {
