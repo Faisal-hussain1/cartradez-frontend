@@ -1,7 +1,9 @@
+'use client';
+
+import {useRouter} from 'next/navigation';
 import useTranslation from '@/shared/hooks/useTranslation';
 import ReactSelect from '@/shared/components/common/inputs/ReactSelect';
 import SearchInput from '@/shared/components/common/inputs/searchInput';
-
 import {FiltersBarProps} from '@/shared/interfaces/common';
 import {STATUS_OPTIONS} from '@/shared/constants/general';
 
@@ -9,9 +11,11 @@ const FiltersBar = ({
   setFilters,
   filters: {requestStatus, searchValue},
   hideSelect = false,
-  placeholder = ' Search...',
-}: FiltersBarProps) => {
+  placeholder = 'Search...',
+  redirectPath = '', // 👈 optional, to specify where to redirect
+}: FiltersBarProps & {redirectPath?: string}) => {
   const {ct, t} = useTranslation();
+  const router = useRouter();
 
   const defaultSelectValue = ct(STATUS_OPTIONS).all;
 
@@ -21,7 +25,12 @@ const FiltersBar = ({
   };
 
   const handleSearch = (searchValue: string) => {
-    setFilters({searchValue});
+    if (redirectPath) {
+      // 👇 Redirect to a custom path, e.g. /filtered?search=term
+      router.push(`${redirectPath}?search=${encodeURIComponent(searchValue)}`);
+    } else {
+      setFilters({searchValue});
+    }
   };
 
   const handleStatusChange = (val: any) => {

@@ -49,6 +49,12 @@ export default function Home() {
     queryToCall: useFetchAllCartradezVehicleList,
   });
 
+  const {data, isPending, error} = useFetchAllVehicleList();
+
+  console.log('Home filteredData:', filteredData);
+
+  console.log('data', data);
+
   return (
     <div>
       <div className="w-full h-[300px] bg-[url('/images/home/banner.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center">
@@ -93,7 +99,7 @@ export default function Home() {
             <div className='col-span-12 md:col-span-9 w-full flex justify-between'>
               <HomeVehicles
                 PaginationComponent={PaginationComponent}
-                filteredData={filteredData}
+                filteredData={data?.vehicles || []}
                 isLoading={isLoading}
               />
             </div>

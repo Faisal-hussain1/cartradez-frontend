@@ -25,7 +25,8 @@ export default function VehicleCard({vehicle}: VehicleCardProps) {
         transition-all duration-300 cursor-pointer 
         hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]
         bg-white'
-      onClick={() => router.push(USER_ROUTES.vehicleDetails(vehicle._id))}
+
+      // onClick={() => router.push(USER_ROUTES.vehicleDetails(vehicle._id))}
     >
       <div className='relative w-full h-48'>
         <Image
