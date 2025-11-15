@@ -52,9 +52,9 @@ export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
         />
 
         {/* WhatsApp + Send Message Buttons */}
-        <div className='flex w-full gap-2'>
+        <div className='flex flex-col sm:flex-row w-full gap-2'>
           <PrimaryButton
-            styles='flex-1 w-1/2 bg-green100 hover:bg-transparent hover:text-green100 hover:border hover:border-green100'
+            styles='flex-1 w-full sm:w-1/2 bg-green100 hover:bg-transparent hover:text-green100 hover:border hover:border-green100'
             onClick={handleWhatsApp}
             buttonText={
               <>
@@ -65,7 +65,7 @@ export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
           />
 
           <PrimaryButton
-            styles='flex-1 w-1/2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white'
+            styles='flex-1 w-full sm:w-1/2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white'
             onClick={handleMessage}
             buttonText={
               <>

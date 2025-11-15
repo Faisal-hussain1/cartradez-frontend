@@ -46,7 +46,7 @@ const TextAreaInput = ({
               }
               disabled={disabled}
               onFocus={onFocus}
-              rows={5}
+              rows={7}
             />
 
             {error && (

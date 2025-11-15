@@ -62,5 +62,6 @@
     "heading": "No {{title}} Yet",
     "description1": "There are currently no {{title}} to display.",
     "description2": "As soon as activity begins, your {{title}} history will be shown in this section."
-  }
+  },
+  "ourCompanyName": "Insols"
 }

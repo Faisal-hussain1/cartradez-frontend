@@ -27,6 +27,12 @@ export default function VehicleListingWithListingType({
     (v: Vehicle) => v.listingType === 'standard'
   );
 
+  console.log(
+    'VehicleListingWithListingType filteredData:',
+    filteredData,
+    quickSellVehicles
+  );
+
   return (
     <div className='w-full'>
       <div>

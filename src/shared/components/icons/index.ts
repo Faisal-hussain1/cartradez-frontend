@@ -29,6 +29,10 @@ import WalletIcon from '@/shared/components/icons/walletIcon';
 import ArrowUpRightIcon from './arrowUpRightIcon';
 import SearchIcon from './searchIcon';
 import FilterSearchIcon from './filterSearchIcon';
+import FacebookIcon from './facebookIcon';
+import InstagramIcon from './instagramIcon';
+import LinkedinIcon from './linkedinIcon';
+import TwitterIcon from './twitterIcon';
 
 export {
   SuccessIcon,
@@ -62,4 +66,8 @@ export {
   ArrowUpRightIcon,
   SearchIcon,
   FilterSearchIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
 };

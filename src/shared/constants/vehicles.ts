@@ -172,13 +172,17 @@ export const VEHICLE_VARIANTS_VALUES = Object.values(VEHICLE_VARIANTS).map(
 );
 
 export const VEHICLE_CONDITIONS = {
-  new: {
-    value: 'new',
-    label: 'New',
+  imported: {
+    value: 'imported',
+    label: 'Imported (Unregistered)',
   },
   used: {
     value: 'used',
     label: 'Used',
+  },
+  new: {
+    value: 'new',
+    label: 'New',
   },
 };
 
@@ -241,34 +245,36 @@ export const VEHICLE_DRIVE_VALUES = Object.values(VEHICLE_DRIVE).map(
   (driveType) => driveType.value
 );
 
-export const VEHICLE_BODIES = {
-  convertible: {
-    value: 'convertible',
-    label: 'Convertible',
-  },
-  coupe: {
-    value: 'coupe',
-    label: 'Coupe',
-  },
-  hatchback: {
-    value: 'hatchback',
-    label: 'Hatchback',
-  },
-  sedan: {
-    value: 'sedan',
-    label: 'Sedan',
-  },
-  rvOrSuv: {
-    value: 'rvOrSuv',
-    label: 'RV/SUV',
-  },
-  other: {
-    value: 'other',
-    label: 'Other',
-  },
+export const VEHICLE_BODY_TYPES = {
+  convertible: {value: 'convertible', label: 'Convertible'},
+  coupe: {value: 'coupe', label: 'Coupe'},
+  hatchback: {value: 'hatchback', label: 'Hatchback'},
+  sedan: {value: 'sedan', label: 'Sedan'},
+  wagon: {value: 'wagon', label: 'Station Wagon'},
+  suv: {value: 'suv', label: 'SUV'},
+  crossover: {value: 'crossover', label: 'Crossover'},
+  compactSuv: {value: 'compactSuv', label: 'Compact SUV'},
+  fullSizeSuv: {value: 'fullSizeSuv', label: 'Full-Size SUV'},
+  minivan: {value: 'minivan', label: 'Minivan / MPV'},
+  van: {value: 'van', label: 'Van / Cargo Van'},
+  pickup: {value: 'pickup', label: 'Pickup Truck'},
+  chassisCab: {value: 'chassisCab', label: 'Chassis Cab'},
+  sportsCar: {value: 'sportsCar', label: 'Sports Car'},
+  supercar: {value: 'supercar', label: 'Supercar / Hypercar'},
+  grandTourer: {value: 'grandTourer', label: 'Grand Tourer (GT)'},
+  muscleCar: {value: 'muscleCar', label: 'Muscle Car'},
+  offRoad: {value: 'offRoad', label: 'Off-Road Vehicle'},
+  coupeSuv: {value: 'coupeSuv', label: 'Crossover Coupe / Coupe SUV'},
+  ute: {value: 'ute', label: 'Ute / Utility Vehicle'},
+  microcar: {value: 'microcar', label: 'Microcar / City Car'},
+  limousine: {value: 'limousine', label: 'Limousine'},
+  hearse: {value: 'hearse', label: 'Hearse'},
+  camperVan: {value: 'camperVan', label: 'Camper Van / RV'},
+  panelVan: {value: 'panelVan', label: 'Panel Van'},
+  other: {value: 'other', label: 'Other'},
 };
 
-export const VEHICLE_BODIES_VALUES = Object.values(VEHICLE_BODIES).map(
+export const VEHICLE_BODY_TYPES_VALUES = Object.values(VEHICLE_BODY_TYPES).map(
   (body) => body.value
 );
 
@@ -294,6 +300,7 @@ export const VEHICLE_DOORS_VALUES = Object.values(VEHICLE_DOORS).map(
 export const VEHICLE_FUEL_TYPES = {
   petrol: {value: 'petrol', label: 'Petrol'},
   diesel: {value: 'diesel', label: 'Diesel'},
+  cngGas: {value: 'cngGas', label: 'CNG Gas'},
   electric: {value: 'electric', label: 'Electric'},
   hybrid: {value: 'hybrid', label: 'Hybrid'},
 };
@@ -342,3 +349,71 @@ export const VEHICLE_CYLINDERS = {
 export const VEHICLE_CYLINDERS_VALUES = Object.values(VEHICLE_CYLINDERS).map(
   (cylinder) => cylinder.value
 );
+
+export const VEHICLE_ASSEMBLIES = {
+  local: {value: 'local', label: 'Local Assembled'},
+  imported: {value: 'imported', label: 'Imported'},
+  ckd: {value: 'ckd', label: 'CKD (Completely Knocked Down)'},
+  cbu: {value: 'cbu', label: 'CBU (Completely Built Unit)'},
+  semiKnockedDown: {
+    value: 'semiKnockedDown',
+    label: 'SKD (Semi Knocked Down)',
+  },
+};
+
+export const VEHICLE_ASSEMBLIES_VALUES = Object.values(VEHICLE_ASSEMBLIES).map(
+  (cylinder) => cylinder.value
+);
+
+export const FEATURE_GROUPS_LIST = [
+  {
+    title: 'Comfort & Convenience',
+    items: [
+      {label: 'Air Conditioning', value: 'airConditioning'},
+      {label: 'Power Steering', value: 'powerSteering'},
+      {label: 'Power Windows', value: 'powerWindows'},
+      {label: 'Keyless Entry', value: 'keylessEntry'},
+      {label: 'Cruise Control', value: 'cruiseControl'},
+      {label: 'Push Start', value: 'pushStart'},
+    ],
+  },
+  {
+    title: 'Safety & Security',
+    items: [
+      {label: 'Airbags', value: 'airbags'},
+      {label: 'ABS', value: 'abs'},
+      {label: 'Traction Control', value: 'tractionControl'},
+      {label: 'Reverse Camera', value: 'reverseCamera'},
+      {label: 'Parking Sensors', value: 'parkingSensors'},
+    ],
+  },
+  {
+    title: 'Entertainment',
+    items: [
+      {label: 'Touchscreen Display', value: 'touchscreen'},
+      {label: 'Bluetooth / AUX', value: 'bluetooth'},
+      {label: 'Premium Sound System', value: 'premiumSound'},
+      {label: 'Apple CarPlay / Android Auto', value: 'carplay'},
+    ],
+  },
+  {
+    title: 'Exterior / Misc',
+    items: [
+      {label: 'Alloy Rims', value: 'alloyRims'},
+      {label: 'Fog Lights', value: 'fogLights'},
+      {label: 'Sunroof / Moonroof', value: 'sunroof'},
+      {label: 'Spoiler', value: 'spoiler'},
+      {label: 'Tinted Windows', value: 'tintedWindows'},
+    ],
+  },
+];
+
+export const DESCRIPTION_SUGGESTIONS = [
+  'Like New',
+  'Authorized Workshop Maintained',
+  'Minor Accidental Cars',
+  'Complete Service History',
+  'Fresh Import',
+  'Price Negotiable',
+  'Alloy Rims',
+];

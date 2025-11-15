@@ -49,11 +49,11 @@ export default function Home() {
     queryToCall: useFetchAllCartradezVehicleList,
   });
 
-  const {data, isPending, error} = useFetchAllVehicleList();
+  // const {data, isPending, error} = useFetchAllVehicleList();
 
-  console.log('Home filteredData:', filteredData);
+  // console.log('Home filteredData:', filteredData);
 
-  console.log('data', data);
+  // console.log('data', data);
 
   return (
     <div>
@@ -99,7 +99,7 @@ export default function Home() {
             <div className='col-span-12 md:col-span-9 w-full flex justify-between'>
               <HomeVehicles
                 PaginationComponent={PaginationComponent}
-                filteredData={data?.vehicles || []}
+                filteredData={filteredData || []}
                 isLoading={isLoading}
               />
             </div>
