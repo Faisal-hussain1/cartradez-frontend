@@ -1,7 +1,9 @@
 import * as Yup from 'yup';
 import {TranslateFunction} from '@/shared/types/common';
 import {
+  VEHICLE_BODY_TYPES_VALUES,
   VEHICLE_CURRENCY_TYPES_VALUES,
+  VEHICLE_DRIVE_VALUES,
   VEHICLE_FUEL_TYPES_VALUES,
   VEHICLE_TRANSMISSION_TYPES_VALUES,
 } from '../constants/vehicles';
@@ -10,49 +12,71 @@ export const newVehicleSchema = (t: TranslateFunction) =>
   Yup.object({
     make: Yup.string().required(t('vehicleListingValidation.makeRequired')),
     model: Yup.string().required(t('vehicleListingValidation.modelRequired')),
+    variant: Yup.string(),
     year: Yup.number()
       .typeError(t('vehicleListingValidation.yearRequired'))
       .required(t('vehicleListingValidation.yearRequired'))
       .min(1900, t('vehicleListingValidation.yearMin'))
-      .max(new Date().getFullYear(), t('vehicleListingValidation.yearMax')),
+      .max(2023, t('vehicleListingValidation.yearMax')),
     condition: Yup.string().required(
       t('vehicleListingValidation.conditionRequired')
     ),
+    bodyType: Yup.string()
+      .oneOf(VEHICLE_BODY_TYPES_VALUES)
+      .required(t('vehicleListingValidation.bodyTypeRequired')),
     color: Yup.string().required(t('vehicleListingValidation.colorRequired')),
-    driveType: Yup.string().required(
-      t('vehicleListingValidation.driveTypeRequired')
-    ),
     mileage: Yup.number().required(
       t('vehicleListingValidation.mileageRequired')
     ),
-    description: Yup.string().required(
-      t('vehicleListingValidation.descriptionRequired')
-    ),
-    price: Yup.number()
-      .typeError(t('vehicleListingValidation.priceRequired'))
-      .required(t('vehicleListingValidation.priceRequired'))
-      .min(1, t('vehicleListingValidation.priceMin')),
-    currency: Yup.string()
-      .oneOf(
-        VEHICLE_CURRENCY_TYPES_VALUES,
-        t('vehicleListingValidation.currencyInvalid')
-      )
-      .required(t('vehicleListingValidation.currencyRequired')),
     engineSize: Yup.number().required(
       t('vehicleListingValidation.engineSizeRequired')
     ),
-    fuelType: Yup.string()
-      .oneOf(
-        VEHICLE_FUEL_TYPES_VALUES,
-        t('vehicleListingValidation.fuelTypeInvalid')
-      )
-      .required(t('vehicleListingValidation.fuelTypeRequired')),
     transmission: Yup.string()
       .oneOf(
         VEHICLE_TRANSMISSION_TYPES_VALUES,
         t('vehicleListingValidation.transmissionInvalid')
       )
       .required(t('vehicleListingValidation.transmissionRequired')),
+    fuelType: Yup.string()
+      .oneOf(
+        VEHICLE_FUEL_TYPES_VALUES,
+        t('vehicleListingValidation.fuelTypeInvalid')
+      )
+      .required(t('vehicleListingValidation.fuelTypeRequired')),
+    driveType: Yup.string()
+      .oneOf(VEHICLE_DRIVE_VALUES)
+      .required(t('vehicleListingValidation.driveTypeRequired')),
+    currency: Yup.string()
+      .oneOf(
+        VEHICLE_CURRENCY_TYPES_VALUES,
+        t('vehicleListingValidation.currencyInvalid')
+      )
+      .required(t('vehicleListingValidation.currencyRequired')),
+    price: Yup.number()
+      .typeError(t('vehicleListingValidation.priceRequired'))
+      .required(t('vehicleListingValidation.priceRequired'))
+      .min(1, t('vehicleListingValidation.priceMin')),
+
+    registrationCity: Yup.string().required(
+      t('vehicleListingValidation.registrationCityRequired')
+    ),
+    registrationNumber: Yup.string().required(
+      t('vehicleListingValidation.registrationNumberRequired')
+    ),
+    registrationYear: Yup.number()
+      .typeError(t('vehicleListingValidation.registrationYearRequired'))
+      .required(t('vehicleListingValidation.registrationYearRequired')),
+    numberOfOwners: Yup.number()
+      .typeError(t('vehicleListingValidation.numberOfOwnersRequired'))
+      .required(t('vehicleListingValidation.numberOfOwnersRequired'))
+      .min(1, t('vehicleListingValidation.numberOfOwnersMin')),
+    description: Yup.string().required(
+      t('vehicleListingValidation.descriptionRequired')
+    ),
+    features: Yup.array()
+      .of(Yup.string().required()) // every item MUST be string
+      .optional() // field itself is optional
+      .default([]), // but default is empty array
     images: Yup.array()
       .of(
         Yup.mixed<File>()

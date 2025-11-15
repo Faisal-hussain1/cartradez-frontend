@@ -15,6 +15,10 @@ import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {ROOT_ROUTE} from '@/shared/constants/PATHS';
 import {stringToTitleCase} from '@/shared/utils/general';
 import {formatDate} from '@/shared/utils/dateUtils';
+import {
+  VEHICLE_FUEL_TYPES,
+  VEHICLE_TRANSMISSION_TYPES,
+} from '@/shared/constants/vehicles';
 
 export default function VehicleDetails({
   vehicleId,
@@ -54,13 +58,13 @@ export default function VehicleDetails({
             <div className='bg-white rounded-2xl shadow-sm w-full p-4 md:p-8'>
               {/* Title + Icons */}
               <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-5'>
-                <h1 className='text-2xl md:text-3xl font-bold text-gray-900 leading-tight'>
+                <h1 className='text-2xl md:text-3xl font-bold text-black leading-tight'>
                   {/* Bugatti Chiron Super Sport 2022 */}
                   {`${stringToTitleCase({str: vehicleDetail.vehicle.make})} ${stringToTitleCase({str: vehicleDetail.vehicle.model})} ${vehicleDetail.vehicle.year}`}
                 </h1>
                 <div className='flex gap-4 mt-4 md:mt-0'>
-                  <Share2 className='w-6 h-6 text-gray-400 hover:text-gray-600 cursor-pointer transition' />
-                  <Heart className='w-6 h-6 text-gray-400 hover:text-red-500 cursor-pointer transition' />
+                  <Share2 className='w-6 h-6 text-gray-400 hover:text-black cursor-pointer transition' />
+                  <Heart className='w-6 h-6 text-gray-400 hover:text-red100 cursor-pointer transition' />
                 </div>
               </div>
 
@@ -82,17 +86,17 @@ export default function VehicleDetails({
               </div> */}
 
               {/* Price */}
-              <p className='text-[#0B3E77] font-bold text-2xl md:text-3xl mb-5'>
+              <p className='text-primary font-bold text-2xl md:text-3xl mb-5'>
                 {`${vehicleDetail.vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicleDetail.vehicle.price.toLocaleString()}`}
               </p>
 
               {/* Location + Date */}
               <div className='flex items-center justify-between text-sm md:text-base text-gray-600 mb-6'>
                 <div className='flex items-center gap-2'>
-                  <MapPin className='w-4 h-4 text-gray-500' />{' '}
+                  <MapPin className='w-4 h-4 text-gray80' />{' '}
                   <span className='truncate'>N/A</span>
                 </div>
-                <div className='whitespace-nowrap text-gray-500'>
+                <div className='whitespace-nowrap text-gray80'>
                   Published:{' '}
                   {formatDate({
                     date: vehicleDetail.vehicle.createdAt,
@@ -109,12 +113,21 @@ export default function VehicleDetails({
 
             {/* ================= Overview ================= */}
             <OverviewCard
-              registrationYear='N/A'
+              registrationYear={vehicleDetail.vehicle.year}
               mileage={vehicleDetail.vehicle.mileage}
-              fuelType={vehicleDetail.vehicle.fuelType}
-              transmission={vehicleDetail.vehicle.transmission}
-
-              // features={['Cruise Control', 'Heated Seats', 'Bluetooth']}
+              fuelType={
+                VEHICLE_FUEL_TYPES[
+                  vehicleDetail.vehicle
+                    .fuelType as keyof typeof VEHICLE_FUEL_TYPES
+                ].label
+              }
+              transmission={
+                VEHICLE_TRANSMISSION_TYPES[
+                  vehicleDetail.vehicle
+                    .transmission as keyof typeof VEHICLE_TRANSMISSION_TYPES
+                ].label
+              }
+              features={vehicleDetail.vehicle.features || []}
             />
 
             {/* ================= Key Info ================= */}
@@ -128,24 +141,22 @@ export default function VehicleDetails({
               ]}
               leftValues={[
                 `${vehicleDetail.vehicle.make}`,
-                `N/A`,
+                `${vehicleDetail.vehicle.bodyType}`,
                 `${vehicleDetail.vehicle.engineSize}`,
                 `${vehicleDetail.vehicle.color}`,
-                'N/A',
+                `${vehicleDetail.vehicle.numberOfOwners}`,
               ]}
               rightLabels={[
                 'Model',
                 'Condition',
                 'Drive Type',
-                'Assembly',
                 'Registration City',
               ]}
               rightValues={[
                 `${vehicleDetail.vehicle.model}`,
                 `${vehicleDetail.vehicle.condition}`,
                 `${vehicleDetail.vehicle.driveType}`,
-                'N/A',
-                'N/A',
+                `${vehicleDetail.vehicle.registrationCity}`,
               ]}
             />
 

@@ -9,16 +9,16 @@
     "links": {
       "aboutUs": "About Us",
       "faqs": "FAQs",
-      "safety": "Buy & Sell Safety",
-      "contact": "Contact Us",
-      "browseCars": "Browse All Cars",
+      "buyAndSellSafety": "Buy & Sell Safety",
+      "contactUs": "Contact Us",
+      "browseAllCars": "Browse All Cars",
       "featuredCars": "Featured Cars",
-      "managed": "Managed By CarTradez",
+      "managedByCartradez": "Managed By CarTradez",
       "buyersGuide": "Buyer's Guide",
-      "postAd": "Post Your Ad",
+      "postAnAd": "Post Your Ad",
       "pricingPlans": "Pricing Plans",
       "sellersGuide": "Seller's Guide",
-      "verification": "Verification Process"
+      "verificationProcess": "Verification Process"
     },
     "bottomBar": {
       "copyright": "Copyright © 2025",

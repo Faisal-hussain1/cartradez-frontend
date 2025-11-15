@@ -1,4 +1,4 @@
-import Guidelines from '@/shared/components/pages/landing/guidlines';
+import Guidelines from '@/shared/components/pages/landing/guidelines';
 import {generateMetadata} from '@/shared/utils/metadataUtils';
 
 export default function GuidelinesPage() {

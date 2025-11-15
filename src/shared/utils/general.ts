@@ -108,10 +108,15 @@ export function truncateChars({text, limit = 30}: TruncateCharProps) {
   return safeText + '...';
 }
 
-export function getYearsList({start = 1900}: {start?: number}) {
-  const currentYear = new Date().getFullYear();
+export function getYearsList({
+  start = 1900,
+  end = new Date().getFullYear(),
+}: {
+  start?: number;
+  end?: number;
+}) {
   const years = [];
-  for (let year = currentYear; year >= start; year--) {
+  for (let year = end; year >= start; year--) {
     years.push({label: year.toString(), value: year.toString()});
   }
 
