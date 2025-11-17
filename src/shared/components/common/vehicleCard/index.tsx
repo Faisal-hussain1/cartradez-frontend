@@ -1,18 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import {BsFuelPump} from 'react-icons/bs';
-import {IoSpeedometerOutline} from 'react-icons/io5';
-import {TbAutomaticGearboxFilled} from 'react-icons/tb';
 
-import {Badge} from '@/shared/components/ui/badge';
 import {Card, CardContent} from '@/shared/components/ui/card';
-import {Separator} from '@/shared/components/ui/separator';
 import {stringToTitleCase, truncateChars} from '@/shared/utils/general';
 import {VehicleCardProps} from '@/shared/interfaces/vehicles';
 import PrimaryButton from '../buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import {PUBLIC_ROUTES, USER_ROUTES} from '@/shared/constants/PATHS';
+import {USER_ROUTES} from '@/shared/constants/PATHS';
 
 export default function VehicleCard({vehicle}: VehicleCardProps) {
   const router = useLocaleRouter();

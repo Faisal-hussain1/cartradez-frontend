@@ -9,25 +9,7 @@ import FiltersBar from '@/shared/components/common/FilterBar';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import {FilterSearchIcon} from '@/shared/components/icons';
 import Container from '@/shared/components/common/containers';
-import Image from 'next/image';
-import {stringToTitleCase, truncateChars} from '@/shared/utils/general';
 import ManagedByCartradezVehicles from './ManagedByCartradezVehicles';
-
-// 🔹 Temporary mock data for right-side small cards
-const featuredCars = [
-  {
-    id: 1,
-    name: 'Bugatti Bolide',
-    price: 'ZMW 20,500,000',
-    image: '/images/ContactUs.png', // replace with your image path
-  },
-  {
-    id: 2,
-    name: 'Lamborghini Aventador',
-    price: 'ZMW 12,400,000',
-    image: '/images/ContactUs.png',
-  },
-];
 
 export default function Home() {
   const {useFetchAllVehicleList, useFetchAllCartradezVehicleList} =
@@ -74,6 +56,7 @@ export default function Home() {
                 filters={filters}
                 hideSelect={true}
                 placeholder='Search by Make or Model'
+                redirectPath='/advancedFilter'
               />
             </div>
 
