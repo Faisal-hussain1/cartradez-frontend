@@ -3,23 +3,25 @@ import {Vehicle} from './common';
 export interface VehiclePayload {
   make: string;
   model: string;
+  variant?: string;
   year: number;
   condition: string;
-  mileage: number;
+  bodyType: string;
   color: string;
-  driveType: string;
-  price: number;
-  currency: string;
-  description: string;
+  mileage: number;
   engineSize: number;
-  fuelType: string;
   transmission: string;
-
-  // cylinder?: string;
-  // location?: string;
-  // modelDetail?: string;
-  // importHistory?: string;
+  fuelType: string;
+  driveType: string;
+  currency: string;
+  price: number;
+  registrationCity: string;
+  registrationNumber: string;
+  registrationYear: number;
+  numberOfOwners: number;
+  features: string[];
   images: File[];
+  description: string;
   isGreatPrice?: boolean;
 }
 

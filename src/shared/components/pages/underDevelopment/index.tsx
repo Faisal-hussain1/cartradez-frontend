@@ -9,7 +9,7 @@ export default function UnderDevelopment() {
   const router = useLocaleRouter();
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen px-4 bg-white text-center'>
+    <div className='flex flex-col items-center justify-center min-h-screen px-4 bg-gray-100 text-center'>
       <div className='mb-8'>
         <Image
           src='/images/logo-black.png'

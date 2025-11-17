@@ -10,18 +10,20 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
 } from '@/shared/components/ui/navigation-menu';
 import {Sheet, SheetContent, SheetTrigger} from '@/shared/components/ui/sheet';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import useTranslation from '@/shared/hooks/useTranslation';
 import Container from '@/shared/components/common/containers';
-import {LANDING_MENU_BAR_LINKS, USER_ROUTES} from '@/shared/constants/PATHS';
+import {
+  AUTH_ROUTES,
+  LANDING_MENU_BAR_LINKS,
+  USER_ROUTES,
+} from '@/shared/constants/PATHS';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from '@/shared/redux/slices/users';
 import {userMutations} from '@/shared/reactQuery';
-import {HoverDropdown} from '../dropdown';
+import HoverAvatarDropdown from '../hoverAvatarDropdown';
 
 export default function Navbar() {
   const {t} = useTranslation();
@@ -38,18 +40,16 @@ export default function Navbar() {
   return (
     <header className='w-full flex justify-center bg-white border-b shadow-md sticky top-0 z-50'>
       <Container className='max-w-[1200px] 2xl:max-w-[1440px]'>
-        <div className='flex items-center justify-between py-3'>
+        <div className='flex items-center justify-between py-1'>
           {/* Logo */}
           {/* <h2 className='text-black font-semibold text-lg'>Car Tradez</h2> */}
           <Image
             src={'/images/logo-black.png'}
             alt='pic'
-            width={80}
-            height={60}
+            width={70}
+            height={10}
             onClick={() => router.push(LANDING_MENU_BAR_LINKS.home.url)}
-            className='cursor-pointer'
-
-            // className='mt-[30px] md:mt-[98px] w-[204px] h-[224px] md:w-[318px] md:h-[342px]'
+            className='cursor-pointer w-[60px] h-[60px]'
           />
 
           {/* Desktop Navigation */}
@@ -60,12 +60,12 @@ export default function Navbar() {
                   {item.url ? (
                     <NavigationMenuLink
                       href={item.url}
-                      className='text-black hover:text-amber-700 transition'
+                      className='text-sm font-semibold text-black hover:text-primary transition'
                     >
                       {item.label}
                     </NavigationMenuLink>
                   ) : (
-                    <span className='text-black opacity-50 cursor-not-allowed'>
+                    <span className='text-sm text-semibold text-black opacity-50 cursor-not-allowed'>
                       {item.label}
                     </span>
                   )}
@@ -79,11 +79,20 @@ export default function Navbar() {
                 />
               </NavigationMenuItem>
 
-              {isLoggedIn && (
+              {isLoggedIn ? (
                 <NavigationMenuItem>
-                  <PrimaryButton
+                  {/* <PrimaryButton
                     buttonText='Logout'
                     onClick={() => executeSignOutMutation({})}
+                  /> */}
+
+                  <HoverAvatarDropdown />
+                </NavigationMenuItem>
+              ) : (
+                <NavigationMenuItem>
+                  <PrimaryButton
+                    buttonText='SignUp/Login'
+                    onClick={() => router.push(AUTH_ROUTES.login)}
                   />
                 </NavigationMenuItem>
               )}

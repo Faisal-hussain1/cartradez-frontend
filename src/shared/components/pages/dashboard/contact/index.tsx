@@ -19,7 +19,9 @@ export default function ContactPage() {
       </div>
 
       <div className='max-w-6xl  px-20 mt-10 text-start'>
-        <h1 className='text-4xl md:text-4xl  text-blue-600'>Contact Us</h1>
+        <h1 className='text-4xl md:text-4xl  text-black font-bold'>
+          Contact Us
+        </h1>
         <p className='text-gray-600 mt-3 text-base md:text-lg'>
           We're here to help. Reach out to us through any of the channels below.
         </p>

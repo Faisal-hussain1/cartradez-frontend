@@ -1,9 +1,15 @@
-import {UsersIcon} from '@/shared/components/icons';
+import {
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  UsersIcon,
+} from '@/shared/components/icons';
 import {SidebarRoute, SiteMapLink} from '@/shared/interfaces/utils';
 import {ROLES} from './users';
 import {extractRoutes} from '@/shared/utils/general';
 
-// const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
 
 const path = (root: string, path: string): string => `${root}${path}`;
 
@@ -39,6 +45,10 @@ export const ADMIN_ROUTES = {
   temp: {
     all: path(DASHBOARD_ROOT, '/temp'),
   },
+  vehicles: path(VEHICLE_ROOT, '/'),
+  addVehicle: path(VEHICLE_ROOT, '/add'),
+  vehicleDetails: (vehicleId: string) =>
+    path(VEHICLE_ROOT, `/detail/${vehicleId}`),
 };
 
 export const MANAGER_ROUTES = {
@@ -124,30 +134,20 @@ export const LANDING_MENU_BAR_LINKS = {
     label: 'Home',
     url: '/',
   },
-  salesVehicles: {
-    value: 'salesVehicles',
-    label: 'Vehicles In Sales',
-    url: '/under-development',
-  },
   newVehicles: {
     value: 'newVehicles',
     label: 'New Vehicles',
     url: '/under-development',
   },
-  tools: {
-    value: 'tools',
-    label: 'Tools',
+  managedByCartradez: {
+    value: 'managedByCartradez',
+    label: 'Managed By Cartradez',
     url: '/under-development',
   },
-  resources: {
-    value: 'resources',
-    label: 'Resources',
-    url: '/under-development',
-  },
-  services: {
-    value: 'services',
-    label: 'Tools & Services',
-    url: '/under-development',
+  buyerAndSellerGuide: {
+    value: 'buyerAndSellerGuide',
+    label: 'Buyer & Seller Guide',
+    url: '/guidelines',
   },
   about: {
     value: 'about',
@@ -159,4 +159,99 @@ export const LANDING_MENU_BAR_LINKS = {
     label: 'Contact Us',
     url: '/contact',
   },
+};
+
+export const LANDING_FOOTER_LINKS = {
+  cartradez: [
+    {
+      value: 'aboutUs',
+      label: 'About Us',
+      url: '/about',
+    },
+    {
+      value: 'faqs',
+      label: 'FAQs',
+      url: '/faq',
+    },
+    {
+      value: 'buyAndSellSafety',
+      label: 'Buy & Sell Safety',
+      url: '/guidelines',
+    },
+    {
+      value: 'contactUs',
+      label: 'Contact Us',
+      url: '/contact',
+    },
+  ],
+  buyACar: [
+    {
+      value: 'browseAllCars',
+      label: 'Browse All Cars',
+      url: '/under-development',
+    },
+    {
+      value: 'featuredCars',
+      label: 'Featured Cars',
+      url: '/under-development',
+    },
+    {
+      value: 'managedByCartradez',
+      label: 'Managed by Cartradez',
+      url: '/under-development',
+    },
+    {
+      value: 'buyersGuide',
+      label: "Buyer's Guide",
+      url: '/guidelines',
+    },
+  ],
+  SellACar: [
+    {
+      value: 'postAnAd',
+      label: 'Post an Ad',
+      url: '/vehicles/add',
+    },
+    {
+      value: 'pricingPlans',
+      label: 'Pricing Plans',
+      url: '/under-development',
+    },
+    {
+      value: 'sellersGuide',
+      label: "Seller's Guide",
+      url: '/guidelines',
+    },
+    {
+      value: 'verificationProcess',
+      label: 'Verification Process',
+      url: '/under-development',
+    },
+  ],
+  socials: [
+    {
+      value: 'facebook',
+      label: 'Facebook',
+      icon: <FacebookIcon size={20} />,
+      url: 'https://www.facebook.com/cartradez',
+    },
+    {
+      value: 'twitter',
+      label: 'Twitter',
+      icon: <TwitterIcon size={20} />,
+      url: `${APP_URL}/under-development`,
+    },
+    {
+      value: 'instagram',
+      label: 'Instagram',
+      icon: <InstagramIcon size={20} />,
+      url: `${APP_URL}/under-development`,
+    },
+    {
+      value: 'linkedin',
+      label: 'LinkedIn',
+      icon: <LinkedinIcon size={20} />,
+      url: `${APP_URL}/under-development`,
+    },
+  ],
 };

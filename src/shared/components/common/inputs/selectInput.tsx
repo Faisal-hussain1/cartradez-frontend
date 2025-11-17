@@ -10,7 +10,6 @@ function SelectInput({
   control,
   name,
   placeholder = 'Select a Type',
-  isRequired = false,
   ...rest
 }: SelectInputProps) {
   const id = useId();
@@ -22,11 +21,11 @@ function SelectInput({
       render={({field: {value, onChange}, fieldState: {error}}) => {
         return (
           <div className='flex flex-col relative'>
-            <label className='font-medium text-gray-700 mb-[5px] inline-flex items-center gap-1'>
+            <label className='font-medium text-gray-700 mb-[1px] inline-flex items-center gap-1'>
               {label}
-              {isRequired && (
-                <span className='inline-flex md:hidden text-red100'>*</span>
-              )}
+              {/* {isRequired && (
+                <span className='inline-flex sm:hidden text-red100'>*</span>
+              )} */}
             </label>
             <Select
               onChange={(selectedOption) => {

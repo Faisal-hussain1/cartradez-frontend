@@ -165,7 +165,7 @@ export interface GeneralBackdropProps {
   buttons?: ButtonProps[];
 }
 
-export interface truncateWordsProps {
+export interface TruncateCharProps {
   text: string;
   limit?: number;
 }
@@ -175,29 +175,23 @@ export interface BannerProps {
 }
 
 export interface Vehicle {
-  id: string;
+  _id: string;
   make: string;
   model: string;
-  body: string;
-  doors?: string;
-  seats?: number;
   year: number;
-  mileage: number;
-  color?: string;
-  numberPlate: string;
-  engineSize?: number;
-  transmission: string;
-  fuelType: string;
-  cylinder?: string;
   currency: string;
   price: number;
-  location?: string;
-  modelDetail?: string;
-  importHistory?: string;
-  isGreatPrice?: boolean;
-  isFeatured?: boolean;
-  badge?: string;
-  images: [{key: string; url: string}];
+  listingType: string;
+  coverImage: {key: string; url: string};
+}
+
+export interface CartradezVehicle {
+  _id: string;
+  make: string;
+  model: string;
+  currency: string;
+  price: number;
+  coverImage: {key: string; url: string};
 }
 
 export type RequestsStatus = {
@@ -214,6 +208,7 @@ export interface FiltersBarProps {
   setFilters: (filters: FilterProps) => void;
   filters: FilterProps;
   hideSelect?: boolean;
+  placeholder?: string;
 }
 
 export interface StatusOption {

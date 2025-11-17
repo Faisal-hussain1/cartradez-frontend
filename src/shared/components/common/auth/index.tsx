@@ -2,7 +2,7 @@ import {AuthFormHeadingProps} from '@/shared/interfaces/auth';
 
 export const AuthFormHeading = ({heading}: AuthFormHeadingProps) => {
   return (
-    <h1 className='text-[24px] md:text-[30px] font-bold text-gray90 mb-2'>
+    <h1 className='text-[24px] md:text-[30px] font-bold text-primary mb-2'>
       {heading}
     </h1>
   );

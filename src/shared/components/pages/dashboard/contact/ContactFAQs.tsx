@@ -1,8 +1,13 @@
 import {Button} from '@/shared/components/ui/button';
 import {MessageSquare} from 'lucide-react';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import useTranslation from '@/shared/hooks/useTranslation';
 import React from 'react';
 
 const ContactFAQs = () => {
+  const router = useLocaleRouter();
+  const {t} = useTranslation();
+
   return (
     <>
       <div className='w-full bg-white rounded-2xl shadow p-8 space-y-4'>
@@ -13,7 +18,10 @@ const ContactFAQs = () => {
           away.
         </p>
 
-        <Button className='bg-blue-900 hover:bg-blue-950 text-white font-semibold px-6 py-2 rounded-md shadow'>
+        <Button
+          onClick={() => router.push('/faq')}
+          className='bg-primary hover:bg-primary/97 text-white font-semibold px-6 py-2 rounded-md shadow'
+        >
           <MessageSquare className='w-5 h-5 text-white' />
           Go to FAQs
         </Button>

@@ -45,6 +45,12 @@
     "transmissionRequired": "Transmission is required",
     "transmissionInvalid": "Invalid transmission type",
 
+    "registrationCityRequired": "Registration city is required",
+    "registrationNumberRequired": "Registration number is required",
+    "registrationYearRequired": "Registration year is required",
+    "numberOfOwnersRequired": "Number of owners is required",
+    "numberOfOwnersMin": "Number of owners must be at least 1",
+
     "locationRequired": "Location is required",
     "brandRequired": "Brand is required",
     "descriptionMax": "Description too long",
