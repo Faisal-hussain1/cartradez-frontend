@@ -17,14 +17,24 @@ const nextConfig = {
     // File extensions that Turbopack will resolve automatically when importing modules
     resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
   },
+  // images: {
+  //   remotePatterns: [
+  //     {
+  //       protocol: 'https',
+  //       hostname: process.env.NEXT_PUBLIC_AWS_BUCKET_HOSTNAME,
+  //     },
+  //   ],
+  //   unoptimized: true, // optional: avoids Next.js optimization issues with S3
+  // },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_AWS_BUCKET_HOSTNAME,
+        hostname: 's3.amazonaws.com',
+        pathname: '/**',
       },
     ],
-    unoptimized: true, // optional: avoids Next.js optimization issues with S3
+    unoptimized: true,
   },
 };
 module.exports = nextConfig;
