@@ -2,6 +2,8 @@
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
+import SelectInput from '@/shared/components/common/inputs/selectInput';
+
 import PasswordInput from '@/shared/components/common/inputs/passwordInput';
 import Link from '@/shared/utils/localeLink';
 import TextInput from '@/shared/components/common/inputs/textInput';
@@ -28,14 +30,14 @@ export default function RegisterForm() {
   const {useSignupMutation} = userMutations();
 
   const onSuccess = () => {
-    router.push(AUTH_ROUTES.login);
+    router.push(AUTH_ROUTES.registerVerifyRequest);
   };
 
   const {mutate: executeSignupMutation, isPending} = useSignupMutation({
     callBackFuncs: {onSuccess},
   });
 
-  const {control, handleSubmit} = useForm<RegisterPayload>({
+  const {control, handleSubmit, watch} = useForm<RegisterPayload>({
     resolver: yupResolver(ct(registerUserSchema)),
     defaultValues: {
       firstName: '',
@@ -43,6 +45,12 @@ export default function RegisterForm() {
       email: '',
       phoneNumber: '',
       password: '',
+      systemRole: 'user',
+      showroomName: '',
+      address: '',
+      city: '',
+      state: '',
+      country: '',
     },
   });
 
@@ -79,6 +87,57 @@ export default function RegisterForm() {
             control={control}
             name='lastName'
           />
+          <TextInput
+            control={control}
+            name='address'
+            label={t('auth.address')}
+            placeholder={t('auth.addressPlaceholder')}
+          />
+          <TextInput
+            control={control}
+            name='country'
+            label={t('auth.country')}
+            placeholder={t('auth.countryPlaceholder')}
+          />
+
+          <TextInput
+            control={control}
+            name='state'
+            label={t('auth.state')}
+            placeholder={t('auth.statePlaceholder')}
+          />
+          <TextInput
+            control={control}
+            name='city'
+            label={t('auth.city')}
+            placeholder={t('auth.cityPlaceholder')}
+          />
+
+          <SelectInput
+            control={control}
+            name='systemRole'
+            label={t('auth.systemRole')}
+            options={[
+              {label: t('auth.user'), value: 'user'},
+              {
+                label: t('auth.dealer'),
+                value: 'dealer',
+              },
+            ]}
+            isSearchable={false}
+            isClearable={false}
+            closeMenuOnSelect={true}
+          />
+          {watch('systemRole') === 'dealer' && (
+            <>
+              <TextInput
+                control={control}
+                name='showroomName'
+                label={t('auth.showroomName')}
+                placeholder={t('auth.showroomNamePlaceholder')}
+              />
+            </>
+          )}
           <TextInput
             name='email'
             label={t('auth.emailLabel')}
