@@ -27,7 +27,7 @@ export default function ActionMessage({action}: {action: string}) {
     headings = {
       main: t('auth.resetLinkSent'),
       subHeading: t('reset.message'),
-      image: '/images/reset-link-sent-image.png',
+      image: '/images/auth/public/images/auth/register-image.png',
     };
   }
 

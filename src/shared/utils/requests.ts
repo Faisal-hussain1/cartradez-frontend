@@ -11,7 +11,8 @@ export const API_SERVER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
 // Create axios instance
 const request = axios.create({
   baseURL: API_SERVER_URL,
-  withCredentials: true,
+
+  // withCredentials: true,
 });
 
 request.interceptors.response.use(
@@ -30,6 +31,17 @@ request.interceptors.response.use(
     return Promise.reject(errorMessage);
   }
 );
+request.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('accessToken');
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
+  return config;
+});
 
 // Post request Call
 export const postRequest = async <T, R = AxiosResponse<T>>({

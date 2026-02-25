@@ -75,7 +75,7 @@ export default function Navbar() {
               <NavigationMenuItem>
                 <PrimaryButton
                   buttonText='Post an Ad'
-                  onClick={() => router.push(USER_ROUTES.addVehicle)}
+                  onClick={() => router.push('/selectRole')}
                 />
               </NavigationMenuItem>
 
@@ -138,6 +138,12 @@ export default function Navbar() {
                   {/* Extra Actions */}
                   <div className='flex flex-col gap-2 mt-4'>
                     <PrimaryButton
+                      buttonText='Post an Ad yahoo'
+                      onClick={() => router.push('/selectRole')}
+                    />
+                  </div>
+                  {/* <div className='flex flex-col gap-2 mt-4'>
+                    <PrimaryButton
                       buttonText='Post an Ad'
                       onClick={() => router.push(USER_ROUTES.addVehicle)}
                     />
@@ -147,7 +153,7 @@ export default function Navbar() {
                         onClick={() => executeSignOutMutation({})}
                       />
                     )}
-                  </div>
+                  </div> */}
                 </nav>
               </SheetContent>
             </Sheet>
