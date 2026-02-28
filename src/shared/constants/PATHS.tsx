@@ -57,6 +57,7 @@ export const MANAGER_ROUTES = {
 
 export const USER_ROUTES = {
   vehicles: path(VEHICLE_ROOT, '/'),
+  selectRole: path(ROOT_ROUTE, '/selectRole'),
   addVehicle: path(VEHICLE_ROOT, '/add'),
   vehicleDetails: (vehicleId: string) =>
     path(VEHICLE_ROOT, `/detail/${vehicleId}`),

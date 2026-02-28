@@ -18,6 +18,9 @@ export interface RegisterPayload {
   email: string;
   phoneNumber: string;
   password: string;
+  systemRole?: 'user' | 'dealer';
+  showroomName?: string;
+  address?: string;
 }
 
 export interface ForgotPasswordPayload {

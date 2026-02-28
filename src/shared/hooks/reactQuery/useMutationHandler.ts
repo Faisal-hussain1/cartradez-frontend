@@ -52,8 +52,8 @@ export const useMutationHandler = ({
           return response.data;
         }
 
-        const {body, ...rest} = response.data;
-        const res = {data: body, ...rest};
+        const res = response.data;
+
         onSuccessAlways?.(res);
         onSuccess?.(res);
 
