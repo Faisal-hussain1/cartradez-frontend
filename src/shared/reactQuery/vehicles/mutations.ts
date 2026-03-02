@@ -33,7 +33,6 @@ export const useMutations = () => {
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({message}) => {
-            console.log("Message ",message)
             queryClient.invalidateQueries({
               queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
             });
