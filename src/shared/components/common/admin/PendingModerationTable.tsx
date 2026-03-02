@@ -2,6 +2,11 @@
 
 import Image from 'next/image';
 import {Eye, Check, X} from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
+import { useEffect, useState } from 'react';
+import { API_ENDPOINTS } from '@/shared/constants/apiEndpoints';
+import { tryCatch } from '@/shared/utils/tryCatchUtils';
 
 const listings = [
   {
@@ -49,6 +54,26 @@ const listings = [
 ];
 
 export default function PendingModerationTable() {
+  const [vehicles,setVehicles]=useState([]);
+  const [message,setMessage]=useState('');
+  const role=useSelector(getUserRole);
+
+  useEffect(()=>{
+    async function getVehicles(){
+      try {
+        const res=await fetch('http://localhost:3001/api/v1/vehicles');
+      const result=await res.json();
+
+      setVehicles(result?.data.vehicles)
+      } catch (error) {
+        console.error("Error fetching vehicles:", error);
+      }
+    }
+    getVehicles();
+  },[])
+
+
+
   return (
     <section className='mt-4'>
       {/* Header */}
@@ -87,7 +112,6 @@ export default function PendingModerationTable() {
           <span className='text-right'>Actions</span>
         </div>
 
-        {/* Rows */}
         {listings.map((item) => (
           <div
             key={item.id}

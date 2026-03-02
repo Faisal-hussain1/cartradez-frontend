@@ -32,11 +32,12 @@ export const useMutations = () => {
         method: POST,
         callBackFuncs: {
           ...callBackFuncs,
-          onSuccessAlways: ({data, message}) => {
+          onSuccessAlways: ({message}) => {
+            console.log("Message ",message)
             queryClient.invalidateQueries({
               queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
             });
-            if (data) showToast({type: 'success', message});
+            showToast({type: 'success', message});
           },
           onErrorAlways: ({message}) =>
             showToast({

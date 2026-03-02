@@ -52,17 +52,13 @@ export default function LoginForm() {
   };
 
   const onSuccess = (res: any) => {
-    console.log('LOGIN RESPONSE:', res);
-
     const token = res?.data?.token;
-
-    console.log('TOKEN:', token);
 
     if (token) {
       localStorage.setItem('accessToken', token);
     }
 
-    router.push('/dashboard');
+    router.push('/dash');
   };
 
   const {mutate: executeLoginMutation, isPending} = useLoginMutation({

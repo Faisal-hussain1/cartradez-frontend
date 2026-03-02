@@ -3,7 +3,7 @@
 import useTranslation from '@/shared/hooks/useTranslation';
 import './ErrorFallback.css';
 
-export const ErrorFallback = ({message}: {message?: string}) => {
+export const ErrorFallback = ({message}: {message?: any}) => {
   const {t} = useTranslation();
   message = message || t('errorResponse.message');
 

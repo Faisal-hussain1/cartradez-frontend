@@ -23,6 +23,7 @@ export default function HomeVehicles() {
       queryToCall: useFetchAllVehicleList,
     });
 
+
   return (
     <div className='flex justify-center'>
       <Container>

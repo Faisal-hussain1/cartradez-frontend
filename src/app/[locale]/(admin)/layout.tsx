@@ -1,7 +1,10 @@
 import Leftbar from '@/shared/components/common/admin/Leftbar';
 import Topbar from '@/shared/components/common/admin/Topbar';
+import { getCurrentUser } from '@/shared/redux/slices/users';
+import { useSelector } from 'react-redux';
 
 export default function DashboardLayout({children}) {
+  // const user=useSelector(getCurrentUser);
   return (
     <div className='flex min-h-screen bg-gray-50'>
       {/* Sidebar */}

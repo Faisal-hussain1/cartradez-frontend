@@ -1022,6 +1022,8 @@ export default function AddVehicleForm() {
     executeAddNewVehicleMutation({payload: formData});
   };
 
+  
+
   return (
     <div className='mb-10'>
       {/* <div>

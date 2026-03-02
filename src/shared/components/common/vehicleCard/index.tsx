@@ -25,7 +25,7 @@ export default function VehicleCard({vehicle}: VehicleCardProps) {
     >
       <div className='relative w-full h-48'>
         <Image
-          src={vehicle.coverImage.url}
+          src={vehicle.coverImage?.url}
           alt={vehicle.make}
           fill
           className='object-cover'

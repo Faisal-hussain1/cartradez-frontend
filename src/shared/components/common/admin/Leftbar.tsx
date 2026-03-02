@@ -3,8 +3,11 @@
 import {LayoutDashboard, List, Shield, Users} from 'lucide-react';
 import Image from 'next/image';
 import {SidebarItem} from './Sidebaritem';
+import { useSelector } from 'react-redux';
+import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
 
 export default function Leftbar() {
+  const role=useSelector(getUserRole);
   return (
     <aside
       className='
@@ -41,8 +44,10 @@ export default function Leftbar() {
           icon={<List size={18} />}
           label='Listings'
         />
-        <SidebarItem href='/roles' icon={<Shield size={18} />} label='Roles' />
+        {role==="admin" && <div>
+          <SidebarItem href='/roles' icon={<Shield size={18} />} label='Roles' />
         <SidebarItem href='/users' icon={<Users size={18} />} label='Users' />
+          </div>}
       </nav>
     </aside>
   );
