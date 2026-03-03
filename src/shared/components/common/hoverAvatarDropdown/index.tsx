@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 import {userMutations} from '@/shared/reactQuery';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 
 export default function HoverAvatarDropdown({
   profileImageUrl,
@@ -28,6 +29,7 @@ export default function HoverAvatarDropdown({
     if (closeTimeout.current) clearTimeout(closeTimeout.current);
     setOpen(true);
   };
+  const router=useLocaleRouter();
 
   const handleMouseLeave = () => {
     closeTimeout.current = setTimeout(() => setOpen(false), 200);
@@ -68,6 +70,13 @@ export default function HoverAvatarDropdown({
         >
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className='cursor-pointer'
+            onClick={() => router.push('/dash')}
+          >
+            Dashboard
+          </DropdownMenuItem>
+          
           {/* <DropdownMenuItem>Profile</DropdownMenuItem>
           <DropdownMenuItem>Settings</DropdownMenuItem> */}
           <DropdownMenuItem

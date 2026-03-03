@@ -35,8 +35,6 @@ export default function Navbar() {
 
   const {useSignOutMutation} = userMutations();
 
-  const {mutate: executeSignOutMutation} = useSignOutMutation();
-
   return (
     <header className='w-full flex justify-center bg-white border-b shadow-md sticky top-0 z-50'>
       <Container className='max-w-[1200px] 2xl:max-w-[1440px]'>

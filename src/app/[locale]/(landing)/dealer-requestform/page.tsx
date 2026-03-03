@@ -12,33 +12,46 @@ import SubmitButton from '@/shared/components/common/buttons/submitButton';
 import CustomSelectInput from '@/shared/components/common/inputs/CustomSelectInput';
 
 type DealerPayload = {
-  dealerName: string;
-  companyName: string;
-  phone: string;
-  email: string;
-  city: string;
+  showroomName: string;
   showroomAddress: string;
   experience: number;
-  message: string;
 };
 
 export default function DealerRequestForm() {
   const {control, handleSubmit, reset} = useForm<DealerPayload>({
     defaultValues: {
-      dealerName: '',
-      companyName: '',
-      phone: '',
-      email: '',
-      city: '',
+      showroomName: '',
       showroomAddress: '',
       experience: 0,
-      message: '',
     },
   });
 
-  const onSubmit: SubmitHandler<DealerPayload> = (data) => {
-    console.log('Dealer Request Data:', data);
-    reset();
+  const onSubmit: SubmitHandler<DealerPayload> =async  (data) => {
+    console.log(data)
+  //   try {
+  //   const res = await fetch(
+  //     `http://localhost:3001/api/v1/users/dealer-form`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     }
+  //   );
+
+  //   const result = await res.json();
+
+  //   if (!res.ok) {
+  //     throw new Error(result?.message || "Something went wrong");
+  //   }
+
+  //   console.log("Dealer form submitted:", result);
+
+  //   reset();
+  // } catch (error: any) {
+  //   console.error("Dealer form error:", error.message);
+  // }
   };
   const [agreed, setAgreed] = useState(false);
 
@@ -114,7 +127,7 @@ export default function DealerRequestForm() {
                   <div className='md:col-span-6 col-span-12'>
                     <CustomTextInput
                       label='National Registration Card No (NRC)'
-                      name='nrcNumber'
+                      name='nrcNo'
                       placeholder='XXXXXX/XX/X'
                       control={control}
                       isRequired
@@ -126,7 +139,7 @@ export default function DealerRequestForm() {
                   <div className='md:col-span-6 col-span-12'>
                     <CustomTextInput
                       label='Company / Showroom Name'
-                      name='companyName'
+                      name='showroomName'
                       placeholder='Enter Company Name'
                       control={control}
                       isRequired
@@ -145,23 +158,6 @@ export default function DealerRequestForm() {
                 </div>
 
                 <div className='grid grid-cols-12 gap-2 mt-3'>
-                  <div className='md:col-span-6 col-span-12'>
-                    <CustomSelectInput
-                      label='Total Cars in Stock'
-                      name='stockRange'
-                      placeholder='Select Range'
-                      control={control}
-                      options={[
-                        {value: '1-5', label: '1 - 5 Cars'},
-                        {value: '6-10', label: '6 - 10 Cars'},
-                        {value: '11-20', label: '11 - 20 Cars'},
-                        {value: '21-50', label: '21 - 50 Cars'},
-                        {value: '50+', label: '50+ Cars'},
-                      ]}
-                      isRequired
-                    />
-                  </div>
-
                   <div className='md:col-span-6 col-span-12'>
                     <CustomSelectInput
                       label='Types of Cars Sold'
@@ -192,24 +188,13 @@ export default function DealerRequestForm() {
                   <div className='md:col-span-6 col-span-12'>
                     <CustomNumberInput
                       label='NTN No'
-                      name='ntnNumber'
+                      name='ntnNo'
                       placeholder='XXXXXXX'
                       control={control}
                       isRequired
                     />
                   </div>
                 </div>
-
-                <div className='mt-3'>
-                  <CustomTextInput
-                    label='Location Information'
-                    name='locationInfo'
-                    placeholder='Area, City, Landmark etc.'
-                    control={control}
-                    isRequired
-                  />
-                </div>
-
                 <div className='mt-3'>
                   <CustomTextInput
                     label='Dealer Social Media (optional)'

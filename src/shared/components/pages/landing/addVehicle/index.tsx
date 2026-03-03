@@ -937,10 +937,12 @@ import ImageUploadInput from '@/shared/components/common/imageUpload';
 import {useState} from 'react';
 import {CheckboxList} from '@/shared/components/common/checkboxList';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 
 export default function AddVehicleForm() {
   const {t} = useTranslation();
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const router=useLocaleRouter();
 
   const {control, handleSubmit, reset, watch, setValue} =
     useForm<VehiclePayload>({
@@ -973,6 +975,7 @@ export default function AddVehicleForm() {
   const {useAddNewVehicleMutation} = vehiclesMutations();
 
   const onSuccess = () => {
+    router.push('/dash')
     reset();
   };
 

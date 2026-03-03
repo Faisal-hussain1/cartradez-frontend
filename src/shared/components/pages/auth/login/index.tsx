@@ -56,9 +56,8 @@ export default function LoginForm() {
 
     if (token) {
       localStorage.setItem('accessToken', token);
+      router.push('/dash')
     }
-
-    router.push('/dash');
   };
 
   const {mutate: executeLoginMutation, isPending} = useLoginMutation({
