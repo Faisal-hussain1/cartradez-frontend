@@ -99,7 +99,7 @@ export default function SellCarChoice() {
             </ul>
 
             <Link
-              href='/sell/dealer'
+              href='/dealer-requestform'
               className='mt-4 inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-white font-medium hover:opacity-90 transition'
             >
               Become a Dealer

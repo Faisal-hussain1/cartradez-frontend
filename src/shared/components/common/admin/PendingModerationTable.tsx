@@ -4,63 +4,19 @@ import Image from 'next/image';
 import {Eye, Check, X} from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
-import { loadStripe } from '@stripe/stripe-js';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueries } from '@/shared/reactQuery/vehicles/queries';
-import { API_ENDPOINTS } from '@/shared/constants/apiEndpoints';
-import { tryCatch } from '@/shared/utils/tryCatchUtils';
-
-const listings = [
-  {
-    id: 1,
-    title: 'Bugatti Chiron Super Sport 300+',
-    image: '/images/Frame 22.png',
-    seller: 'Darrell Steward',
-    created: 'Feb 08, 2025',
-  },
-  {
-    id: 2,
-    title: 'Lamborghini Sian Roadster',
-    image: '/images/Frame 22.png',
-    seller: 'Brooklyn Simmons',
-    created: 'May 14, 2025',
-  },
-  {
-    id: 3,
-    title: 'SSC Tuatara',
-    image: '/images/Frame 22.png',
-    seller: 'Kathryn Murphy',
-    created: 'Jul 01, 2025',
-  },
-  {
-    id: 4,
-    title: 'SSC Tuatara',
-    image: '/images/Frame 22.png',
-    seller: 'Kathryn Murphy',
-    created: 'Jul 01, 2025',
-  },
-  {
-    id: 5,
-    title: 'SSC Tuatara',
-    image: '/images/Frame 22.png',
-    seller: 'Kathryn Murphy',
-    created: 'Jul 01, 2025',
-  },
-  {
-    id: 6,
-    title: 'SSC Tuatara',
-    image: '/images/Frame 22.png',
-    seller: 'Kathryn Murphy',
-    created: 'Jul 01, 2025',
-  },
-];
+import ListingPopUp from './adminUsers/ListingPopUp';
 
 export default function PendingModerationTable() {
   const { useFetchAllVehicleList } = useQueries();
+  const [popUp,setPopup]=useState(false);
 
   const { data, isLoading, error } = useFetchAllVehicleList();
-  const [message,setMessage]=useState('');
+  const [selectedVehicle,setSelectedVehicle]=useState<any>(null);
   const user=useSelector(getCurrentUser);
+
+  const role=useSelector(getUserRole);
   const myVehicles = useMemo(() => {
   if (!data?.vehicles || !user?._id) return [];
 
@@ -69,46 +25,22 @@ export default function PendingModerationTable() {
   );
 }, [data?.vehicles, user?._id]);
 
-const publishableKey="pk_test_51RKN9FQaNfqZpifiMJskjSfmcCdVhVMks73GTE7Ti9MG5nkg9T5w4a9cdeUDckrEEYXgoTdZzgFm5aLh8cQRsMCN00IOOjP2BE"
-  
-  const stripePromise = loadStripe(publishableKey);
+const pendingVehicles = useMemo(() => {
+  const source = role=='admin' ? data?.vehicles : myVehicles;
 
-  const pay=async(userId:any,vehicleId:any,currency:any,image:any,make:any,model:any)=>{
-    try {
-      const stripe = await stripePromise;
-       if (!stripe) {
-      console.error('Stripe failed to initialize');
-      return;
-    }
-      
-      const res = await fetch(`http://localhost:3001/api/v1/payment`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-        },
-        body: JSON.stringify({userId,vehicleId,currency,image,make,model}),
-      });
-  
-  
-      const data = await res.json();  
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: data.id
-      });
-      if (error) {
-        console.error('Stripe redirect error:', error);
-      }
-      
-    } catch (err) {
-      console.error('Payment error:', err);
-    }
-  }
+  if (!source) return [];
 
-
+  return source.filter((vehicle: any) => vehicle?.listingType === null);
+}, [role, data?.vehicles, myVehicles]);
 
   return (
     <section className='mt-4'>
-      {/* Header */}
       <div className='flex items-center justify-between mb-2'>
+        {popUp && <ListingPopUp  vehicle={selectedVehicle}
+    onClose={() => {
+      setPopup(false);
+      setSelectedVehicle(null);
+    }}/>}
         <h2 className='text-sm font-semibold text-blue100'>
           Pending Moderation Queue
         </h2>
@@ -138,65 +70,60 @@ const publishableKey="pk_test_51RKN9FQaNfqZpifiMJskjSfmcCdVhVMks73GTE7Ti9MG5nkg9
           '
         >
           <span>Listing</span>
-          <span>Seller</span>
+          {(role==='admin' || role==='manager') && <span>Added By</span>}
           <span>Created</span>
           <span className='text-right'>Actions</span>
         </div>
 
-        {myVehicles.map((item:any) => (
-          <div
-            key={item._id}
-            className='
-              grid grid-cols-[1fr_160px_120px_120px]
-              items-center
-              px-3 py-2
-              text-xs
-              border-t border-border
-              hover:bg-accent
-              transition
-            '
-          >
-            {/* Listing */}
-            <div className='flex items-center gap-2 min-w-0'>
-              <Image
-                src={item.coverImage.url}
-                alt={item.coverImage.key}
-                width={32}
-                height={32}
-                className='rounded object-cover'
-              />
-              <span className='font-medium truncate text-foreground'>
-                {item.make}
-              </span>
-            </div>
-
-            {/* Seller */}
-            {/* <span className='truncate text-gray80'>{item.seller}</span> */}
-
-            {/* Created */}
-            {/* <span className='text-gray70'>{item.created}</span> */}
-
-            {/* Actions */}
-            <div className='flex justify-end gap-1.5'>
-              <ActionButton type='view' icon={<Eye size={14} />} />
-              <ActionButton type='approve' icon={<Check size={14} />} />
-              <ActionButton type='reject' icon={<X size={14} />} />
-              <button onClick={()=>pay(user?._id,item._id,item.currency,item.coverImage.url,item.make,item.model)} className='bg-blue-600
-    hover:bg-blue-700
-    active:scale-95
-    text-white
-    text-xs
-    font-medium
-    px-4
-    py-2
-    rounded-md
-    transition-all
-    duration-200
-    shadow-sm
-    hover:shadow-md'>Pay Now</button>
-            </div>
+         {pendingVehicles.length === 0 ? (
+      <div className="py-10 text-center text-sm text-muted-foreground">
+        No Pending Listings
+      </div>
+    ) : (
+      pendingVehicles.map((item: any) => (
+        <div key={item._id} className="grid grid-cols-[1fr_160px_120px_120px] items-center px-3 py-2 text-xs border-t border-border hover:bg-accent transition">
+          
+          {/* Listing */}
+          <div className="flex items-center gap-2 min-w-0">
+            <Image
+              src={item?.coverImage?.url}
+              alt="vehicle"
+              width={32}
+              height={32}
+              className="rounded object-cover"
+            />
+            <span className="font-medium truncate text-foreground">
+              {item?.make} {item?.model}
+            </span>
           </div>
-        ))}
+
+          {/* Actions */}
+          <div className="flex justify-end gap-1.5 col-span-3">
+            <ActionButton type="view" icon={<Eye size={14} />} />
+            <ActionButton type="approve" icon={<Check size={14} />} />
+            <ActionButton type="reject" icon={<X size={14} />} />
+
+            <button
+              onClick={() => {
+                setPopup(true);
+                setSelectedVehicle({
+                  userId: item.creatorId,
+                  vehicleId: item._id,
+                  currency: item.currency,
+                  image: item?.coverImage?.url,
+                  make: item.make,
+                  model: item.model,
+                });
+              }}
+              className="bg-blue-600 hover:bg-primary active:scale-95 text-white text-xs font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              List Now
+            </button>
+          </div>
+
+        </div>
+      ))
+    )}
       </div>
     </section>
   );
