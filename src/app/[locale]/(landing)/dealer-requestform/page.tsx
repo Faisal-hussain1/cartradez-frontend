@@ -10,48 +10,50 @@ import CustomNumberInput from '@/shared/components/common/inputs/CustomNumberInp
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
 import CustomSelectInput from '@/shared/components/common/inputs/CustomSelectInput';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/shared/redux/slices/users';
 
-type DealerPayload = {
-  showroomName: string;
-  showroomAddress: string;
-  experience: number;
-};
+// type DealerPayload = {
+//   showroomName: string;
+//   showroomAddress: string;
+//   experience: number;
+// };
 
 export default function DealerRequestForm() {
-  const {control, handleSubmit, reset} = useForm<DealerPayload>({
+  const {control, handleSubmit, reset} = useForm<any>({
     defaultValues: {
       showroomName: '',
       showroomAddress: '',
       experience: 0,
     },
   });
+  const user=useSelector(getCurrentUser);
 
-  const onSubmit: SubmitHandler<DealerPayload> =async  (data) => {
-    console.log(data)
-  //   try {
-  //   const res = await fetch(
-  //     `http://localhost:3001/api/v1/users/dealer-form`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     }
-  //   );
+  const onSubmit: SubmitHandler<any> =async  (data) => {
+    try {
+    const res = await fetch(
+      `http://localhost:3001/api/v1/users/dealer-form/${user?._id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({carTypes:data.carTypes,experience:data.experience,nrcNo:data.nrcNo,ntnNo:data.ntnNo,showroomAddress:data.showroomAddress,showroomName:data.showroomName,socialMedia:data.socialMedia,role:"dealer"}),
+      }
+    );
 
-  //   const result = await res.json();
+    const result = await res.json();
 
-  //   if (!res.ok) {
-  //     throw new Error(result?.message || "Something went wrong");
-  //   }
+    // if (!res.ok) {
+    //   throw new Error(result?.message || "Something went wrong");
+    // }
 
-  //   console.log("Dealer form submitted:", result);
+    console.log("Dealer form submitted:", result);
 
-  //   reset();
-  // } catch (error: any) {
-  //   console.error("Dealer form error:", error.message);
-  // }
+    // reset();
+  } catch (error: any) {
+    console.error("Dealer form error:", error.message);
+  }
   };
   const [agreed, setAgreed] = useState(false);
 
