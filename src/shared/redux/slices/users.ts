@@ -27,4 +27,4 @@ export const getCurrentUser = (state: {users: UsersState}) =>
 export const getUsersList = (state: {users: UsersState}) => state.users.list;
 
 export const getUserRole = (state: {users: UsersState}) =>
-  state.users.currentUser?.currentActiveOrganization?.role;
+  state.users.currentUser?.systemRole;

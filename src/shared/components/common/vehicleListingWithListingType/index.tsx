@@ -4,28 +4,35 @@ import {Vehicle} from '@/shared/interfaces/common';
 import {CommonCarousel} from '../cardSlider';
 import {useResponsiveSlides} from '@/shared/hooks/useResponsiveSlide';
 import VehicleCard from '../vehicleCard';
+import { useQueries } from '@/shared/reactQuery/vehicles/queries';
+import { useMemo } from 'react';
+
 
 export default function VehicleListingWithListingType({
   PaginationComponent,
   filteredData,
-  isLoading,
   isPaginationShow = true,
 }: any) {
   const slidesToShow = useResponsiveSlides();
+  const {useFetchAllVehicleList}=useQueries();
+  const { data, isLoading, error } = useFetchAllVehicleList();
+  console.log(data?.vehicles)
 
-  if (isLoading) return <GlobalLoader height='h-[400px]' />;
+ const vehicles = data?.vehicles || [];
 
-  const premiumVehicles = filteredData.filter(
-    (v: Vehicle) => v.listingType === 'premium'
-  );
+const premiumVehicles = useMemo(() => {
+  return vehicles.filter((v: Vehicle) => v.listingType === "premium");
+}, [vehicles]);
 
-  const quickSellVehicles = filteredData.filter(
-    (v: Vehicle) => v.listingType === 'quickSell'
-  );
+const quickSellVehicles = useMemo(() => {
+  return vehicles.filter((v: Vehicle) => v.listingType === "quick sell");
+}, [vehicles]);
 
-  const standardVehicles = filteredData.filter(
-    (v: Vehicle) => v.listingType === 'standard'
-  );
+const standardVehicles = useMemo(() => {
+  return vehicles.filter((v: Vehicle) => v.listingType === "standard");
+}, [vehicles]);
+
+if (isLoading) return <GlobalLoader height='h-[400px]' />;
 
   return (
     <div className='w-full'>

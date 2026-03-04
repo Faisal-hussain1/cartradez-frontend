@@ -15,14 +15,12 @@ export default function HomeVehicles() {
   const router = useLocaleRouter();
 
   const {useFetchAllVehicleList} = vehiclesQueries();
-
   const {PaginationComponent, filteredData, isLoading, filters, setFilters} =
     useServerSideListFilters<Vehicle>({
       dataKey: 'vehicles',
       listType: LIST_TYPES.homePageVehicles,
       queryToCall: useFetchAllVehicleList,
     });
-
 
   return (
     <div className='flex justify-center'>

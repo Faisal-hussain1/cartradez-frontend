@@ -12,6 +12,8 @@ export default function VehicleListing({
 }: any) {
   if (isLoading) return <GlobalLoader height='h-[400px]' />;
 
+  console.log(filteredData)
+
   return (
     <div className='w-full'>
       {filteredData.length > 0 ? (

@@ -11,7 +11,9 @@ import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
 import CustomSelectInput from '@/shared/components/common/inputs/CustomSelectInput';
 import { useSelector } from 'react-redux';
-import { getCurrentUser } from '@/shared/redux/slices/users';
+import { actions, getCurrentUser } from '@/shared/redux/slices/users';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import { dispatch } from '@/shared/redux/store';
 
 // type DealerPayload = {
 //   showroomName: string;
@@ -28,33 +30,40 @@ export default function DealerRequestForm() {
     },
   });
   const user=useSelector(getCurrentUser);
+  const router=useLocaleRouter();
+  const token=localStorage.getItem('accessToken')
 
-  const onSubmit: SubmitHandler<any> =async  (data) => {
-    try {
+ const onSubmit: SubmitHandler<any> = async (data) => {
     const res = await fetch(
       `http://localhost:3001/api/v1/users/dealer-form/${user?._id}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          'Authorization':`Bearer ${token}`
         },
-        body: JSON.stringify({carTypes:data.carTypes,experience:data.experience,nrcNo:data.nrcNo,ntnNo:data.ntnNo,showroomAddress:data.showroomAddress,showroomName:data.showroomName,socialMedia:data.socialMedia,role:"dealer"}),
+        body: JSON.stringify({
+          carTypes: data.carTypes,
+          experience: data.experience,
+          nrcNo: data.nrcNo,
+          ntnNo: data.ntnNo,
+          showroomAddress: data.showroomAddress,
+          showroomName: data.showroomName,
+          socialMedia: data.socialMedia,
+        }),
       }
     );
 
-    const result = await res.json();
+    const  result= await res.json(); // safer
 
-    // if (!res.ok) {
-    //   throw new Error(result?.message || "Something went wrong");
-    // }
-
-    console.log("Dealer form submitted:", result);
-
-    // reset();
-  } catch (error: any) {
-    console.error("Dealer form error:", error.message);
-  }
-  };
+    if(result.success==true){
+      dispatch(actions.setCurrentUser(result?.updatedUser))
+      reset();
+      router.push('/dash');
+    }else{
+      console.log("Something went wrong");
+    }
+};
   const [agreed, setAgreed] = useState(false);
 
   return (

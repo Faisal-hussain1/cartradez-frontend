@@ -3,10 +3,23 @@
 import Image from 'next/image';
 import {stringToTitleCase, truncateChars} from '@/shared/utils/general';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
-import {CartradezVehicle} from '@/shared/interfaces/common';
+import {CartradezVehicle, Vehicle} from '@/shared/interfaces/common';
 import EmptyDataPlaceholder from '@/shared/components/common/EmptyDataPlaceholder';
+import { useMemo } from 'react';
+import { useQueries } from '@/shared/reactQuery/vehicles/queries';
 
-export default function ManagedByCartradezVehicles({vehicles, isLoading}: any) {
+export default function ManagedByCartradezVehicles({vehicles}: any) {
+
+  const {useFetchAllVehicleList}=useQueries();
+  const {data,isLoading}=useFetchAllVehicleList();
+
+  const v=data?.vehicles;
+  console.log(v)
+
+  const managedByCarTradez = useMemo(() => {
+  return v?.filter((v: Vehicle) => v.isManagedByCartradez==true);
+}, [v]);
+console.log(managedByCarTradez)
   if (isLoading) return <GlobalLoader height='h-[400px]' />;
 
   return (
@@ -15,7 +28,7 @@ export default function ManagedByCartradezVehicles({vehicles, isLoading}: any) {
         Managed by Cartradez
       </p>
 
-      {vehicles.length > 0 ? (
+      {managedByCarTradez.length > 0 ? (
         <div className='flex flex-col gap-4'>
           {vehicles.map((vehicle: CartradezVehicle) => (
             <div

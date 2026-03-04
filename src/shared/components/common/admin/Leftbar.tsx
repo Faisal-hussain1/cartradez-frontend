@@ -8,7 +8,6 @@ import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
 
 export default function Leftbar() {
   const role=useSelector(getUserRole);
-  console.log(role)
   return (
     <aside
       className='

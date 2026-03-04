@@ -21,7 +21,7 @@ import {
   USER_ROUTES,
 } from '@/shared/constants/PATHS';
 import {useSelector} from 'react-redux';
-import {getCurrentUser} from '@/shared/redux/slices/users';
+import {getCurrentUser, getUserRole} from '@/shared/redux/slices/users';
 import {userMutations} from '@/shared/reactQuery';
 import HoverAvatarDropdown from '../hoverAvatarDropdown';
 
@@ -31,7 +31,17 @@ export default function Navbar() {
   const router = useLocaleRouter();
 
   const currentUser = useSelector(getCurrentUser);
+  console.log(currentUser)
+  const userRole=useSelector(getUserRole);
   const isLoggedIn = Boolean(currentUser?._id);
+
+  function routeBasedOnRole(role:any){
+    if(role==='dealer' || role==='admin'){
+      router.push('/vehicles/add');
+    }else{
+      router.push('/selectRole')
+    }
+  }
 
   const {useSignOutMutation} = userMutations();
 
@@ -73,7 +83,7 @@ export default function Navbar() {
               <NavigationMenuItem>
                 <PrimaryButton
                   buttonText='Post an Ad'
-                  onClick={() => router.push('/selectRole')}
+                  onClick={() => routeBasedOnRole(userRole) }
                 />
               </NavigationMenuItem>
 

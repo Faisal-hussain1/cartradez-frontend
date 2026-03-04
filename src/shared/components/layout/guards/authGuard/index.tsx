@@ -25,14 +25,12 @@ const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
   const [mount, setMount] = useState(false);
 
   useEffect(() => {
-    const role = currentUser?.currentActiveOrganization.role;
-
+    const role=currentUser?.systemRole;
     const url = getRedirectUrl({role: role as string});
 
     const {isAdmin, isManager, isUser} = getRoleFlags({
       role: role as string,
     });
-
     const isAuthorizeRoutes = isAdminRoute || isManagerRoute || isUserRoute;
 
     // if there are public routes then do nothing
@@ -49,7 +47,7 @@ const AuthGuard = ({children}: NodeChildrenProps): ReactNode => {
 
       return router.push(AUTH_ROUTES.login);
     } else if (isLoggedIn && isAuthRoute) {
-      console.log('3', url);
+      console.log('3', '/dash');
 
       return router.push(url);
     } else if (

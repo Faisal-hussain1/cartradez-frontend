@@ -183,6 +183,7 @@ export interface Vehicle {
   price: number;
   listingType: string;
   coverImage: {key: string; url: string};
+  isManagedByCartradez:boolean
 }
 
 export interface CartradezVehicle {

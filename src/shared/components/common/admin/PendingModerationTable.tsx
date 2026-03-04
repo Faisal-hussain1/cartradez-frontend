@@ -13,6 +13,7 @@ export default function PendingModerationTable() {
   const [popUp,setPopup]=useState(false);
 
   const { data, isLoading, error } = useFetchAllVehicleList();
+  console.log(data?.vehicles)
   const [selectedVehicle,setSelectedVehicle]=useState<any>(null);
   const user=useSelector(getCurrentUser);
 

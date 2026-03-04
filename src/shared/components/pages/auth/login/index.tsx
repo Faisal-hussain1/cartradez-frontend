@@ -56,7 +56,6 @@ export default function LoginForm() {
 
     if (token) {
       localStorage.setItem('accessToken', token);
-      router.push('/dash')
     }
   };
 
@@ -79,7 +78,7 @@ export default function LoginForm() {
     <AuthSectionContainer>
       <LeftSideContainer>
         <Image
-          src='/images/auth/login-image.png'
+          src="/images/auth/login-image.png"
           alt='login-image'
           width={400}
           height={700}

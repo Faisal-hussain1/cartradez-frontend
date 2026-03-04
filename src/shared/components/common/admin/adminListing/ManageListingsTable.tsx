@@ -2,29 +2,24 @@
 
 import Image from 'next/image';
 import {Eye, Trash2} from 'lucide-react';
+import { useQueries } from '@/shared/reactQuery/vehicles/queries';
+import GlobalLoader from '../../loaders/GlobalLoader';
+import { useMemo } from 'react';
+import { formatDate } from 'date-fns';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/shared/redux/slices/users';
 
-const listings = [
-  {
-    id: 1,
-    title: 'Bugatti Chiron Super Sport 300+',
-    image: '/images/Frame 22.png',
-    type: 'Premium',
-    price: 'ZMW 2,940,000',
-    seller: 'Darrell Steward',
-    created: 'Feb 08, 2025',
-  },
-  {
-    id: 2,
-    title: 'Lamborghini Sian Roadster',
-    image: '/images/Frame 22.png',
-    type: 'Standard',
-    price: 'ZMW 2,940,000',
-    seller: 'Brooklyn Simmons',
-    created: 'May 14, 2025',
-  },
-];
+// 
 
 export default function ManageListingsTable() {
+  const {useFetchAllVehicleList}=useQueries();
+  const user=useSelector(getCurrentUser);
+  const {data,isLoading}=useFetchAllVehicleList();
+  const vehicles=data?.vehicles;
+  const listings = useMemo(() => {
+    return vehicles?.filter((v:any) => v.listingType !==null && v.creatorId===user?._id );
+  }, [vehicles]);
+  if (isLoading) return <GlobalLoader height='h-[200px]' />;
   return (
     <section className='bg-card border border-border rounded-xl overflow-hidden'>
       {/* Header */}
@@ -41,13 +36,12 @@ export default function ManageListingsTable() {
         <span>Listing</span>
         <span>Listing Type</span>
         <span>Price</span>
-        <span>Seller</span>
         <span>Created</span>
         <span className='text-right'>Actions</span>
       </div>
 
       {/* Rows */}
-      {listings.map((item, index) => (
+      {listings.map((item:any, index:number) => (
         <div
           key={item.id}
           className='
@@ -66,8 +60,8 @@ export default function ManageListingsTable() {
           {/* Listing */}
           <div className='flex items-center gap-3 min-w-0'>
             <Image
-              src={item.image}
-              alt={item.title}
+              src={item?.coverImage.url}
+              alt={item?.coverImage.key}
               width={36}
               height={36}
               className='rounded-md object-cover'
@@ -76,16 +70,18 @@ export default function ManageListingsTable() {
           </div>
 
           {/* Type */}
-          <span>{item.type}</span>
+          <span>{item?.listingType}</span>
 
           {/* Price */}
-          <span>{item.price}</span>
-
-          {/* Seller */}
-          <span>{item.seller}</span>
+          <span>{item?.price} {item?.currency==='usd'?'$':'ZMW'}</span>
 
           {/* Created */}
-          <span className='text-muted-foreground'>{item.created}</span>
+          <span className='text-muted-foreground'>  {item?.createdAt
+    ? formatDate({
+        date: item.createdAt,
+        format: 'LLL dd, yyyy',
+      })
+    : 'N/A'}</span>
 
           {/* Actions */}
           <div className='flex justify-end gap-2'>

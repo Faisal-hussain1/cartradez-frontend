@@ -24,6 +24,7 @@ export default function VehicleDetails({
   vehicleId,
 }: vehicleDetailsLinkProps): JSX.Element {
   const {useFetchVehicleById} = vehiclesQueries();
+
   const router = useLocaleRouter();
 
   const {
@@ -33,6 +34,7 @@ export default function VehicleDetails({
   } = useFetchVehicleById({
     params: {vehicleId},
   });
+  
 
   if (isPending) return <GlobalLoader />;
 
@@ -60,7 +62,7 @@ export default function VehicleDetails({
               <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-5'>
                 <h1 className='text-2xl md:text-3xl font-bold text-black leading-tight'>
                   {/* Bugatti Chiron Super Sport 2022 */}
-                  {`${stringToTitleCase({str: vehicleDetail.vehicle.make})} ${stringToTitleCase({str: vehicleDetail.vehicle.model})} ${vehicleDetail.vehicle.year}`}
+                  {`${stringToTitleCase({str: vehicleDetail?.vehicle.make})} ${stringToTitleCase({str: vehicleDetail.vehicle.model})} ${vehicleDetail.vehicle.year}`}
                 </h1>
                 <div className='flex gap-4 mt-4 md:mt-0'>
                   <Share2 className='w-6 h-6 text-gray-400 hover:text-black cursor-pointer transition' />
