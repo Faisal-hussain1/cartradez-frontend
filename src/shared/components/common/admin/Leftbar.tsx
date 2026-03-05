@@ -44,7 +44,7 @@ export default function Leftbar() {
           icon={<List size={18} />}
           label='Listings'
         />
-        {role=='admin' &&  <div>
+        {role==="admin" && <div>
           <SidebarItem href='/roles' icon={<Shield size={18} />} label='Roles' />
         <SidebarItem href='/users' icon={<Users size={18} />} label='Users' />
           </div>}
