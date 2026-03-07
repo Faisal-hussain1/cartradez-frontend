@@ -30,12 +30,11 @@ export const useMutations = () => {
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({data: {user}, message} = {}) => {
-            const userData=user?._doc;
-            if (userData) {
-              dispatch(actions.setCurrentUser(userData));
+            if (user) {
+              dispatch(actions.setCurrentUser(user));
 
               const url = getRedirectUrl({
-                role: userData?.systemRole,
+                role: user?.systemRole,
               });
 
               router.push(url);

@@ -20,14 +20,14 @@ export default function VehiclesListView({
     <div className='w-full space-y-4'>
       <h2 className='text-xl font-semibold text-black mb-3'>{title}</h2>
 
-      {vehicles.length > 0 ? (
-        vehicles.map((vehicle) => (
+      {vehicles?.length > 0 ? (
+        vehicles?.map((vehicle) => (
           <Card
             key={vehicle.id}
             className='border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition bg-white'
           >
             <CardContent className='p-0'>
-              <div className='flex flex-row gap-4'>
+              <div className='flex flex-row gap-3'>
                 <div className='w-[220px] h-[150px] relative flex-shrink-0 overflow-hidden'>
                   <Image
                     src={vehicle.coverImage.url}

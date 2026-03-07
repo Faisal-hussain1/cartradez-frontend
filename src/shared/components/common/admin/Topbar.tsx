@@ -24,7 +24,7 @@ export default function Topbar() {
             {user?.firstName}
           </span>
           <img
-            src='/avatar.jpg'
+            src='/images/avatar-default.jpeg'
             alt='User Avatar'
             className='w-8 h-8 rounded-full border'
           />

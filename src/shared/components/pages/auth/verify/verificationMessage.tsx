@@ -3,6 +3,8 @@ import useTranslation from '@/shared/hooks/useTranslation';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {userMutations} from '@/shared/reactQuery';
 import {VerificationMessageProps} from '@/shared/interfaces/auth';
+import { useParams } from 'next/navigation';
+import { string } from 'yup';
 
 const VerificationMessage = ({
   message,
@@ -13,6 +15,7 @@ const VerificationMessage = ({
   const router = useLocaleRouter();
   const {t} = useTranslation();
   const {useResendVerificationMutation} = userMutations();
+  const API_URL=`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1` as string;
 
   const {mutate: executeResendPasswordMutation, isPending} =
     useResendVerificationMutation();
@@ -20,6 +23,16 @@ const VerificationMessage = ({
   const resendLink = async () => {
     executeResendPasswordMutation({payload: email});
   };
+  const params=useParams();
+
+
+  async function verifyUser(){
+    const res=await fetch(`${API_URL}/users/verify/${params.token}`);
+    const result=await res.json();
+    if(result.success==true){
+      router.push(AUTH_ROUTES.login);
+    }
+  }
 
   return (
     <div>
@@ -34,7 +47,7 @@ const VerificationMessage = ({
       {successful && (
         <>
           {successful}
-          <button onClick={() => router.push(AUTH_ROUTES.login)}>
+          <button className='cursor-pointer bg-primary' onClick={() => verifyUser() }>
             {t('auth.clickLogin')}
           </button>
         </>

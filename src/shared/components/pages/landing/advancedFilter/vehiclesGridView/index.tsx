@@ -9,19 +9,17 @@ export default function VehiclesGridView({
   vehicles: any[];
 }) {
   return (
-    <div className='w-full'>
-      <h2 className='text-xl font-semibold text-black mb-3'>{title}</h2>
+    <div className="w-full">
+      <h2 className="text-xl font-semibold text-black mb-5">{title}</h2>
 
-      <div className='grid grid-cols-12 gap-4'>
-        {vehicles.length > 0 ? (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-6 justify-items-center">
+        {vehicles?.length > 0 ? (
           vehicles.map((vehicle) => (
-            <div key={vehicle.id} className='col-span-3'>
-              <VehicleCard vehicle={vehicle} />
-            </div>
+            <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))
         ) : (
-          <div className='flex-1 flex items-center justify-center w-full'>
-            <EmptyDataPlaceholder title='premium vehicle' />
+          <div className="col-span-full flex items-center justify-center w-full">
+            <EmptyDataPlaceholder title="vehicle" />
           </div>
         )}
       </div>

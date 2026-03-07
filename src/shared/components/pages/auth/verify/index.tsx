@@ -15,6 +15,7 @@ const UserVerificationHandler = ({token}: {token: string}) => {
 
   const {t} = useTranslation();
 
+
   if (isRequestPending) return <div>{t('loginIdentifier.message')}</div>;
 
   if (isTokenExpired)

@@ -16,7 +16,6 @@ export default function VehicleListingWithListingType({
   const slidesToShow = useResponsiveSlides();
   const {useFetchAllVehicleList}=useQueries();
   const { data, isLoading, error } = useFetchAllVehicleList();
-  console.log(data?.vehicles)
 
  const vehicles = data?.vehicles || [];
 
@@ -42,7 +41,7 @@ if (isLoading) return <GlobalLoader height='h-[400px]' />;
             <CommonCarousel
               title='Premium Listings'
               items={premiumVehicles}
-              slidesToShow={slidesToShow}
+              slidesToShow={5}
               renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
             />
 
@@ -65,7 +64,7 @@ if (isLoading) return <GlobalLoader height='h-[400px]' />;
             <CommonCarousel
               title='Quick Sell Listings'
               items={quickSellVehicles}
-              slidesToShow={slidesToShow}
+              slidesToShow={5}
               renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
             />
 

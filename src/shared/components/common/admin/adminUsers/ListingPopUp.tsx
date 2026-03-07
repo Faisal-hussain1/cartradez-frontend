@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/shared/redux/slices/users";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+const API_URL=`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1` as string;
 export default function ListingPopUp({
   vehicle,
   onClose,
@@ -20,6 +20,7 @@ export default function ListingPopUp({
   Premium: 20,
 };
 
+
   const price = listingPrices[listingType];
   const publishableKey="pk_test_51RKN9FQaNfqZpifiMJskjSfmcCdVhVMks73GTE7Ti9MG5nkg9T5w4a9cdeUDckrEEYXgoTdZzgFm5aLh8cQRsMCN00IOOjP2BE"
   
@@ -33,7 +34,7 @@ export default function ListingPopUp({
       return;
     }
       
-      const res = await fetch(`http://localhost:3001/api/v1/payment`, {
+      const res = await fetch(`${API_URL}/payment`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 
