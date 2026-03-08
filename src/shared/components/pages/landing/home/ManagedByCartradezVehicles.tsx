@@ -14,12 +14,10 @@ export default function ManagedByCartradezVehicles({vehicles}: any) {
   const {data,isLoading}=useFetchAllVehicleList();
 
   const v=data?.vehicles;
-  console.log(v)
 
   const managedByCarTradez = useMemo(() => {
   return v?.filter((v: Vehicle) => v.isManagedByCartradez==true);
 }, [v]);
-console.log(managedByCarTradez)
   if (isLoading) return <GlobalLoader height='h-[400px]' />;
 
   return (

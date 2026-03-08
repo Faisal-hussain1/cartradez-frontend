@@ -111,8 +111,6 @@ export default function AddVehicleForm() {
         formData.append('features', feature)
       );
     }
-
-    // 👇 use "files" to match multer backend
     data.images.forEach((file, idx) => {
       formData.append('files', file, file.name || `image-${idx}.jpg`);
     });
@@ -124,18 +122,6 @@ export default function AddVehicleForm() {
 
   return (
     <div className='mb-10'>
-      {/* <div>
-        <div className='flex justify-center bg-white mt-10 md:mt-3 lg:mt-5  p-2'>
-          <div>
-            <p className='text-md md:text-3xl font-semibold text-center text-primary'>
-              Sell your Car With Easy & Simple Steps!
-            </p>
-            <p className='text-center mt-2'>
-              It's free and takes less than a minute
-            </p>
-          </div>
-        </div>
-      </div> */}
       <div className='w-full'>
         <img
           src='/images/home/add-vehicle-banner-image.png'
@@ -194,7 +180,7 @@ export default function AddVehicleForm() {
                         name='year'
                         placeholder='Select Year'
                         control={control}
-                        options={getYearsList({start: 1900, end: 2030})}
+                        options={getYearsList({start: 1900, end: 2026})}
                         isRequired={true}
                       />
                     </div>

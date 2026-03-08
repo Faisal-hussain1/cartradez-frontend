@@ -175,10 +175,16 @@ export const useMutations = () => {
         method: PATCH,
         callBackFuncs: {
           ...callBackFuncs,
-          onSuccessAlways: ({data: {updatedUser}, message} = {}) => {
-            if (updatedUser) dispatch(actions.setCurrentUser(updatedUser));
-            showToast({type: 'success', message});
-          },
+         onSuccessAlways: (response = {}) => {
+  const user = response?.data?.user;
+  const message = response?.message;
+
+  if (user) {
+    dispatch(actions.setCurrentUser(user));
+    router.push("/dash")
+  };
+  showToast({ type: 'success', message });
+},
           onErrorAlways: ({message}) => showToast({type: 'error', message}),
         },
       }),

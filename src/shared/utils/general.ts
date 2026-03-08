@@ -49,27 +49,6 @@ export const getFormattedId = ({id}: IdType) => {
 
   return cleanedId;
 };
-
-/*
-Example usage of extractRoutes function:
-
-const ROUTES = {
-  group1: {
-    page1: '/home',
-    page2: '/about',
-  },
-  group2: {
-    subGroup: {
-      page3: '/contact',
-    },
-  },
-  page4: '/login',
-};
-
-const flat = extractRoutes({ routeObj: ROUTES });
-Output: ['/home', '/about', '/contact', '/login']
-*/
-
 export function extractRoutes({
   routeObj,
 }: {
