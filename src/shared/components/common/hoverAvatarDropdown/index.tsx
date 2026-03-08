@@ -16,6 +16,8 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 import {userMutations} from '@/shared/reactQuery';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/shared/redux/slices/users';
 
 export default function HoverAvatarDropdown({
   profileImageUrl,
@@ -34,6 +36,7 @@ export default function HoverAvatarDropdown({
   const handleMouseLeave = () => {
     closeTimeout.current = setTimeout(() => setOpen(false), 200);
   };
+  const user=useSelector(getCurrentUser);
 
   const {useSignOutMutation} = userMutations();
 
@@ -48,9 +51,9 @@ export default function HoverAvatarDropdown({
       <DropdownMenu open={open} modal={false}>
         <DropdownMenuTrigger asChild>
           <div>
-            <Avatar className='h-10 w-10 cursor-pointer border border-gray-300 transition-transform hover:scale-105'>
+            <Avatar className='h-9 w-10 cursor-pointer border border-gray-300 transition-transform hover:scale-105'>
               <AvatarImage
-                src={profileImageUrl || '/images/avatar-default.jpeg'}
+                src={user?.profileImage || '/images/avatar-default.jpeg'}
                 alt='User Profile Image'
               />
               <AvatarFallback>KA</AvatarFallback>

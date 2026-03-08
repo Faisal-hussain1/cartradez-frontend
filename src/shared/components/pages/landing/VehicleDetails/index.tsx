@@ -38,18 +38,6 @@ export default function VehicleDetails({
 
   if (isPending) return <GlobalLoader />;
 
-  // if (error) {
-  //   router.push(ROOT_ROUTE);
-
-  //   return null;
-  // }
-
-  // if (!vehicleDetail) {
-  //   router.push(ROOT_ROUTE);
-
-  //   return null;
-  // }
-
   return (
     <Container className='bg-[#F3F4F6] py-6'>
       <div className='flex flex-col gap-6'>
@@ -69,25 +57,6 @@ export default function VehicleDetails({
                   <Heart className='w-6 h-6 text-gray-400 hover:text-red100 cursor-pointer transition' />
                 </div>
               </div>
-
-              {/* Tags */}
-              {/* <div className='flex flex-wrap gap-2 mb-5'>
-                {[
-                  'One Owner',
-                  '8.0L W16 Engine',
-                  'Imported (France)',
-                  'AWD',
-                ].map((tag) => (
-                  <span
-                    key={tag}
-                    className='text-xs md:text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded-md font-medium'
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div> */}
-
-              {/* Price */}
               <p className='text-primary font-bold text-2xl md:text-3xl mb-5'>
                 {`${vehicleDetail.vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicleDetail.vehicle.price.toLocaleString()}`}
               </p>
@@ -166,11 +135,6 @@ export default function VehicleDetails({
             <DescriptionCard
               title='Description'
               paragraphs={[`${vehicleDetail.vehicle.description}`]}
-
-              // bullets={[
-              //   `Unmatched performance: 8.0L quad-turbocharged W16 engine delivering 1,577 horsepower.`,
-              //   `Record-breaking speed: Accelerates 0–100 km/h in just 2.4 seconds — pure engineering art.`,
-              // ]}
             />
           </div>
 

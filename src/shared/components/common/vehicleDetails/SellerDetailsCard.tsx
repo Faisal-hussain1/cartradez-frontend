@@ -60,14 +60,6 @@ export default function SellerDetailsCard({
                 <CheckCircle className='w-4 h-4' />
                 <span>Verified Seller</span>
               </div>
-              {/* )} */}
-
-              {/* {(sellerType === 'certified' || sellerType === 'both') && (
-                <div className='flex items-center gap-1.5 border border-blue-500 bg-blue-50 text-blue-600 px-3 py-1 rounded-xl text-[13px] font-medium leading-[100%]'>
-                  <UserCheck className='w-4 h-4' />
-                  <span>Certified Dealer</span>
-                </div>
-              )} */}
             </div>
           </div>
         </div>
