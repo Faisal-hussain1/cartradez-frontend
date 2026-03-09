@@ -3,7 +3,7 @@
 import {useEffect, useState} from 'react';
 
 export function useResponsiveSlides({
-  baseSlides = 4,
+  baseSlides = 5,
 }: {baseSlides?: number} = {}) {
   const [slidesToShow, setSlidesToShow] = useState(baseSlides);
 

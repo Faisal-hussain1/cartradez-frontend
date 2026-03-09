@@ -2,83 +2,62 @@
 
 import Image from 'next/image';
 
-import {Card, CardContent} from '@/shared/components/ui/card';
-import {stringToTitleCase, truncateChars} from '@/shared/utils/general';
-import {VehicleCardProps} from '@/shared/interfaces/vehicles';
+import { Card, CardContent } from '@/shared/components/ui/card';
+import { stringToTitleCase, truncateChars } from '@/shared/utils/general';
+import { VehicleCardProps } from '@/shared/interfaces/vehicles';
 import PrimaryButton from '../buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import {USER_ROUTES} from '@/shared/constants/PATHS';
+import { USER_ROUTES } from '@/shared/constants/PATHS';
 
-export default function VehicleCard({vehicle}: VehicleCardProps) {
+export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const router = useLocaleRouter();
-
-  // vehicle.badge = 'Good Price';
 
   return (
     <Card
-      className='group relative overflow-hidden rounded-2xl shadow-md 
-        transition-all duration-300 cursor-pointer 
-        hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]
-        bg-white'
-
-      // onClick={() => router.push(USER_ROUTES.vehicleDetails(vehicle._id))}
+      className="
+        group relative overflow-hidden rounded-xl shadow-sm
+        transition-all duration-300 cursor-pointer
+        hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01]
+        bg-white
+        max-w-[260px] w-full
+      "
     >
-      <div className='relative w-full h-48'>
+      {/* Image */}
+      <div className="relative w-full h-36">
         <Image
           src={vehicle.coverImage?.url}
           alt={vehicle.make}
           fill
-          className='object-cover'
+          className="object-cover"
         />
-        {/* {vehicle.isGreatPrice && (
-          <Badge className='absolute top-3 left-3 bg-green-500 text-white px-3 py-1'>
-            {vehicle.badge}
-          </Badge>
-        )} */}
       </div>
-      <CardContent className='pt-5 pb-3'>
-        <h3 className='text-lg font-semibold'>
+
+      <CardContent className="pt-3 pb-3 px-3">
+        
+        {/* Title */}
+        <h3 className="text-sm font-semibold leading-tight">
           {truncateChars({
-            text: `${stringToTitleCase({str: vehicle.make})} ${stringToTitleCase({str: vehicle.model})} ${vehicle.year}`,
-            limit: 20,
+            text: `${stringToTitleCase({ str: vehicle.make })} ${stringToTitleCase({ str: vehicle.model })} ${vehicle.year}`,
+            limit: 18,
           })}
         </h3>
-        {/* <p className='text-sm text-gray-500'>
-          {truncateChars({text: vehicle.description})}
-        </p> */}
 
-        {/* <Separator className='mt-2' />
-
-        <div className='grid grid-cols-3 gap-2 mt-3 text-sm text-gray-600'>
-          <div>
-            <p className='flex justify-center'>
-              <IoSpeedometerOutline />
-            </p>
-            <p className='text-center'>{vehicle.mileage}</p>
-          </div>
-          <div>
-            <p className='flex justify-center'>
-              <BsFuelPump />
-            </p>
-            <p className='text-center'>{vehicle.fuelType}</p>
-          </div>
-          <div>
-            <p className='flex justify-center'>
-              <TbAutomaticGearboxFilled />
-            </p>
-            <p className='text-center'>{vehicle.transmission}</p>
-          </div>
+        {/* Price Section */}
+        <div className="mt-2 flex items-center justify-between">
+          <p className="text-primary font-semibold text-sm">
+            {vehicle?.currency === 'usd' ? '$' : 'ZK'}{' '}
+            {vehicle?.price?.toLocaleString()}
+          </p>
         </div>
 
-        <Separator className='mt-2' /> */}
-
-        <div className='flex items-center justify-between mt-4'>
-          {/* {vehicle.currency === 'usd' ? '$ ' : 'ZK '}
-          {vehicle.price.toLocaleString()} */}
+        {/* Button */}
+        <div className="mt-3">
           <PrimaryButton
-            buttonText='View Details'
-            onClick={() => router.push(USER_ROUTES.vehicleDetails(vehicle._id))}
-            styles={'w-full'}
+            buttonText="View Details"
+            onClick={() =>
+              router.push(USER_ROUTES.vehicleDetails(vehicle._id))
+            }
+            styles="w-full text-sm py-1.5"
           />
         </div>
       </CardContent>

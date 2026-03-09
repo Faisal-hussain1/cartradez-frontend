@@ -53,6 +53,7 @@ export default function LoginForm() {
 
   const onSuccess = (res: any) => {
     const token = res?.data?.token;
+    console.log(res)
 
     if (token) {
       localStorage.setItem('accessToken', token);

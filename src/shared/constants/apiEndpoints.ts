@@ -16,7 +16,7 @@ export const API_ENDPOINTS = {
       `/users/sellers/${username}`,
     REFRESH_ONBOARDING_LINK: ({sellerId}: {sellerId: string}) =>
       `/users/refresh-onboarding-link/${sellerId}`,
-    UPDATE_PROFILE: '/users/profile',
+    UPDATE_PROFILE: '/users/update-profile',
     GET_SELLER_BANK_ACCOUNT: '/users/sellers/bank-account',
   },
   VEHICLES: {

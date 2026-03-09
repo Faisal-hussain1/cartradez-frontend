@@ -30,12 +30,11 @@ export const useMutations = () => {
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({data: {user}, message} = {}) => {
-            const userData=user?._doc;
-            if (userData) {
-              dispatch(actions.setCurrentUser(userData));
+            if (user) {
+              dispatch(actions.setCurrentUser(user));
 
               const url = getRedirectUrl({
-                role: userData?.systemRole,
+                role: user?.systemRole,
               });
 
               router.push(url);
@@ -176,10 +175,16 @@ export const useMutations = () => {
         method: PATCH,
         callBackFuncs: {
           ...callBackFuncs,
-          onSuccessAlways: ({data: {updatedUser}, message} = {}) => {
-            if (updatedUser) dispatch(actions.setCurrentUser(updatedUser));
-            showToast({type: 'success', message});
-          },
+         onSuccessAlways: (response = {}) => {
+  const user = response?.data?.user;
+  const message = response?.message;
+
+  if (user) {
+    dispatch(actions.setCurrentUser(user));
+    router.push("/dash")
+  };
+  showToast({ type: 'success', message });
+},
           onErrorAlways: ({message}) => showToast({type: 'error', message}),
         },
       }),

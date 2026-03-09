@@ -76,12 +76,11 @@ export default function ManageListingsTable() {
           <span>{item?.price} {item?.currency==='usd'?'$':'ZMW'}</span>
 
           {/* Created */}
-          <span className='text-muted-foreground'>  {item?.createdAt
-    ? formatDate({
-        date: item.createdAt,
-        format: 'LLL dd, yyyy',
-      })
-    : 'N/A'}</span>
+         <span className='text-muted-foreground'>
+  {item?.createdAt
+    ? formatDate(item.createdAt, 'LLL dd, yyyy')
+    : 'N/A'}
+</span>
 
           {/* Actions */}
           <div className='flex justify-end gap-2'>

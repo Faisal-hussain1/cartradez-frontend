@@ -33,7 +33,7 @@ export default function PaymentSuccess() {
         {/* Button */}
         <PrimaryButton
           buttonText='Go to Dashboard'
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/dash')}
           styles='w-full'
         />
       </div>
