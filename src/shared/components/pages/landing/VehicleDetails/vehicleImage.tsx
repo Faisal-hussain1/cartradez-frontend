@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import Image from 'next/image';
-import {ChevronLeft, ChevronRight} from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface VehicleImage {
   id: string;
@@ -22,7 +22,6 @@ export default function VehicleImages({
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [showAllThumbnails, setShowAllThumbnails] = React.useState(false);
 
-  // Find featured image or use first image
   const featuredImageIndex = images.findIndex((img) => img.isFeatured);
   const initialActiveIndex = featuredImageIndex !== -1 ? featuredImageIndex : 0;
 
@@ -30,11 +29,8 @@ export default function VehicleImages({
     setActiveIndex(initialActiveIndex);
   }, [initialActiveIndex]);
 
-  // Thumbnail images to show initially
   const initialThumbsToShow = images.slice(0, maxThumbnailsToShow);
   const extraCount = images.length - maxThumbnailsToShow;
-
-  // All thumbnails to show when "View All" is clicked
   const displayedThumbnails = showAllThumbnails ? images : initialThumbsToShow;
 
   const nextImage = () => {
@@ -49,7 +45,6 @@ export default function VehicleImages({
     setShowAllThumbnails(!showAllThumbnails);
   };
 
-  // Auto-slide functionality
   React.useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % images.length);
@@ -60,77 +55,80 @@ export default function VehicleImages({
 
   if (!images || images.length === 0) {
     return (
-      <div className='w-full h-[400px] bg-gray-200 rounded-xl flex items-center justify-center'>
-        <p className='text-gray-500'>No images available</p>
+      <div className="w-full aspect-video bg-gray-200 rounded-xl flex items-center justify-center">
+        <p className="text-gray-500">No images available</p>
       </div>
     );
   }
 
   return (
-    <div className='w-full flex flex-col gap-4'>
-      {/* Main Image Container - Full Width */}
-      <div className='relative w-full h-[500px] rounded-2xl overflow-hidden bg-gray-100'>
+    <div className="w-full flex flex-col gap-4">
+
+      {/* Main Image */}
+      <div className="relative w-full aspect-[16/9] md:aspect-[16/10] lg:aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100">
+
         <Image
           src={images[activeIndex].url}
           alt={images[activeIndex].alt || `Vehicle image ${activeIndex + 1}`}
           fill
-          className='object-cover transition-all duration-500 ease-in-out'
+          className="object-cover transition-all duration-500 ease-in-out"
           priority
-          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw'
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
         />
 
-        {/* Featured Badge */}
+        {/* Featured badge */}
         {images[activeIndex].isFeatured && (
-          <span className='absolute top-4 left-4 bg-yellow-400 text-xs px-3 py-1 rounded-md font-semibold'>
+          <span className="absolute top-3 left-3 bg-yellow-400 text-xs px-2 py-1 rounded-md font-semibold">
             Featured
           </span>
         )}
 
-        {/* Navigation Arrows */}
+        {/* Navigation buttons */}
         <button
           onClick={prevImage}
-          className='absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all z-10'
-          aria-label='Previous image'
+          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 md:p-3 rounded-full shadow-md transition z-10"
+          aria-label="Previous image"
         >
-          <ChevronLeft className='w-6 h-6 text-gray-700' />
+          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
         </button>
 
         <button
           onClick={nextImage}
-          className='absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all z-10'
-          aria-label='Next image'
+          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 md:p-3 rounded-full shadow-md transition z-10"
+          aria-label="Next image"
         >
-          <ChevronRight className='w-6 h-6 text-gray-700' />
+          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
         </button>
 
-        {/* Image Indicator Dots */}
-        <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10'>
+        {/* Indicator dots */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-2.5 h-2.5 rounded-full transition ${
                 index === activeIndex
                   ? 'bg-white scale-110'
-                  : 'bg-white/50 hover:bg-white/70'
+                  : 'bg-white/50 hover:bg-white/80'
               }`}
-              aria-label={`Go to image ${index + 1}`}
             />
           ))}
         </div>
+
       </div>
 
-      {/* Thumbnails Section */}
-      <div className='w-full'>
-        {/* Thumbnails Grid */}
+      {/* Thumbnails */}
+      <div className="w-full">
+
         <div
           className={`grid gap-3 ${
             showAllThumbnails
-              ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
-              : 'grid-cols-4'
+              ? 'grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6'
+              : 'grid-cols-4 sm:grid-cols-5 md:grid-cols-6'
           }`}
         >
-          {displayedThumbnails.map((image, index) => {
+
+          {displayedThumbnails.map((image) => {
             const actualIndex = images.findIndex((img) => img.id === image.id);
 
             return (
@@ -147,11 +145,12 @@ export default function VehicleImages({
                   src={image.url}
                   alt={image.alt || `Thumbnail ${actualIndex + 1}`}
                   fill
-                  className='object-cover hover:scale-105 transition-transform duration-200'
-                  sizes='(max-width: 768px) 25vw, (max-width: 1024px) 20vw, 15vw'
+                  className="object-cover hover:scale-105 transition-transform duration-200"
+                  sizes="(max-width: 768px) 25vw, (max-width: 1024px) 20vw, 15vw"
                 />
+
                 {image.isFeatured && !showAllThumbnails && (
-                  <span className='absolute top-1 left-1 bg-yellow-400 text-[10px] px-1 py-0.5 rounded font-semibold'>
+                  <span className="absolute top-1 left-1 bg-yellow-400 text-[10px] px-1 py-0.5 rounded font-semibold">
                     Featured
                   </span>
                 )}
@@ -159,33 +158,34 @@ export default function VehicleImages({
             );
           })}
 
-          {/* View All / Show Less Button */}
+          {/* View All */}
           {!showAllThumbnails && extraCount > 0 && (
             <button
               onClick={toggleShowAllThumbnails}
-              className='relative aspect-video rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 flex flex-col items-center justify-center transition-all group'
+              className="relative aspect-video rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 flex flex-col items-center justify-center transition group"
             >
-              <span className='text-2xl font-bold text-gray-600 group-hover:text-gray-800'>
+              <span className="text-xl md:text-2xl font-bold text-gray-600 group-hover:text-gray-800">
                 +{extraCount}
               </span>
-              <span className='text-sm text-gray-500 group-hover:text-gray-700 mt-1'>
+              <span className="text-xs md:text-sm text-gray-500 group-hover:text-gray-700">
                 View All
               </span>
             </button>
           )}
 
+          {/* Show Less */}
           {showAllThumbnails && (
             <button
               onClick={toggleShowAllThumbnails}
-              className='relative aspect-video rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 flex flex-col items-center justify-center transition-all group'
+              className="relative aspect-video rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-xs md:text-sm font-semibold text-gray-600"
             >
-              <span className='text-sm font-semibold text-gray-600 group-hover:text-gray-800 text-center px-2'>
-                Show Less
-              </span>
+              Show Less
             </button>
           )}
+
         </div>
       </div>
+
     </div>
   );
 }

@@ -1,15 +1,15 @@
 'use client';
 
-import {useForm, SubmitHandler} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
 
-import {VehiclePayload} from '@/shared/interfaces/vehicles';
+import { VehiclePayload } from '@/shared/interfaces/vehicles';
 import Container from '@/shared/components/common/containers';
-import {vehiclesMutations} from '@/shared/reactQuery';
+import { vehiclesMutations } from '@/shared/reactQuery';
 import useTranslation from '@/shared/hooks/useTranslation';
-import {newVehicleSchema} from '@/shared/schemas/vehicles';
+import { newVehicleSchema } from '@/shared/schemas/vehicles';
 import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
 import {
   DESCRIPTION_SUGGESTIONS,
@@ -22,27 +22,28 @@ import {
   VEHICLE_MAKES,
   VEHICLE_TRANSMISSION_TYPES,
 } from '@/shared/constants/vehicles';
-import {DescriptionBox} from '@/shared/components/common/descriptionBox';
+import { DescriptionBox } from '@/shared/components/common/descriptionBox';
 import BoxContainer from '@/shared/components/common/containers/boxContainer';
 import Label from '@/shared/components/common/label';
-import {getYearsList} from '@/shared/utils/general';
+import { getYearsList } from '@/shared/utils/general';
 import CustomSelectInput from '@/shared/components/common/inputs/CustomSelectInput';
 import CustomTextInput from '@/shared/components/common/inputs/CustomTextInput';
 import CustomNumberInput from '@/shared/components/common/inputs/CustomNumberInput';
 import ImageUploadInput from '@/shared/components/common/imageUpload';
-import {useState} from 'react';
-import {CheckboxList} from '@/shared/components/common/checkboxList';
+import { useState } from 'react';
+import { CheckboxList } from '@/shared/components/common/checkboxList';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 
 export default function AddVehicleForm() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
-  const router=useLocaleRouter();
+  const router = useLocaleRouter();
 
-  const {control, handleSubmit, reset, watch, setValue} =
+  const { control, handleSubmit, reset, watch, setValue } =
     useForm<VehiclePayload>({
       resolver: yupResolver(newVehicleSchema(t)),
+      shouldFocusError: true,
       defaultValues: {
         make: '',
         model: '',
@@ -68,16 +69,16 @@ export default function AddVehicleForm() {
       },
     });
 
-  const {useAddNewVehicleMutation} = vehiclesMutations();
+  const { useAddNewVehicleMutation } = vehiclesMutations();
 
   const onSuccess = () => {
-    router.push('/dash')
+    router.push('/dash');
     reset();
   };
 
-  const {mutate: executeAddNewVehicleMutation, isPending} =
+  const { mutate: executeAddNewVehicleMutation, isPending } =
     useAddNewVehicleMutation({
-      callBackFuncs: {onSuccess},
+      callBackFuncs: { onSuccess },
     });
 
   const onSubmit: SubmitHandler<VehiclePayload> = (data) => {
@@ -111,33 +112,56 @@ export default function AddVehicleForm() {
         formData.append('features', feature)
       );
     }
+
     data.images.forEach((file, idx) => {
       formData.append('files', file, file.name || `image-${idx}.jpg`);
     });
 
-    executeAddNewVehicleMutation({payload: formData});
+    executeAddNewVehicleMutation({ payload: formData });
+  };
+
+  /* Scroll to first validation error */
+  const onError = (errors: FieldErrors<VehiclePayload>) => {
+    const firstError = Object.keys(errors)[0];
+    if (!firstError) return;
+
+    const el = document.querySelector(
+      `[name="${firstError}"]`
+    ) as HTMLElement;
+
+    if (el) {
+      const y =
+        el.getBoundingClientRect().top + window.pageYOffset - 120;
+
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth',
+      });
+
+      el.focus();
+    }
   };
 
   
 
   return (
-    <div className='mb-10'>
-      <div className='w-full'>
+   <div className="mb-10">
+      <div className="w-full">
         <img
-          src='/images/home/add-vehicle-banner-image.png'
-          alt='Safety Guidelines Banner'
-          className='w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover shadow-glow'
+          src="/images/home/add-vehicle-banner-image.png"
+          alt="Safety Guidelines Banner"
+          className="w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover shadow-glow"
         />
       </div>
-      <div className='w-full flex justify-center'>
+
+      <div className="w-full flex justify-center">
         <Container>
-          <div className='w-full sm:w-4/5 max-w-[1200px] mx-auto'>
-            <div className=''>
-              <AuthFormContainer
-                heading='List Your Vehicle'
-                handleSubmit={handleSubmit(onSubmit)}
-                fromContainerStyles='bg-transparent shadow-none rounded-none'
-              >
+          <div className="w-full sm:w-4/5 max-w-[1200px] mx-auto">
+            <AuthFormContainer
+              heading="List Your Vehicle"
+              handleSubmit={handleSubmit(onSubmit, onError)}
+              fromContainerStyles="bg-transparent shadow-none rounded-none"
+            >
                 {/* Basic Car Information */}
                 <BoxContainer
                   heading='Basic Car Information'
@@ -319,7 +343,7 @@ export default function AddVehicleForm() {
                         name='registrationYear'
                         placeholder='Select Registration Year'
                         control={control}
-                        options={getYearsList({start: 1900, end: 2030})}
+                        options={getYearsList({start: 1900, end: 2026})}
                         isRequired={true}
                       />
                     </div>
@@ -360,8 +384,8 @@ export default function AddVehicleForm() {
 
                 {/* Upload Images */}
                 <BoxContainer
-                  heading='Upload Images'
-                  subHeading='Upload between 3 and 9 images of your vehicle. Supported formats: JPEG, JPG, PNG.'
+                  heading='Upload Images (Upload b/w 3 to 9)'
+                  subHeading='Supported formats: JPEG, JPG, PNG.'
                 >
                   <div className='mt-5'>
                     <ImageUploadInput
@@ -389,22 +413,22 @@ export default function AddVehicleForm() {
                   </div>
                 </BoxContainer>
 
-                <div className='flex justify-end'>
-                  <div>
-                    <PrimaryButton
-                      loading={isPending}
-                      buttonText='Cancel'
-                      styles='w-[60px] md:w-[80px] bg-white text-primary border-1 border-primary hover:bg-gray-100'
-                    />
-                    <SubmitButton
-                      loading={isPending}
-                      buttonText='Submit Now'
-                      styles='w-[100px] md:w-[140px] ml-3'
-                    />
-                  </div>
+                 <div className="flex justify-end">
+                <div>
+                  <PrimaryButton
+                    loading={isPending}
+                    buttonText="Cancel"
+                    styles="w-[60px] md:w-[80px] bg-white text-primary border-1 border-primary hover:bg-gray-100"
+                  />
+                  <SubmitButton
+                    loading={isPending}
+                    buttonText="Submit Now"
+                    styles="w-[100px] md:w-[140px] ml-3"
+                  />
                 </div>
-              </AuthFormContainer>
-            </div>
+              </div>
+
+            </AuthFormContainer>
           </div>
         </Container>
       </div>

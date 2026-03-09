@@ -53,7 +53,6 @@ export default function LoginForm() {
 
   const onSuccess = (res: any) => {
     const token = res?.data?.token;
-    console.log(res)
 
     if (token) {
       localStorage.setItem('accessToken', token);
@@ -87,7 +86,7 @@ export default function LoginForm() {
         />
       </LeftSideContainer>
       <RightSideContainer>
-        <Logo width={204} height={109} />
+        <Logo width={130} height={80} />
         <AuthFormContainer
           heading={t('auth.welcomeBack')}
           subHeading={t('auth.loginSubHeading')}

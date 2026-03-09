@@ -14,7 +14,7 @@ const AuthFormContainer = ({
 }: AuthFormContainerProps) => {
   return (
     <div
-      className={`w-full md:mt-16 mt-20 p-[14px] md:p-[30px] rounded-[14px] shadow-2xl ${fromContainerStyles}`}
+      className={`w-full md:mt-2 mt-10 p-[14px] md:p-[20px] rounded-[14px] shadow-2xl ${fromContainerStyles}`}
     >
       <AuthFormHeading heading={heading} />
       {subHeading && <AuthFormSubHeading heading={subHeading} />}

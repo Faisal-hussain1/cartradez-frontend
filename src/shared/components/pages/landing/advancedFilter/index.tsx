@@ -142,21 +142,6 @@ export default function AdvancedFilter() {
               {/* Vehicle Listings */}
              <div className="grid grid-cols-12 gap-6 mt-6">
 
-  {/* Standard Listings */}
-  <div className="col-span-12 px-1">
-    {viewType === 'grid' ? (
-      <VehiclesGridView
-        title="Standard Listings"
-        vehicles={standard}
-      />
-    ) : (
-      <VehiclesListView
-        title="Standard Listings"
-        vehicles={standard}
-      />
-    )}
-  </div>
-
   {/* Quick Sell Listings */}
   <div className="col-span-12 mt-6 px-1">
     {viewType === 'grid' ? (
@@ -168,6 +153,19 @@ export default function AdvancedFilter() {
       <VehiclesListView
         title="Quick Sell Listings"
         vehicles={quickSell}
+      />
+    )}
+  </div>
+  <div className="col-span-12 px-1">
+    {viewType === 'grid' ? (
+      <VehiclesGridView
+        title="Standard Listings"
+        vehicles={standard}
+      />
+    ) : (
+      <VehiclesListView
+        title="Standard Listings"
+        vehicles={standard}
       />
     )}
   </div>

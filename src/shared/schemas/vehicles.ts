@@ -17,7 +17,7 @@ export const newVehicleSchema = (t: TranslateFunction) =>
       .typeError(t('vehicleListingValidation.yearRequired'))
       .required(t('vehicleListingValidation.yearRequired'))
       .min(1900, t('vehicleListingValidation.yearMin'))
-      .max(2023, t('vehicleListingValidation.yearMax')),
+      .max(2026, t('vehicleListingValidation.yearMax')),
     condition: Yup.string().required(
       t('vehicleListingValidation.conditionRequired')
     ),
