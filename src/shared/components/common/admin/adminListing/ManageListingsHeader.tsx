@@ -1,8 +1,10 @@
 'use client';
 
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {ChevronDown, Calendar} from 'lucide-react';
 
 export default function ManageListingsHeader() {
+  const router=useLocaleRouter();
   return (
     <section className='space-y-4'>
       {/* Top row */}
@@ -11,8 +13,8 @@ export default function ManageListingsHeader() {
           Manage Listings
         </h1>
 
-        <button
-          className='
+        <button onClick={()=>router.push('/selectRole')}
+          className='cursor-pointer
             px-4 py-2
             text-sm font-medium
             rounded-md

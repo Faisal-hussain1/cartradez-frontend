@@ -61,7 +61,7 @@ export default function Topbar() {
             <img
               src={user?.profileImage || "/images/avatar-default.jpeg"}
               alt="User Avatar"
-              className="w-8 h-8 rounded-full border cursor-pointer"
+              className="w-9 h-8 rounded-full border cursor-pointer"
             />
           </div>
 

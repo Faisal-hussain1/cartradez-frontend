@@ -170,7 +170,7 @@ export default function EditProfile() {
             <button
               disabled={isPending}
               type="submit"
-              className="bg-[#414279] text-white px-6 py-2 rounded-lg hover:opacity-90 transition disabled:opacity-60"
+              className="cursor-pointer bg-[#414279] text-white px-6 py-2 rounded-lg hover:opacity-90 transition disabled:opacity-60"
             >
               {isPending ? "Saving..." : "Save Changes"}
             </button>

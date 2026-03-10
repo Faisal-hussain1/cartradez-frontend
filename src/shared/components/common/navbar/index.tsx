@@ -97,7 +97,7 @@ export default function Navbar() {
                 <NavigationMenuItem>
                   <PrimaryButton
                     buttonText="SignUp/Login"
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/auth/login')}
                   />
                 </NavigationMenuItem>
               )}

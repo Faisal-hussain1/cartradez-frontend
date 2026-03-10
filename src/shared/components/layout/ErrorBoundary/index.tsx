@@ -14,9 +14,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.state = {hasError: false};
   }
 
-  static getDerivedStateFromError() {
-    return {hasError: true};
-  }
+ static getDerivedStateFromError(_: Error) {
+  return { hasError: true };
+}
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     if (process.env.NODE_ENV === 'production') {
@@ -38,7 +38,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return <div>{fallback || <ErrorFallback />}</div>;
     }
 
-    return this.props.children;
+    return this.props.children ?? null;
   }
 }
 
