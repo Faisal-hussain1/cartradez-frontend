@@ -1,16 +1,39 @@
 "use client";
 
+import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
 import { Bell } from "lucide-react";
-import { useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { userMutations } from "@/shared/reactQuery";
+import { connectSocket } from "@/shared/socket";
+import { useInbox } from "@/shared/hooks/useInbox";
+import { useUnRead } from "@/shared/hooks/useUnReadMessages";
 
 export default function Topbar() {
   const user = useSelector(getCurrentUser);
   const router = useRouter();
+  const { len, refetch } = useUnRead();
 
+  const socketRef = useRef<any>(null);
+
+  /* ================= SOCKET ================= */
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      refetch();  // Adding delay to avoid over-fetching
+    }, 2000); // Delay of 2 seconds
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, [len]); // Depend on the unread messages count
+
+  /* ================= REDIRECT FIX ================= */
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    }
+  }, [user]);
+
+  /* ================= DROPDOWN ================= */
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,13 +52,10 @@ export default function Topbar() {
   }, []);
 
   const { useSignOutMutation } = userMutations();
-    const { mutate: executeSignOutMutation } = useSignOutMutation();
-
-    if(!user) router.push('/')
+  const { mutate: executeSignOutMutation } = useSignOutMutation();
 
   return (
     <header className="sticky top-0 h-16 bg-white border-b z-20 flex items-center justify-between px-6 rounded-b-lg">
-
       {/* Search */}
       <input
         type="text"
@@ -44,11 +64,22 @@ export default function Topbar() {
       />
 
       <div className="flex items-center gap-5">
+        {/* 🔔 NOTIFICATION */}
+        <div
+          className="relative cursor-pointer"
+          onClick={() => router.push("/chat/inbox")}
+        >
+          <Bell className="w-5 h-5 text-gray-600 hover:text-[#414279]" />
 
-        {/* Notification */}
-        <Bell className="w-5 h-5 text-gray-600 cursor-pointer hover:text-[#414279]" />
+          {/* 🔥 UNREAD BADGE */}
+          {len > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 py-[2px] rounded-full min-w-[16px] text-center">
+              {len > 9 ? "9+" : len}
+            </span>
+          )}
+        </div>
 
-        {/* Profile */}
+        {/* PROFILE */}
         <div className="relative" ref={dropdownRef}>
           <div
             onClick={() => setOpen(!open)}
@@ -60,23 +91,20 @@ export default function Topbar() {
 
             <img
               src={user?.profileImage || "/images/avatar-default.jpeg"}
-              alt="User Avatar"
-              className="w-9 h-8 rounded-full border cursor-pointer"
+              className="w-9 h-8 rounded-full border"
             />
           </div>
 
-          {/* Dropdown */}
           {open && (
             <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-lg border z-50 overflow-hidden">
-
               <button
                 onClick={() => {
                   router.push("/");
                   setOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 transition cursor-pointer"
+                className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
               >
-                 Go to Home
+                Go to Home
               </button>
 
               <button
@@ -84,9 +112,9 @@ export default function Topbar() {
                   router.push("/dash/edit-profile");
                   setOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100 transition cursor-pointer"
+                className="w-full text-left px-4 py-3 text-sm hover:bg-gray-100"
               >
-                 Edit Profile
+                Edit Profile
               </button>
 
               <button
@@ -94,11 +122,10 @@ export default function Topbar() {
                   executeSignOutMutation();
                   setOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition cursor-pointer"
+                className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50"
               >
-                 Logout
+                Logout
               </button>
-
             </div>
           )}
         </div>

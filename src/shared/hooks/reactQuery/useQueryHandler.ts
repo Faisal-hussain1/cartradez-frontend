@@ -44,7 +44,7 @@ export const useQueryHandler = <TData = any>({
   const queryClient = getQueryClient();
 
   const query = useQuery<TData, unknown>({
-    queryKey: params ? [queryKey, params] : [queryKey],
+    queryKey,
     queryFn: async () => {
       try {
         const response: AxiosResponse<any> = await getRequest({endpoint});

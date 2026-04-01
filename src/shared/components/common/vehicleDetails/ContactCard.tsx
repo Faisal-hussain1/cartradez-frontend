@@ -9,8 +9,13 @@ import {
 import {Phone, Send} from 'lucide-react';
 import {FaWhatsapp} from 'react-icons/fa'; // ✅ Official WhatsApp icon
 import PrimaryButton from '../buttons/PrimaryButton';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/shared/redux/slices/users';
 
-export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
+export default function ContactCard({phoneNumber,sellerId}: {phoneNumber?: string,sellerId?:string}) {
+  const router=useLocaleRouter();
+  const user = useSelector(getCurrentUser);
   const handleCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
@@ -22,8 +27,8 @@ export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
     window.open(`https://wa.me/${cleanNumber}`, '_blank');
   };
 
-  const handleMessage = () => {
-    window.location.href = `sms:${phoneNumber}`;
+ const handleMessage = () => {
+    router.push(`/chat/${sellerId}`); // 👈 dynamic chat page
   };
 
   return (
@@ -64,7 +69,7 @@ export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
             }
           />
 
-          <PrimaryButton
+          {(sellerId !==user?._id) && <PrimaryButton
             styles='flex-1 w-full sm:w-1/2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white'
             onClick={handleMessage}
             buttonText={
@@ -73,7 +78,7 @@ export default function ContactCard({phoneNumber}: {phoneNumber?: string}) {
                 <span>Send Message</span>
               </>
             }
-          />
+          />}
         </div>
       </CardContent>
     </Card>

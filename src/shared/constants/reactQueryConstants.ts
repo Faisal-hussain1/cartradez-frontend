@@ -23,6 +23,25 @@ export const USERS = {
       buildDynamicURL(API_ENDPOINTS.USERS.GET_USERS_LIST, params),
     activeServerSidePagination: true,
   },
+   fetchUserById: {
+    queryKey: 'getUserById', // 👈 keep string
+   endpoint: (userId: string) => `/users/${userId}`
+  },
+};
+
+export const CHATS = {
+  fetchMessagesByUser: {
+    queryKey: ["getMessagesByUser"],
+    endpoint: (userId: string) => `/chat/${userId}`, // 👈 matches your backend
+  },
+  fetchInbox: {
+  queryKey: (userId:string)=>["getInbox",userId],
+  endpoint: "/chat/inbox",
+},
+fetchUnRead:{
+  queryKey:["getUnreadMessages"],
+  endpoint:(userId:string)=>`/chat/unread/${userId}`
+}
 };
 
 export const VEHICLES = {

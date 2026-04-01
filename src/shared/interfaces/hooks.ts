@@ -1,4 +1,5 @@
 import {RootState} from '@/shared/redux/store';
+import { QueryKey } from "@tanstack/react-query";
 
 export interface UseFilterListProps<T> {
   reduxSelector: (state: RootState) => T[]; // Replace 'any' with your actual state type
@@ -136,7 +137,7 @@ export interface MutationCallbacks<T = any> {
 }
 
 export interface QueryRequestParams {
-  queryKey: string;
+  queryKey: string | string[];
   endpoint: string;
   isThirdParty?: boolean;
   params?: Record<string, any>;
