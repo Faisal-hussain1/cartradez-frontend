@@ -16,6 +16,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
 
+  console.log(message);
   const socketRef = useRef<any>(null);
   const params=useParams();
   const { user } = useGetUserById(params.id);
@@ -75,6 +76,7 @@ export default function ChatPage() {
   const handleSend = () => {
     if (!message.trim()) return;
 
+    console.log("Message Sent")
     socketRef.current.emit("sendMessage", {
       to: params.id,
       message,
@@ -152,7 +154,7 @@ export default function ChatPage() {
       </div>
 
       {/* INPUT */}
-      <div className="p-3 w-10 border-t bg-white flex gap-2">
+     <div className="p-3 w-20 border-t bg-white flex gap-2">
         <input
           type="text"
           value={message}
