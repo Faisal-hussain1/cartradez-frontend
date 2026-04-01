@@ -6,7 +6,7 @@ export const connectSocket = () => {
   const token = localStorage.getItem("accessToken");
 
   socket = io(
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3001",
     {
       withCredentials: true,
       auth: {
