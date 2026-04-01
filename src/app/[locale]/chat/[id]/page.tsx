@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Send } from "lucide-react";
 import { useGetUserById } from "@/shared/hooks/useUserById";
 import { useGetMessages } from "@/shared/hooks/useGetMessages";
@@ -15,8 +16,6 @@ export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
-
-  console.log(message);
   const socketRef = useRef<any>(null);
   const params=useParams();
   const { user } = useGetUserById(params.id);
@@ -76,7 +75,6 @@ export default function ChatPage() {
   const handleSend = () => {
     if (!message.trim()) return;
 
-    console.log("Message Sent")
     socketRef.current.emit("sendMessage", {
       to: params.id,
       message,
@@ -102,6 +100,9 @@ export default function ChatPage() {
 
       {/* HEADER */}
       <div className="flex items-center gap-3 p-4 border-b bg-white">
+       <button onClick={() => window.history.back()} className="p-2 rounded-full cursor-pointer">
+    <ArrowLeft size={20} />
+  </button>
         <div className="relative">
           <img
             src={user?.profileImage || "/images/avatar-default.jpeg"}

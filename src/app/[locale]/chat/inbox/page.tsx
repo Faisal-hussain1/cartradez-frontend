@@ -5,28 +5,35 @@ import { useInbox } from "@/shared/hooks/useInbox";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
+import { ArrowLeft } from "lucide-react";
 
 export default function InboxPage() {
   const router = useRouter();
-  const user=useSelector(getCurrentUser)
-  const { users, isLoading,refetch } = useInbox();
+  const user = useSelector(getCurrentUser);
+  const { users, isLoading, refetch } = useInbox();
 
   useEffect(() => {
-    refetch()
+    refetch();
   }, [user?._id]);
-
 
   return (
     <div className="h-screen bg-gray-50">
 
       {/* HEADER */}
-      <div className="p-4 border-b bg-white font-semibold text-gray-800">
-        Messages
+      <div className="p-4 border-b bg-white flex items-center gap-4">
+        {/* Back Button */}
+        <button
+          onClick={() => window.history.back()}
+          className="p-2 rounded-full cursor-pointer"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <span className="text-lg font-semibold text-gray-800">Messages</span>
       </div>
 
       {/* USERS LIST */}
       <div className="divide-y">
-        
+
         {/* Loading */}
         {isLoading && <p className="p-4 text-gray-500">Loading...</p>}
 
@@ -52,24 +59,18 @@ export default function InboxPage() {
           <div
             key={user._id}
             onClick={() => router.push(`/chat/${user._id}`)}
-            className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100 transition"
+            className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out"
           >
             <img
               src={user.profileImage || "/images/avatar-default.jpeg"}
-              className="w-12 h-12 rounded-full"
+              className="w-12 h-12 rounded-full object-cover"
             />
-
             <div className="flex-1">
-              <p className="text-sm font-semibold">{user.name}</p>
-              <p className="text-xs text-gray-500 truncate">
-                {user.lastMessage || "No messages yet"}
-              </p>
+              <p className="text-sm font-semibold text-gray-800">{user.name}</p>
+              <p className="text-xs text-gray-500 truncate">{user.lastMessage || "No messages yet"}</p>
             </div>
-
             <span className="text-xs text-gray-400">
-              {user.time
-                ? new Date(user.time).toLocaleTimeString()
-                : ""}
+              {user.time ? new Date(user.time).toLocaleTimeString() : ""}
             </span>
           </div>
         ))}
