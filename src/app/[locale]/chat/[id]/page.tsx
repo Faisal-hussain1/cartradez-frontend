@@ -154,7 +154,7 @@ export default function ChatPage() {
       </div>
 
       {/* INPUT */}
-      <div className="p-3 w-10 border-t bg-white flex gap-2">
+     <div className="p-3 w-20 border-t bg-white flex gap-2">
         <input
           type="text"
           value={message}
