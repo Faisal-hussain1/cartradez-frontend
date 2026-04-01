@@ -1,6 +1,6 @@
 import {useQueryHandler} from '@/shared/hooks/reactQuery/useQueryHandler';
 import {QueryCallbacks} from '@/shared/interfaces/hooks';
-import {USERS} from '@/shared/constants/reactQueryConstants';
+import {USERS,CHATS} from '@/shared/constants/reactQueryConstants';
 
 export const useQueries = () => {
   return {
@@ -54,5 +54,80 @@ export const useQueries = () => {
           ...callBackFuncs,
         },
       }),
+     useFetchUserById: ({
+  id,
+  callBackFuncs,
+}: {
+  id: string;
+  callBackFuncs?: QueryCallbacks;
+}) =>
+  useQueryHandler({
+    queryKey: `${USERS.fetchUserById.queryKey}-${id}`, // ✅ string dynamic
+    endpoint: USERS.fetchUserById.endpoint(id),
+    customQueryOptions: {
+      enabled: !!id,
+      staleTime: 5 * 60 * 1000,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  }),
+  useFetchMessagesByUser: ({
+  userId,
+  currentUserId,
+  callBackFuncs,
+}: {
+  userId: string;
+  currentUserId:string;
+  callBackFuncs?: QueryCallbacks;
+}) =>
+  useQueryHandler({
+    queryKey: `${CHATS.fetchMessagesByUser.queryKey}-${userId}-${currentUserId}`, // ✅ string dynamic
+    endpoint: CHATS.fetchMessagesByUser.endpoint(userId),
+    customQueryOptions: {
+      enabled: !!userId && !!currentUserId,
+      staleTime: 0, // always fresh chat
+      refetchOnWindowFocus: false,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  }),
+  useFetchInbox: ({
+  callBackFuncs,
+  userId,
+}: {
+  callBackFuncs?: QueryCallbacks;
+  userId?:any;
+} = {}) =>
+  useQueryHandler({
+   queryKey: CHATS.fetchInbox.queryKey(userId),
+    endpoint: CHATS.fetchInbox.endpoint,
+    customQueryOptions: {
+      enabled: !!userId,
+      staleTime: 0,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  }),
+   useFetchUnReadMessages: ({
+  callBackFuncs,
+  userId,
+}: {
+  callBackFuncs?: QueryCallbacks;
+  userId?:any;
+} = {}) =>
+  useQueryHandler({
+   queryKey: CHATS.fetchUnRead.queryKey,
+    endpoint: CHATS.fetchUnRead.endpoint(userId),
+    customQueryOptions: {
+      enabled: !!userId,
+      staleTime: 0,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  }),
   };
 };

@@ -2,6 +2,7 @@ export const API_ENDPOINTS = {
   USERS: {
     LOGIN: '/users/login',
     SIGNUP: '/users/signup',
+    USER_BY_ID:`/users/:id`,
     RESEND_VERIFICATION: '/users/verify/refresh',
     VERIFY: ({token}: {token: string}) => `/users/verify/new/${token}`,
     SEND_RESET_PASSWORD: '/users/forgot-password',

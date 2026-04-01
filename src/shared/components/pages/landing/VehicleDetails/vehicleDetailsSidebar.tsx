@@ -21,7 +21,7 @@ export default function VehicleDetailsSidebar({
 }) {
   return (
     <div className='flex flex-col gap-4'>
-      <ContactCard phoneNumber={sellerDetails.phoneNumber} />
+      <ContactCard phoneNumber={sellerDetails.phoneNumber} sellerId={sellerDetails?._id} />
       <SellerDetailsCard sellerDetails={sellerDetails} />
       <SafetyGuidelinesCard />
     </div>

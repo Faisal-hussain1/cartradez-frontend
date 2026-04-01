@@ -91,7 +91,7 @@ export default function Navbar() {
               {/* Auth */}
               {isLoggedIn ? (
                 <NavigationMenuItem>
-                  <HoverAvatarDropdown />
+                  <HoverAvatarDropdown profileImageUrl={currentUser?.profileImage} />
                 </NavigationMenuItem>
               ) : (
                 <NavigationMenuItem>
