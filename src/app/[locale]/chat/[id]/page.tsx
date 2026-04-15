@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Send } from "lucide-react";
 import { useGetUserById } from "@/shared/hooks/useUserById";
 import { useGetMessages } from "@/shared/hooks/useGetMessages";
@@ -15,8 +16,6 @@ export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
-
-  console.log(message);
   const socketRef = useRef<any>(null);
   const params=useParams();
   const { user } = useGetUserById(params.id);
@@ -76,7 +75,6 @@ export default function ChatPage() {
   const handleSend = () => {
     if (!message.trim()) return;
 
-    console.log("Message Sent")
     socketRef.current.emit("sendMessage", {
       to: params.id,
       message,
@@ -102,6 +100,9 @@ export default function ChatPage() {
 
       {/* HEADER */}
       <div className="flex items-center gap-3 p-4 border-b bg-white">
+       <button onClick={() => window.history.back()} className="p-2 rounded-full cursor-pointer">
+    <ArrowLeft size={20} />
+  </button>
         <div className="relative">
           <img
             src={user?.profileImage || "/images/avatar-default.jpeg"}
@@ -154,22 +155,22 @@ export default function ChatPage() {
       </div>
 
       {/* INPUT */}
-     <div className="p-3 w-20 border-t bg-white flex gap-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none"
-        />
+    <div className="p-3 border-t bg-white flex gap-2 items-center">
+  <input
+    type="text"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    placeholder="Type a message..."
+    className="flex-1 border rounded-full px-4 py-2 text-sm focus:outline-none"
+  />
 
-        <button
-          onClick={handleSend}
-          className="bg-primary text-white px-4 rounded-lg flex items-center justify-center"
-        >
-          <Send size={16} />
-        </button>
-      </div>
+  <button
+    onClick={handleSend}
+    className="bg-primary text-white p-2 rounded-full flex items-center justify-center"
+  >
+    <Send size={16} />
+  </button>
+</div>
     </div>
   );
 }
