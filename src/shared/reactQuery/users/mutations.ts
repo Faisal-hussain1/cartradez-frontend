@@ -132,6 +132,35 @@ export const useMutations = () => {
           },
         },
       }),
+      useAcceptPrivacyMutation: ({ callBackFuncs } = {}) =>
+  useMutationHandler({
+    endpoint: "/users/accept-privacy",
+    method: PATCH,
+    callBackFuncs: {
+      ...callBackFuncs,
+      onSuccessAlways: ({ data: { user }, message }) => {
+        if (user) {
+          dispatch(actions.setCurrentUser(user)); // 🔥 IMPORTANT
+        }
+        showToast({ type: "success", message });
+      },
+    },
+  }),
+
+useAcceptTermsMutation: ({ callBackFuncs } = {}) =>
+  useMutationHandler({
+    endpoint: "/users/accept-terms",
+    method: PATCH,
+    callBackFuncs: {
+      ...callBackFuncs,
+      onSuccessAlways: ({ data: { user }, message }) => {
+        if (user) {
+          dispatch(actions.setCurrentUser(user)); // 🔥 IMPORTANT
+        }
+        showToast({ type: "success", message });
+      },
+    },
+  }),
 
     useAddSellerMutation: ({
       callBackFuncs,

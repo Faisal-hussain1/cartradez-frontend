@@ -155,22 +155,22 @@ export default function ChatPage() {
       </div>
 
       {/* INPUT */}
-     <div className="p-3 w-20 border-t bg-white flex gap-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none"
-        />
+    <div className="p-3 border-t bg-white flex gap-2 items-center">
+  <input
+    type="text"
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    placeholder="Type a message..."
+    className="flex-1 border rounded-full px-4 py-2 text-sm focus:outline-none"
+  />
 
-        <button
-          onClick={handleSend}
-          className="bg-primary text-white px-4 rounded-lg flex items-center justify-center"
-        >
-          <Send size={16} />
-        </button>
-      </div>
+  <button
+    onClick={handleSend}
+    className="bg-primary text-white p-2 rounded-full flex items-center justify-center"
+  >
+    <Send size={16} />
+  </button>
+</div>
     </div>
   );
 }

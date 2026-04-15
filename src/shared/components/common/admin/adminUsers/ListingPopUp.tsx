@@ -26,44 +26,48 @@ export default function ListingPopUp({
   
   const stripePromise = loadStripe(publishableKey);
 
-  const pay=async(listingType:any,pricing:any)=>{
-    try {
-      const stripe = await stripePromise;
-       if (!stripe) {
-      console.error('Stripe failed to initialize');
-      return;
-    }
-      
-      const res = await fetch(`${API_URL}/payment`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-        },
-        body: JSON.stringify({
+  const pay = async (listingType: any, pricing: any) => {
+  try {
+    const res = await fetch(`${API_URL}/payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         userId: user?._id,
-        vehicleId: vehicle?.vehicleId,
-        currency: vehicle?.currency || "usd",
+        vehicleId: vehicle?._id,
+        currency:"usd",
         image: vehicle?.coverImage?.url,
         make: vehicle?.make,
         model: vehicle?.model,
         listingType,
-        price: pricing,   // ✅ send correct field name
+        price: pricing,
       }),
-      });
-  
-  
-      const data = await res.json();  
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: data.id
-      });
-      if (error) {
-        console.error('Stripe redirect error:', error);
-      }
-      
-    } catch (err) {
-      console.error('Payment error:', err);
-    }
+    });
+
+    const data = await res.json();
+
+    // 🔁 Create form dynamically
+    const form = document.createElement("form");
+    form.method = "POST";
+
+    // 🧪 TEST URL
+    form.action = "https://sandbox.payfast.co.za/eng/process";
+
+    Object.keys(data).forEach((key) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = data[key];
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  } catch (err) {
+    console.error("Payment error:", err);
   }
+};
 
 
   return (

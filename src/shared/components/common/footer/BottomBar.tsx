@@ -26,11 +26,14 @@ export default function BottomBar() {
         </p>
 
         <div className='flex space-x-5 text-white'>
-          <a href='#' className='hover:underline'>
-            {t('footer.bottomBar.terms')}
+          <a href='/terms' className='hover:underline'>
+            Terms & Conditions
           </a>
-          <a href='#' className='hover:underline'>
-            {t('footer.bottomBar.privacy')}
+          <a href='/privacy' className='hover:underline'>
+            Privacy Policy
+          </a>
+          <a href='/refund' className='hover:underline'>
+            Refund Policy
           </a>
         </div>
       </div>
