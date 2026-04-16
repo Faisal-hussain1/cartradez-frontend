@@ -36,7 +36,7 @@ export default function RegisterForm() {
     callBackFuncs: {onSuccess},
   });
 
-  const {control, handleSubmit} = useForm<RegisterPayload>({
+  const { control, handleSubmit, register,formState:errors } = useForm<RegisterPayload>({
     resolver: yupResolver(ct(registerUserSchema)),
     defaultValues: {
       firstName: '',
@@ -52,6 +52,8 @@ export default function RegisterForm() {
       city: '',
       state: '',
       country: '',
+      acceptTerms: false,
+      acceptPrivacy: false,
     },
   });
 
@@ -140,6 +142,42 @@ export default function RegisterForm() {
             label={t('auth.passwordLabel')}
             placeholder={t('auth.passwordPlaceholder')}
           />
+          <div className="flex flex-col gap-3 mt-2">
+  {/* Terms & Conditions */}
+  <label className="flex items-start gap-2 text-sm">
+    <input
+      type="checkbox"
+      {...register('acceptTerms')}
+      className="mt-1"
+    />
+    <span>
+      I agree to{' '}
+      <Link href="/term" className="underline font-medium">
+        Terms & Conditions
+      </Link>
+    </span>
+  </label>
+  {/* {errors.acceptTerms && (
+    <p className="text-red-500 text-xs">
+      {errors.acceptTerms.message}
+    </p>
+  )} */}
+
+  {/* Privacy Policy */}
+  <label className="flex items-start gap-2 text-sm">
+    <input
+      type="checkbox"
+      {...register('acceptPrivacy')}
+      className="mt-1"
+    />
+    <span>
+      I agree to{' '}
+      <Link href="/privacy" className="underline font-medium">
+        Privacy Policy
+      </Link>
+    </span>
+  </label>
+</div>
 
           <SubmitButton loading={isPending} buttonText={t('auth.signup')} />
 

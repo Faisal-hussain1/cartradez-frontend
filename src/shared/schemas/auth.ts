@@ -27,6 +27,12 @@ export const registerUserSchema = (t: TranslateFunction) =>
     phoneNumber: Yup.string()
       .min(12, t('authValidation.phoneMin'))
       .required(t('authValidation.phoneRequired')),
+      acceptTerms: Yup.boolean()
+    .oneOf([true], 'You must accept Terms & Conditions'),
+
+  acceptPrivacy: Yup
+    .boolean()
+    .oneOf([true], 'You must accept Privacy Policy'),
   });
 
 // Send Reset Password Link Schema

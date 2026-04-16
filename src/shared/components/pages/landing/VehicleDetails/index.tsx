@@ -65,7 +65,7 @@ export default function VehicleDetails({
               <div className='flex items-center justify-between text-sm md:text-base text-gray-600 mb-6'>
                 <div className='flex items-center gap-2'>
                   <MapPin className='w-4 h-4 text-gray80' />{' '}
-                  <span className='truncate'>N/A</span>
+                  <span className='truncate'>{vehicleDetail?.vehicle?.creatorId?.address}, {vehicleDetail?.vehicle?.creatorId?.city}, {vehicleDetail?.vehicle?.creatorId?.country}</span>
                 </div>
                 <div className='whitespace-nowrap text-gray80'>
                   Published:{' '}
