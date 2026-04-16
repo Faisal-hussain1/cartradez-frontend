@@ -4,7 +4,7 @@ export default function RefundPolicy() {
   return (
     <PolicyLayout title="Refund Policy">
 
-      <p><strong>Effective Date:</strong>2026-04-15</p>
+      <p><strong>Effective Date:</strong>April,15,2026</p>
 
       <h2 className="font-semibold text-lg">General Rule</h2>
       <p>
