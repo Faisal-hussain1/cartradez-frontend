@@ -21,6 +21,8 @@ export interface RegisterPayload {
   systemRole?: 'user' | 'dealer';
   showroomName?: string;
   address?: string;
+  acceptTerms:boolean | false;
+  acceptPrivacy:boolean | false;
 }
 
 export interface ForgotPasswordPayload {
