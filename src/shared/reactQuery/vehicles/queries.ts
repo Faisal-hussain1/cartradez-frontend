@@ -47,23 +47,23 @@ export const useQueries = () => {
       }),
 
     useFetchVehicleById: ({
-      callBackFuncs,
-      params,
-    }: {
-      callBackFuncs?: QueryCallbacks;
-      params?: any;
-    } = {}) =>
-      useQueryHandler({
-        queryKey: VEHICLES.fetchVehicleById.queryKey,
-        endpoint: VEHICLES.fetchVehicleById.endpoint(params),
-        params,
-        customQueryOptions: {
-          staleTime: 10 * 60 * 1000,
-          refetchOnWindowFocus: true,
-        },
-        callbacks: {
-          ...callBackFuncs,
-        },
-      }),
+  callBackFuncs,
+  params,
+}: {
+  callBackFuncs?: QueryCallbacks;
+  params?: any;
+} = {}) =>
+  useQueryHandler({
+    queryKey: VEHICLES.fetchVehicleById.queryKey(params.vehicleId), // ✅ pass ID here
+    endpoint: VEHICLES.fetchVehicleById.endpoint(params),
+    params,
+    customQueryOptions: {
+      staleTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: true,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  }),
   };
 };

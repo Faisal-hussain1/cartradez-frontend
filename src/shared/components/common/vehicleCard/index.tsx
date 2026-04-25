@@ -14,14 +14,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
   return (
     <Card
-      className="
-        group relative overflow-hidden rounded-xl shadow-sm
-        transition-all duration-300 cursor-pointer
-        hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01]
-        bg-white
-        max-w-[260px] w-full
-      "
-    >
+  className="
+    group relative overflow-hidden rounded-xl shadow-sm
+    transition-all duration-300 cursor-pointer
+    hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01]
+    bg-white
+    w-full max-w-[260px]
+    flex flex-col h-full
+  "
+>
       {/* Image */}
       <div className="relative w-full h-36">
         <Image
@@ -32,34 +33,32 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         />
       </div>
 
-      <CardContent className="pt-3 pb-3 px-3">
+      <CardContent className="pt-3 pb-3 px-3 flex flex-col flex-1">
         
         {/* Title */}
-        <h3 className="text-sm font-semibold leading-tight">
-          {truncateChars({
-            text: `${stringToTitleCase({ str: vehicle.make })} ${stringToTitleCase({ str: vehicle.model })} ${vehicle.year}`,
-            limit: 18,
-          })}
-        </h3>
+        <h3 className="text-sm font-semibold leading-tight min-h-[40px]">
+  {truncateChars({
+    text: `${stringToTitleCase({ str: vehicle.make })} ${stringToTitleCase({ str: vehicle.model })} ${vehicle.year}`,
+    limit: 18,
+  })}
+</h3>
 
-        {/* Price Section */}
-        <div className="mt-2 flex items-center justify-between">
-          <p className="text-primary font-semibold text-sm">
-            {vehicle?.currency === 'usd' ? '$' : 'ZK'}{' '}
-            {vehicle?.price?.toLocaleString()}
-          </p>
-        </div>
+<div className="mt-2">
+  <p className="text-primary font-semibold text-sm">
+    {vehicle?.currency === 'usd' ? '$' : 'ZK'}{' '}
+    {vehicle?.price?.toLocaleString()}
+  </p>
+</div>
 
-        {/* Button */}
-        <div className="mt-3">
-          <PrimaryButton
-            buttonText="View Details"
-            onClick={() =>
-              router.push(USER_ROUTES.vehicleDetails(vehicle._id))
-            }
-            styles="w-full text-sm py-1.5"
-          />
-        </div>
+<div className="mt-auto pt-3">
+  <PrimaryButton
+    buttonText="View Details"
+    onClick={() =>
+     router.push(USER_ROUTES.vehicleDetails(vehicle._id), { scroll: true })
+    }
+    styles="w-full text-sm py-1.5"
+  />
+</div>
       </CardContent>
     </Card>
   );

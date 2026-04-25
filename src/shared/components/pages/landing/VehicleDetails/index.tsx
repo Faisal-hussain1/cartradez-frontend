@@ -39,11 +39,23 @@ export default function VehicleDetails({
   if (isPending) return <GlobalLoader />;
 
   return (
-    <Container className='bg-[#F3F4F6] py-6'>
+    <Container className='bg-[#F3F4F6] py-6' key={vehicleId}>
       <div className='flex flex-col gap-6'>
         <div className='grid grid-cols-12 gap-6'>
           {/* ================= Left Section ================= */}
           <div className='col-span-12 lg:col-span-9 flex flex-col gap-6'>
+            <div className="mb-4">
+  <button
+    onClick={() => router.push(ROOT_ROUTE)}
+    className="
+      flex items-center gap-2
+      text-sm font-medium text-gray-600
+      hover:text-black transition
+    "
+  >
+    ← Back
+  </button>
+</div>
             {/* ================= Vehicle Header Card ================= */}
             <div className='bg-white rounded-2xl shadow-sm w-full p-4 md:p-8'>
               {/* Title + Icons */}
