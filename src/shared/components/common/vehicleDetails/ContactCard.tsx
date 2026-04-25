@@ -16,6 +16,7 @@ import { getCurrentUser } from '@/shared/redux/slices/users';
 export default function ContactCard({phoneNumber,sellerId}: {phoneNumber?: string,sellerId?:string}) {
   const router=useLocaleRouter();
   const user = useSelector(getCurrentUser);
+  const isUser=user?._id
   const handleCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
@@ -69,7 +70,7 @@ export default function ContactCard({phoneNumber,sellerId}: {phoneNumber?: strin
             }
           />
 
-          {(sellerId !==user?._id) && <PrimaryButton
+          {(sellerId !==user?._id) && isUser && <PrimaryButton
             styles='flex-1 w-full sm:w-1/2 bg-transparent text-primary border border-primary hover:bg-primary hover:text-white'
             onClick={handleMessage}
             buttonText={

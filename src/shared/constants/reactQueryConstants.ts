@@ -59,14 +59,13 @@ export const VEHICLES = {
       ),
   },
   fetchVehicleById: {
-    queryKey: 'getVehicleByUId',
-    endpoint: (params: any) =>
-      buildDynamicURL(
-        API_ENDPOINTS.VEHICLES.GET_VEHICLE({
-          id: params.vehicleId,
-        }),
-        params
-      ),
-    activeServerSidePagination: false,
-  },
+  queryKey: (vehicleId: string) => ['getVehicleById', vehicleId], // ✅ dynamic key
+  endpoint: (params: any) =>
+    buildDynamicURL(
+      API_ENDPOINTS.VEHICLES.GET_VEHICLE({
+        id: params.vehicleId,
+      }),
+      params
+    ),
+},
 };

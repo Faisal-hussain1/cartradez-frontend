@@ -36,7 +36,7 @@ export default function RegisterForm() {
     callBackFuncs: {onSuccess},
   });
 
-  const { control, handleSubmit, register,formState:errors } = useForm<RegisterPayload>({
+  const { control, handleSubmit, register,watch  } = useForm<RegisterPayload>({
     resolver: yupResolver(ct(registerUserSchema)),
     defaultValues: {
       firstName: '',
@@ -57,10 +57,12 @@ export default function RegisterForm() {
     },
   });
 
+  const acceptTerms = watch("acceptTerms");
+const acceptPrivacy = watch("acceptPrivacy");
+
   const onSubmit = (payload: RegisterPayload) => {
     executeSignupMutation({payload});
   };
-
   return (
     <AuthSectionContainer>
       <LeftSideContainer>
@@ -152,7 +154,7 @@ export default function RegisterForm() {
     />
     <span>
       I agree to{' '}
-      <Link href="/term" className="underline font-medium">
+      <Link href="/terms" className="underline font-medium">
         Terms & Conditions
       </Link>
     </span>
@@ -179,7 +181,11 @@ export default function RegisterForm() {
   </label>
 </div>
 
-          <SubmitButton loading={isPending} buttonText={t('auth.signup')} />
+          <SubmitButton
+  loading={isPending}
+  buttonText={t('auth.signup')}
+  disabled={!(acceptTerms && acceptPrivacy)}
+/>
 
           <Link href={AUTH_ROUTES.login}>{t('auth.allReadyAccount')}</Link>
         </AuthFormContainer>
