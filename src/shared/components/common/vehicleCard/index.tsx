@@ -11,9 +11,13 @@ import { USER_ROUTES } from '@/shared/constants/PATHS';
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const router = useLocaleRouter();
+  const handleViewDetails = () => {
+    router.push(USER_ROUTES.vehicleDetails(vehicle._id), { scroll: true });
+  };
+
 
   return (
-    <Card
+    <Card onClick={handleViewDetails}
   className="
     group relative overflow-hidden rounded-xl shadow-sm
     transition-all duration-300 cursor-pointer
@@ -53,9 +57,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 <div className="mt-auto pt-3">
   <PrimaryButton
     buttonText="View Details"
-    onClick={() =>
-     router.push(USER_ROUTES.vehicleDetails(vehicle._id), { scroll: true })
-    }
+    onClick={handleViewDetails}
     styles="w-full text-sm py-1.5"
   />
 </div>
