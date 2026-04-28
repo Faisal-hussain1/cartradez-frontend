@@ -113,8 +113,9 @@ export default function LoginForm() {
           </div>
           <SubmitButton loading={isPending} buttonText={t('auth.loginText')} />
           <div className='flex-end'>
+            <span className='text-gray-600 text-sm'>New to Car Tradez?</span>
             <Link className='text-primary text-sm' href={AUTH_ROUTES.register}>
-              {t('auth.registerWithQuestionMarkText')}
+              {t(' Sign Up')}
             </Link>
           </div>
         </AuthFormContainer>
