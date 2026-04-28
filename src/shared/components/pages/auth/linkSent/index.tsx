@@ -33,11 +33,11 @@ export default function PaymentFailed() {
         </div>
 
         <h1 className='text-xl font-semibold text-gray-800 mb-1'>
-          Check Your Email
+          Verify Your Email
         </h1>
 
         <p className='text-gray-600 text-xs mb-5'>
-          We have sent you a mail. Check your mailbox.
+          We have sent a verification link to your email address. Please check your inbox and click on the link to verify your account. If you don't see the email, please check your spam folder.
         </p>
 
       </div>

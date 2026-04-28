@@ -47,8 +47,7 @@ export default function VehicleDetails({
             <div className="mb-4">
   <button
     onClick={() => router.push(ROOT_ROUTE)}
-    className="
-      flex items-center gap-2
+    className="cursor-pointer flex items-center gap-2
       text-sm font-medium text-gray-600
       hover:text-black transition
     "

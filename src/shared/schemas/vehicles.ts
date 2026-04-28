@@ -22,8 +22,7 @@ export const newVehicleSchema = (t: TranslateFunction) =>
       t('vehicleListingValidation.conditionRequired')
     ),
     bodyType: Yup.string()
-      .oneOf(VEHICLE_BODY_TYPES_VALUES)
-      .required(t('vehicleListingValidation.bodyTypeRequired')),
+      .required(t('Body type is required')),
     color: Yup.string().required(t('vehicleListingValidation.colorRequired')),
     mileage: Yup.number().required(
       t('vehicleListingValidation.mileageRequired')
@@ -44,8 +43,7 @@ export const newVehicleSchema = (t: TranslateFunction) =>
       )
       .required(t('vehicleListingValidation.fuelTypeRequired')),
     driveType: Yup.string()
-      .oneOf(VEHICLE_DRIVE_VALUES)
-      .required(t('vehicleListingValidation.driveTypeRequired')),
+      .required(t('Drive Type is required')),
     currency: Yup.string()
       .oneOf(
         VEHICLE_CURRENCY_TYPES_VALUES,
@@ -55,7 +53,7 @@ export const newVehicleSchema = (t: TranslateFunction) =>
     price: Yup.number()
       .typeError(t('vehicleListingValidation.priceRequired'))
       .required(t('vehicleListingValidation.priceRequired'))
-      .min(1, t('vehicleListingValidation.priceMin')),
+      .min(2000, t('vehicleListingValidation.priceMin')),
 
     registrationCity: Yup.string().required(
       t('vehicleListingValidation.registrationCityRequired')
