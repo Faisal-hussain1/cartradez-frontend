@@ -20,6 +20,7 @@ export interface RegisterPayload {
   password: string;
   systemRole?: 'user' | 'dealer';
   showroomName?: string;
+  country?: string;
   address?: string;
   acceptTerms:boolean | false;
   acceptPrivacy:boolean | false;

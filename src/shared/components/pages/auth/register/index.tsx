@@ -2,7 +2,6 @@
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
-
 import PasswordInput from '@/shared/components/common/inputs/passwordInput';
 import Link from '@/shared/utils/localeLink';
 import TextInput from '@/shared/components/common/inputs/textInput';
@@ -59,6 +58,7 @@ export default function RegisterForm() {
 
   const acceptTerms = watch("acceptTerms");
 const acceptPrivacy = watch("acceptPrivacy");
+const selectedCountry = watch("country");
 
   const onSubmit = (payload: RegisterPayload) => {
     executeSignupMutation({payload});
@@ -132,11 +132,12 @@ const acceptPrivacy = watch("acceptPrivacy");
           />
 
           <PhoneInputText
-            control={control}
-            name='phoneNumber'
-            label={t('auth.phoneNumberLabel')}
-            placeholder={t('auth.phoneNumberPlaceholder')}
-          />
+  control={control}
+  name="phoneNumber"
+  label={t('auth.phoneNumberLabel')}
+  placeholder={t('auth.phoneNumberPlaceholder')}
+  countryName={selectedCountry}
+/>
 
           <PasswordInput
             name='password'

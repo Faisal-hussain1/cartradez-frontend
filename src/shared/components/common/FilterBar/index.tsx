@@ -25,12 +25,7 @@ const FiltersBar = ({
   };
 
   const handleSearch = (searchValue: string) => {
-    if (redirectPath) {
-      // 👇 Redirect to a custom path, e.g. /filtered?search=term
-      router.push(`${redirectPath}?search=${encodeURIComponent(searchValue)}`);
-    } else {
       setFilters({searchValue});
-    }
   };
 
   const handleStatusChange = (val: any) => {

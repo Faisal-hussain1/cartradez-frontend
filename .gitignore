@@ -42,3 +42,5 @@ next-env.d.ts
 .env.sentry-build-plugin
 
 /.idea/
+temp_auto_push.bat
+temp_interactive_push.bat

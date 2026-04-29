@@ -121,27 +121,31 @@ export default function AddVehicleForm() {
   };
 
   /* Scroll to first validation error */
-  const onError = (errors: FieldErrors<VehiclePayload>) => {
-    const firstError = Object.keys(errors)[0];
-    if (!firstError) return;
+const onError = (errors: FieldErrors<VehiclePayload>) => {
+  const firstError = Object.keys(errors)[0];
+  if (!firstError) return;
 
-    const el = document.querySelector(
-      `[name="${firstError}"]`
-    ) as HTMLElement;
+  const el = document.querySelector(
+    `[data-field-name="${firstError}"], [name="${firstError}"]`
+  ) as HTMLElement | null;
 
-    if (el) {
-      const y =
-        el.getBoundingClientRect().top + window.pageYOffset - 120;
+  if (!el) return;
 
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth',
-      });
+  const y = el.getBoundingClientRect().top + window.pageYOffset - 120;
 
-      el.focus();
-    }
-  };
+  window.scrollTo({
+    top: y,
+    behavior: 'smooth',
+  });
 
+  setTimeout(() => {
+    const focusable = el.querySelector(
+      'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
+    ) as HTMLElement | null;
+
+    focusable?.focus();
+  }, 300);
+};
   
 
   return (
@@ -168,16 +172,16 @@ export default function AddVehicleForm() {
                   subHeading='(All fields marked with * are mandatory)'
                 >
                   <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Make'
-                        name='make'
-                        placeholder='Select Makes'
-                        control={control}
-                        options={Object.values(VEHICLE_MAKES)}
-                        isRequired={true}
-                      />
-                    </div>
+                    <div className='md:col-span-6 col-span-12' data-field-name='make'>
+  <CustomSelectInput
+    label='Make'
+    name='make'
+    placeholder='Select Makes'
+    control={control}
+    options={Object.values(VEHICLE_MAKES)}
+    isRequired={true}
+  />
+</div>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomTextInput
                         label='Model'
@@ -198,40 +202,40 @@ export default function AddVehicleForm() {
                         control={control}
                       />
                     </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Year'
-                        name='year'
-                        placeholder='Select Year'
-                        control={control}
-                        options={getYearsList({start: 1900, end: 2026})}
-                        isRequired={true}
-                      />
-                    </div>
+                     <div className='md:col-span-6 col-span-12' data-field-name='year'>
+  <CustomSelectInput
+    label='Year'
+    name='year'
+    placeholder='Select Year'
+    control={control}
+    options={getYearsList({start: 1900, end: 2026})}
+    isRequired={true}
+  />
+</div>
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Condition'
-                        name='condition'
-                        placeholder='Select Condition'
-                        control={control}
-                        options={Object.values(VEHICLE_CONDITIONS)}
-                        isRequired={true}
-                      />
+                     <div className='md:col-span-6 col-span-12' data-field-name='condition'>
+  <CustomSelectInput
+    label='Condition'
+    name='condition'
+    placeholder='Select Condition'
+    control={control}
+    options={Object.values(VEHICLE_CONDITIONS)}
+    isRequired={true}
+  />
+</div>
+                      <div className='md:col-span-6 col-span-12' data-field-name='bodyType'>
+  <CustomSelectInput
+    label='Body Type'
+    name='bodyType'
+    placeholder='Select Body Type'
+    control={control}
+    options={Object.values(VEHICLE_BODY_TYPES)}
+    isRequired={true}
+  />
+</div>
                     </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Body Type'
-                        name='bodyType'
-                        placeholder='Select Body Type'
-                        control={control}
-                        options={Object.values(VEHICLE_BODY_TYPES)}
-                        isRequired={true}
-                      />
-                    </div>
-                  </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12'>
@@ -264,55 +268,55 @@ export default function AddVehicleForm() {
                         isRequired={true}
                       />
                     </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Transmission'
-                        name='transmission'
-                        placeholder='Select Transmission'
-                        control={control}
-                        options={Object.values(VEHICLE_TRANSMISSION_TYPES)}
-                        isRequired={true}
-                      />
-                    </div>
+                     <div className='md:col-span-6 col-span-12' data-field-name='transmission'>
+  <CustomSelectInput
+    label='Transmission'
+    name='transmission'
+    placeholder='Select Transmission'
+    control={control}
+    options={Object.values(VEHICLE_TRANSMISSION_TYPES)}
+    isRequired={true}
+  />
+</div>
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Fuel Type'
-                        name='fuelType'
-                        placeholder='Select Fuel Type'
-                        control={control}
-                        options={Object.values(VEHICLE_FUEL_TYPES)}
-                        isRequired={true}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Drive Type'
-                        name='driveType'
-                        placeholder='Select Drive Type'
-                        control={control}
-                        options={Object.values(VEHICLE_DRIVE)}
-                        isRequired={true}
-                      />
-                    </div>
+                     <div className='md:col-span-6 col-span-12' data-field-name='fuelType'>
+  <CustomSelectInput
+    label='Fuel Type'
+    name='fuelType'
+    placeholder='Select Fuel Type'
+    control={control}
+    options={Object.values(VEHICLE_FUEL_TYPES)}
+    isRequired={true}
+  />
+</div>
+                     <div className='md:col-span-6 col-span-12' data-field-name='driveType'>
+  <CustomSelectInput
+    label='Drive Type'
+    name='driveType'
+    placeholder='Select Drive Type'
+    control={control}
+    options={Object.values(VEHICLE_DRIVE)}
+    isRequired={true}
+  />
+</div>
                   </div>
                 </BoxContainer>
 
                 {/* Pricing Information */}
                 <BoxContainer heading='Pricing Information'>
                   <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Currency'
-                        name='currency'
-                        placeholder='Select Currency'
-                        control={control}
-                        options={Object.values(VEHICLE_CURRENCY_TYPES)}
-                        isRequired={true}
-                      />
-                    </div>
+                     <div className='md:col-span-6 col-span-12' data-field-name='currency'>
+  <CustomSelectInput
+    label='Currency'
+    name='currency'
+    placeholder='Select Currency'
+    control={control}
+    options={Object.values(VEHICLE_CURRENCY_TYPES)}
+    isRequired={true}
+  />
+</div>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomNumberInput
                         label='Price'
@@ -337,16 +341,16 @@ export default function AddVehicleForm() {
                         isRequired={true}
                       />
                     </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomSelectInput
-                        label='Registration Year'
-                        name='registrationYear'
-                        placeholder='Select Registration Year'
-                        control={control}
-                        options={getYearsList({start: 1900, end: 2026})}
-                        isRequired={true}
-                      />
-                    </div>
+                     <div className='md:col-span-6 col-span-12' data-field-name='registrationYear'>
+  <CustomSelectInput
+    label='Registration Year'
+    name='registrationYear'
+    placeholder='Select Registration Year'
+    control={control}
+    options={getYearsList({start: 1900, end: 2026})}
+    isRequired={true}
+  />
+</div>
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
@@ -382,19 +386,49 @@ export default function AddVehicleForm() {
                   </div>
                 </BoxContainer>
 
-                {/* Upload Images */}
-                <BoxContainer
-                  heading='Upload Images (Upload b/w 3 to 9)'
-                  subHeading='Supported formats: JPEG, JPG, PNG.'
-                >
-                  <div className='mt-5'>
-                    <ImageUploadInput
-                      name='images'
-                      setValue={setValue}
-                      watch={watch}
-                    />
-                  </div>
-                </BoxContainer>
+               {/* Upload Images */}
+<BoxContainer
+  heading="Upload Vehicle Images"
+  subHeading="Please upload clear vehicle photos. Minimum 3 images and maximum 9 images are required."
+  containerStyles="border-l-primary"
+>
+  <div className="mt-5 rounded-xl border border-dashed border-primary/40 bg-primary/5 p-4 md:p-5">
+    <div className="mb-4">
+      <p className="text-[15px] font-semibold text-gray90">
+        Image Upload Guidelines
+      </p>
+
+      <p className="mt-1 text-sm text-gray70">
+        Upload at least <strong>3 images</strong> and no more than{' '}
+        <strong>9 images</strong>. Only <strong>JPEG</strong>,{' '}
+        <strong>JPG</strong>, and <strong>PNG</strong> formats are allowed.
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+      <div className="rounded-lg bg-white border border-gray-200 p-3 text-center">
+        <p className="text-xs text-gray60">Minimum</p>
+        <p className="text-lg font-bold text-primary">3 Images</p>
+      </div>
+
+      <div className="rounded-lg bg-white border border-gray-200 p-3 text-center">
+        <p className="text-xs text-gray60">Maximum</p>
+        <p className="text-lg font-bold text-primary">9 Images</p>
+      </div>
+
+      <div className="rounded-lg bg-white border border-gray-200 p-3 text-center">
+        <p className="text-xs text-gray60">Formats</p>
+        <p className="text-lg font-bold text-primary">JPG, JPEG, PNG</p>
+      </div>
+    </div>
+
+    <ImageUploadInput
+      name="images"
+      setValue={setValue}
+      watch={watch}
+    />
+  </div>
+</BoxContainer>
 
                 {/* Description */}
                 <BoxContainer heading='Description'>

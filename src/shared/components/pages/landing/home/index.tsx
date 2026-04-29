@@ -1,30 +1,58 @@
 'use client';
 
+import { useMemo } from 'react';
 import HomeVehicles from './vehicles';
 import useServerSideListFilters from '@/shared/hooks/listFilters/useServerSideListFilters';
-import {LIST_TYPES} from '@/shared/constants/general';
-import {vehiclesQueries} from '@/shared/reactQuery';
-import {CartradezVehicle, Vehicle} from '@/shared/interfaces/common';
+import { LIST_TYPES } from '@/shared/constants/general';
+import { vehiclesQueries } from '@/shared/reactQuery';
+import { CartradezVehicle, Vehicle } from '@/shared/interfaces/common';
 import FiltersBar from '@/shared/components/common/FilterBar';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
-import {FilterSearchIcon} from '@/shared/components/icons';
+import { FilterSearchIcon } from '@/shared/components/icons';
 import Container from '@/shared/components/common/containers';
 import ManagedByCartradezVehicles from './ManagedByCartradezVehicles';
-import { getCurrentUser } from '@/shared/redux/slices/users';
-import { useDispatch, useSelector } from 'react-redux';
-const API_URL=`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1` as string;
-import { useEffect, useState } from 'react';
-import PolicyModal from '@/shared/components/policymodal';
-import {actions} from '@/shared/redux/slices/users';
-import { AppDispatch } from '@/shared/redux/store';
+
+const normalizeText = (value: any) =>
+  String(value || '')
+    .toLowerCase()
+    .trim();
+
+const getVehicleSearchText = (vehicle: any) => {
+  return [
+    vehicle?.name,
+    vehicle?.title,
+    vehicle?.make,
+    vehicle?.model,
+    vehicle?.variant,
+    vehicle?.year,
+    vehicle?.price,
+    vehicle?.city,
+    vehicle?.location,
+    vehicle?.fuelType,
+    vehicle?.fuel_type,
+    vehicle?.transmission,
+    vehicle?.color,
+    vehicle?.listingType,
+    vehicle?.listing_type,
+    vehicle?.packageType,
+    vehicle?.bodyType,
+    vehicle?.body_type,
+    vehicle?.engineCapacity,
+    vehicle?.engine_capacity,
+    vehicle?.mileage,
+    vehicle?.condition,
+    vehicle?.registeredCity,
+    vehicle?.registered_city,
+  ]
+    .map(normalizeText)
+    .join(' ');
+};
 
 export default function Home() {
-  const user=useSelector(getCurrentUser);
-  const {useFetchAllVehicleList, useFetchAllCartradezVehicleList} =
+  const { useFetchAllVehicleList, useFetchAllCartradezVehicleList } =
     vehiclesQueries();
-    const dispatch=useDispatch<AppDispatch>();
 
-  const {PaginationComponent, filteredData, isLoading, filters, setFilters} =
+  const { PaginationComponent, filteredData, isLoading, filters, setFilters } =
     useServerSideListFilters<Vehicle>({
       dataKey: 'vehicles',
       listType: LIST_TYPES.homePageVehicles,
@@ -39,42 +67,18 @@ export default function Home() {
     listType: LIST_TYPES.managedByCartradezVehicles,
     queryToCall: useFetchAllCartradezVehicleList,
   });
-   const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     if (!user?.privacyAccepted) {
-  //       setShowPrivacy(true);
-  //     } else if (!user?.termsAccepted) {
-  //       setShowTerms(true);
-  //     }
-  //   }
-  // }, [user]);
+  const frontendFilteredVehicles = useMemo(() => {
+    const keyword = normalizeText(filters?.searchValue);
 
-  // const handlePrivacyAccept = async () => {
-  //   const res=await fetch(`${API_URL}/users/accept-terms`,{method:"GET",headers:{"Content-Type":"application/json",Authorization:`Bearer ${localStorage.getItem("accessToken")}`}});
-  //   const data=await res.json();
-  //    dispatch(actions.setCurrentUser(data?.user))
-  //   setShowPrivacy(false);
+    if (!keyword) return filteredData || [];
 
-  //   if (!user?.termsAccepted) {
-  //     setShowTerms(true);
-  //   }
-  // };
+    return (filteredData || []).filter((vehicle: any) => {
+      const searchableText = getVehicleSearchText(vehicle);
 
-  // const handleTermsAccept = async () => {
-  //   const res=await fetch(`${API_URL}/users/accept-privacy`,{method:"GET",headers:{"Content-Type":"application/json",Authorization:`Bearer ${localStorage.getItem("accessToken")}`}});
-  //   const data=await res.json();
-  //   dispatch(actions.setCurrentUser(data?.user))
-  //   setShowTerms(false);
-  // };
-
-  // const {data, isPending, error} = useFetchAllVehicleList();
-
-  // console.log('Home filteredData:', filteredData);
-
-  // console.log('data', data);
+      return searchableText.includes(keyword);
+    });
+  }, [filteredData, filters?.searchValue]);
 
   return (
     <div>
@@ -88,14 +92,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className='grid grid-cols-12  gap-1 md:gap-3 mt-5'>
+          <div className='grid grid-cols-12 gap-1 md:gap-3 mt-5'>
             <div className='col-span-12 md:col-span-9'>
               <FiltersBar
                 setFilters={setFilters}
                 filters={filters}
                 hideSelect={true}
-                placeholder='Search by Make or Model'
-                redirectPath='/advancedFilter'
+                placeholder='Search by Make, Model, Price, Listing Type'
               />
             </div>
 
@@ -117,13 +120,13 @@ export default function Home() {
       <div className='flex justify-center mb-10'>
         <Container>
           <div className='grid grid-cols-12 gap-6 md:gap-6 mt-8'>
-            {/* 🔹 Left Section — Vehicle Listing */}
             <div className='col-span-12 md:col-span-9 w-full flex justify-between'>
-              <HomeVehicles
-                PaginationComponent={PaginationComponent}
-                filteredData={filteredData || []}
-                isLoading={isLoading}
-              />
+             <HomeVehicles
+  PaginationComponent={PaginationComponent}
+  filteredData={frontendFilteredVehicles}
+  isLoading={isLoading}
+  searchValue={filters?.searchValue}
+/>
             </div>
 
             <div className='col-span-12 md:col-span-3 bg-[#E5E7EB] p-5 rounded-2xl flex flex-col gap-4'>
@@ -136,6 +139,5 @@ export default function Home() {
         </Container>
       </div>
     </div>
-    
   );
 }

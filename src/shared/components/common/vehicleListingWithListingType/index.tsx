@@ -1,108 +1,116 @@
-import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
+'use client';
+
 import EmptyDataPlaceholder from '@/shared/components/common/EmptyDataPlaceholder';
-import {Vehicle} from '@/shared/interfaces/common';
-import {CommonCarousel} from '../cardSlider';
-import {useResponsiveSlides} from '@/shared/hooks/useResponsiveSlide';
+import { Vehicle } from '@/shared/interfaces/common';
+import { CommonCarousel } from '../cardSlider';
+import { useResponsiveSlides } from '@/shared/hooks/useResponsiveSlide';
 import VehicleCard from '../vehicleCard';
-import { useQueries } from '@/shared/reactQuery/vehicles/queries';
 import { useMemo } from 'react';
 
+const normalizeText = (value: any) =>
+  String(value || '')
+    .toLowerCase()
+    .trim();
+
+const getListingType = (vehicle: any) => {
+  return normalizeText(
+    vehicle?.listingType ||
+      vehicle?.listing_type ||
+      vehicle?.listing?.type ||
+      vehicle?.packageType
+  );
+};
 
 export default function VehicleListingWithListingType({
   PaginationComponent,
-  filteredData,
+  filteredData = [],
   isPaginationShow = true,
+  searchValue = '',
 }: any) {
   const slidesToShow = useResponsiveSlides();
-  const {useFetchAllVehicleList}=useQueries();
-  const { data, isLoading, error } = useFetchAllVehicleList();
 
- const vehicles = data?.vehicles || [];
+  const vehicles = filteredData || [];
+  const isSearching = normalizeText(searchValue).length > 0;
 
-const premiumVehicles = useMemo(() => {
-  return vehicles.filter((v: Vehicle) => v.listingType === "premium");
-}, [vehicles]);
+  const premiumVehicles = useMemo(() => {
+    return vehicles.filter((v: Vehicle) => getListingType(v) === 'premium');
+  }, [vehicles]);
 
-const quickSellVehicles = useMemo(() => {
-  return vehicles.filter((v: Vehicle) => v.listingType === "quick sell");
-}, [vehicles]);
+  const quickSellVehicles = useMemo(() => {
+    return vehicles.filter((v: Vehicle) => {
+      const type = getListingType(v);
 
-const standardVehicles = useMemo(() => {
-  return vehicles.filter((v: Vehicle) => v.listingType === "standard");
-}, [vehicles]);
+      return (
+        type === 'quick sell' ||
+        type === 'quick_sell' ||
+        type === 'quicksell'
+      );
+    });
+  }, [vehicles]);
 
-if (isLoading) return <GlobalLoader height='h-[400px]' />;
+  const standardVehicles = useMemo(() => {
+    return vehicles.filter((v: Vehicle) => getListingType(v) === 'standard');
+  }, [vehicles]);
+
+  const sections = [
+    {
+      title: 'Premium Listings',
+      emptyTitle: 'premium vehicle',
+      items: premiumVehicles,
+      slidesToShow: 5,
+    },
+    {
+      title: 'Quick Sell Listings',
+      emptyTitle: 'quick sell vehicle',
+      items: quickSellVehicles,
+      slidesToShow: 5,
+    },
+    {
+      title: 'Standard Listings',
+      emptyTitle: 'standard vehicle',
+      items: standardVehicles,
+      slidesToShow,
+    },
+  ];
+
+  const visibleSections = isSearching
+    ? sections.filter((section) => section.items.length > 0)
+    : sections;
+
+  if (isSearching && visibleSections.length === 0) {
+    return (
+      <div className='flex-1 flex items-center justify-center w-full'>
+        <EmptyDataPlaceholder title='vehicle' />
+      </div>
+    );
+  }
 
   return (
     <div className='w-full'>
-      <div>
-        {premiumVehicles.length > 0 ? (
-          <div className=''>
-            <CommonCarousel
-              title='Premium Listings'
-              items={premiumVehicles}
-              slidesToShow={5}
-              renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
-            />
+      {visibleSections.map((section, index) => (
+        <div key={section.title} className={index === 0 ? '' : 'mt-10'}>
+          {section.items.length > 0 ? (
+            <div>
+              <CommonCarousel
+                title={section.title}
+                items={section.items}
+                slidesToShow={section.slidesToShow}
+                renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
+              />
 
-            {isPaginationShow && (
-              <div className='w-full flex justify-end my-5'>
-                {PaginationComponent}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className='flex-1 flex items-center justify-center w-full'>
-            <EmptyDataPlaceholder title='premium vehicle' />
-          </div>
-        )}
-      </div>
-
-      <div className='mt-10'>
-        {quickSellVehicles.length > 0 ? (
-          <div className=''>
-            <CommonCarousel
-              title='Quick Sell Listings'
-              items={quickSellVehicles}
-              slidesToShow={5}
-              renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
-            />
-
-            {isPaginationShow && (
-              <div className='w-full flex justify-end my-5'>
-                {PaginationComponent}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className='flex-1 flex items-center justify-center w-full'>
-            <EmptyDataPlaceholder title='quick sell vehicle' />
-          </div>
-        )}
-      </div>
-
-      <div className='mt-10'>
-        {standardVehicles.length > 0 ? (
-          <div className=''>
-            <CommonCarousel
-              title='Standard Listings'
-              items={standardVehicles}
-              slidesToShow={slidesToShow}
-              renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
-            />
-
-            {isPaginationShow && (
-              <div className='w-full flex justify-end my-5'>
-                {PaginationComponent}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className='flex-1 flex items-center justify-center w-full'>
-            <EmptyDataPlaceholder title='standard vehicle' />
-          </div>
-        )}
-      </div>
+              {isPaginationShow && (
+                <div className='w-full flex justify-end my-5'>
+                  {PaginationComponent}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className='flex-1 flex items-center justify-center w-full'>
+              <EmptyDataPlaceholder title={section.emptyTitle} />
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

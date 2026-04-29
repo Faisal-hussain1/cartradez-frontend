@@ -46,7 +46,7 @@ export default function SellerDetailsCard({
         {/* Seller Info */}
         <div className='flex items-start gap-3'>
           <img
-            src={sellerDetails?.profileImage || '/images/default-user.PNG'}
+            src={sellerDetails?.profileImage}
             alt={'image'}
             className='w-14 h-14 rounded-full object-cover border border-gray-300'
           />
@@ -55,7 +55,6 @@ export default function SellerDetailsCard({
               {`${sellerDetails?.firstName} ${sellerDetails?.lastName}`}
             </p>
             <div className='flex items-center gap-2 flex-wrap'>
-              {/* {(sellerType === 'verified' || sellerType === 'both') && ( */}
               <div className='flex items-center gap-1.5 border border-green100 bg-green-50 text-green100 px-3 py-1 rounded-full text-[13px] font-medium leading-[100%]'>
                 <CheckCircle className='w-4 h-4' />
                 <span>Verified Seller</span>

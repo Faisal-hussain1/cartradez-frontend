@@ -1,10 +1,39 @@
 import {Controller} from 'react-hook-form';
-import {PhoneInput} from 'react-international-phone';
+import {
+  PhoneInput,
+  PhoneInputRefType,
+} from 'react-international-phone';
 import 'react-international-phone/style.css';
 import ErrorMessage from './errorMessage';
 import {TextInputProps} from '@/shared/interfaces/inputs';
 import {cn} from '@/shared/utils/shadCNUtils';
 import {THEME} from '@/shared/constants/theme';
+import {useEffect, useRef} from 'react';
+
+const countryNameToCode: Record<string, string> = {
+  pakistan: 'pk',
+  india: 'in',
+  'united states': 'us',
+  usa: 'us',
+  america: 'us',
+  'united kingdom': 'gb',
+  uk: 'gb',
+  uae: 'ae',
+  'united arab emirates': 'ae',
+  saudi: 'sa',
+  'saudi arabia': 'sa',
+  canada: 'ca',
+  australia: 'au',
+  germany: 'de',
+  france: 'fr',
+  italy: 'it',
+  turkey: 'tr',
+  china: 'cn',
+};
+
+type PhoneInputTextProps = TextInputProps & {
+  countryName?: string;
+};
 
 const PhoneInputText = ({
   control,
@@ -12,7 +41,20 @@ const PhoneInputText = ({
   label,
   placeholder,
   disabled = false,
-}: TextInputProps) => {
+  countryName,
+}: PhoneInputTextProps) => {
+  const phoneInputRef = useRef<PhoneInputRefType>(null);
+
+  useEffect(() => {
+    if (!countryName) return;
+
+    const countryCode = countryNameToCode[countryName.trim().toLowerCase()];
+
+    if (countryCode) {
+      phoneInputRef.current?.setCountry(countryCode);
+    }
+  }, [countryName]);
+
   return (
     <Controller
       name={name}
@@ -31,19 +73,21 @@ const PhoneInputText = ({
             )}
           >
             {label && (
-              <label className='text-[14px] mb-[10px] text-secondary font-semibold'>
+              <label className="text-[14px] mb-[10px] text-secondary font-semibold">
                 {label}
               </label>
             )}
 
             <PhoneInput
+              ref={phoneInputRef}
+              defaultCountry="pk"
               placeholder={placeholder}
-              {...field}
+              value={field.value}
+              onChange={(phone) => field.onChange(phone)}
               inputProps={{
                 name,
                 className: cn(
-                  'flex h-[52px] w-full rounded-br-[10px] border-gray-300 bg-white focus-visible:ring-primary' +
-                    'placeholder:[color:var(--gray60)] md:text-sm px-4',
+                  'flex h-[52px] w-full rounded-br-[10px] border-gray-300 bg-white focus-visible:ring-primary placeholder:[color:var(--gray60)] md:text-sm px-4',
                   error &&
                     'border-[var(--error-light)] bg-[var(--error-light)] focus-visible:ring-error',
                   hasValue &&
@@ -68,6 +112,7 @@ const PhoneInputText = ({
                 } as React.CSSProperties
               }
             />
+
             {error && <ErrorMessage errorMsg={error.message} />}
           </div>
         );

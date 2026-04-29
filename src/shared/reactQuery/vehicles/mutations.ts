@@ -36,6 +36,7 @@ export const useMutations = () => {
             queryClient.invalidateQueries({
               queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
             });
+            console.log('Vehicle added successfully:', message);
             showToast({type: 'success', message});
           },
           onErrorAlways: ({message}) =>

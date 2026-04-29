@@ -39,12 +39,12 @@ const VerificationMessage = ({
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 text-center space-y-6">
         
         <h2 className="text-2xl font-semibold text-gray-800">
-          Account Verified
+          Account Verified!
         </h2>
 
         {message && (
           <div className="space-y-4">
-            <p className="text-gray-600">{message}</p>
+            <p className="text-black">{message}</p>
 
             <button
               disabled={isPending}
@@ -58,11 +58,11 @@ const VerificationMessage = ({
 
         {successful && (
           <div className="space-y-4">
-            <p className="text-green-600 font-medium">{successful}</p>
+            <p className="text-black font-medium">{successful}</p>
 
             <button
               onClick={() => verifyUser()}
-              className="w-full py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition"
+              className="bg-[#414279] cursor-pointer w-full py-3 rounded-lg text-white font-medium"
             >
               {t('auth.clickLogin')}
             </button>
