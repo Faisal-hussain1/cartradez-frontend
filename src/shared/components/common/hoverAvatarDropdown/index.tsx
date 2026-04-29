@@ -49,7 +49,7 @@ export default function HoverAvatarDropdown({
           <div>
             <Avatar className='h-9 w-10 cursor-pointer border border-gray-300 transition-transform hover:scale-105'>
               <AvatarImage
-                src={profileImageUrl || '/images/avatar-default.jpeg'}
+                src={profileImageUrl}
                 alt='User Profile Image'
               />
               <AvatarFallback>KA</AvatarFallback>

@@ -23,6 +23,7 @@ import {
   RightSideContainer,
 } from '@/shared/components/common/containers/auth';
 import Link from '@/shared/utils/localeLink';
+import GoogleAuthButton from '../googleButton';
 
 export default function LoginForm() {
   const {t, ct} = useTranslation();
@@ -66,6 +67,8 @@ export default function LoginForm() {
     resolver: yupResolver(ct(loginUserSchema)),
     defaultValues: {email: '', password: ''},
   });
+
+
 
   const onSubmit = (payload: LoginPayload) => {
     executeLoginMutation({
@@ -112,11 +115,22 @@ export default function LoginForm() {
             </Link>
           </div>
           <SubmitButton loading={isPending} buttonText={t('auth.loginText')} />
+          <div className="flex items-center gap-3 my-2">
+  <div className="flex-1 h-px bg-gray-200" />
+  <span className="text-xs text-gray-400">OR</span>
+  <div className="flex-1 h-px bg-gray-200" />
+</div>
+
+<GoogleAuthButton text="Login with Google" />
           <div className='flex-end'>
             <span className='text-gray-600 text-sm'>New to Car Tradez?</span>
-            <Link className='text-primary text-sm' href={AUTH_ROUTES.register}>
+            <button
+              type='button'
+              className='text-primary text-sm'
+              onClick={() => router.push(AUTH_ROUTES.register)}
+            >
               {t(' Sign Up')}
-            </Link>
+            </button>
           </div>
         </AuthFormContainer>
       </RightSideContainer>

@@ -26,9 +26,9 @@ export default function ManagedByCartradezVehicles({vehicles}: any) {
         Managed by Cartradez
       </p>
 
-      {managedByCarTradez.length > 0 ? (
+      {managedByCarTradez?.length > 0 ? (
         <div className='flex flex-col gap-4'>
-          {vehicles.map((vehicle: CartradezVehicle) => (
+          {vehicles?.map((vehicle: CartradezVehicle) => (
             <div
               key={vehicle._id}
               className='relative flex items-center bg-white shadow-md rounded-xl overflow-hidden w-full hover:shadow-lg transition-all'

@@ -13,6 +13,7 @@ export type User = {
   firstName: string;
   lastName: string;
   username: string;
+  profileImage: string;
   email: string;
   isVerified: boolean;
   organizations: Organization[];
