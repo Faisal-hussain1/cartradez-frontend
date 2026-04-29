@@ -11,6 +11,8 @@ import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import { FilterSearchIcon } from '@/shared/components/icons';
 import Container from '@/shared/components/common/containers';
 import ManagedByCartradezVehicles from './ManagedByCartradezVehicles';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/shared/redux/slices/users';
 
 const normalizeText = (value: any) =>
   String(value || '')
@@ -49,6 +51,7 @@ const getVehicleSearchText = (vehicle: any) => {
 };
 
 export default function Home() {
+  const user=useSelector(getCurrentUser);
   const { useFetchAllVehicleList, useFetchAllCartradezVehicleList } =
     vehiclesQueries();
 
@@ -79,6 +82,8 @@ export default function Home() {
       return searchableText.includes(keyword);
     });
   }, [filteredData, filters?.searchValue]);
+
+
 
   return (
     <div>

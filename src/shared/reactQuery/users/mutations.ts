@@ -58,7 +58,12 @@ export const useMutations = () => {
           onSuccessAlways: ({message} = {}) => {
             showToast({type: 'success', message});
           },
-          onErrorAlways: ({message}) => {
+          onErrorAlways: (error: any) => {
+            const message =
+              error?.message ||
+              error?.error?.message ||
+              error?.error?.[0] ||
+              'Signup failed';
             showToast({type: 'error', message});
           },
         },

@@ -13,7 +13,7 @@ export default function EditProfile() {
 
   const { mutate: updateProfile, isPending } = useUpdateProfileMutation();
 
-  const [imagePreview, setImagePreview] = useState(user?.profileImage || "");
+  const [imagePreview, setImagePreview] = useState(user?.profileImage);
 
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
@@ -77,7 +77,7 @@ export default function EditProfile() {
         <div className="flex items-center gap-5 mb-6">
 
           <img
-            src={imagePreview || "/images/avatar-default.jpeg"}
+            src={imagePreview}
             className="w-20 h-20 rounded-full object-cover border"
           />
 

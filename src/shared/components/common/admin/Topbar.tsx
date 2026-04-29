@@ -90,7 +90,7 @@ export default function Topbar() {
             </span>
 
             <img
-              src={user?.profileImage || "/images/avatar-default.jpeg"}
+              src={user?.profileImage}
               className="w-9 h-8 rounded-full border"
             />
           </div>

@@ -13,6 +13,7 @@ import {
 } from '@/shared/providers';
 import 'react-toastify/dist/ReactToastify.css';
 import {RootLayoutProps} from '@/shared/interfaces/common';
+import ClientProviders from '@/shared/providers/ClientProviders';
 
 export function generateStaticParams() {
   return i18nConfig.locales.map((locale: string) => ({locale}));
@@ -28,20 +29,24 @@ export default async function LocaleLayout({
   return (
     <Fragment>
       <ReduxProvider>
-        <TranslationsProvider
-          namespaces={i18nNamespaces}
-          locale={locale}
-          resources={resources}
-        >
-          <ReactQueryProvider>
-            <AuthGuard>
-              <NuqsAdapter>
-                <SuspenseWrapper>{children}</SuspenseWrapper>
-              </NuqsAdapter>
-            </AuthGuard>
-          </ReactQueryProvider>
-        </TranslationsProvider>
-      </ReduxProvider>
+  <TranslationsProvider
+    namespaces={i18nNamespaces}
+    locale={locale}
+    resources={resources}
+  >
+    <ReactQueryProvider>
+      <ClientProviders>
+        <AuthGuard>
+          <NuqsAdapter>
+            <SuspenseWrapper>
+              {children}
+            </SuspenseWrapper>
+          </NuqsAdapter>
+        </AuthGuard>
+      </ClientProviders>
+    </ReactQueryProvider>
+  </TranslationsProvider>
+</ReduxProvider>
       <ToastContainer
         autoClose={2000}
         hideProgressBar

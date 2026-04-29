@@ -33,6 +33,10 @@ export default function SellerDetailsCard({
   sellerDetails: SellerDetailsType;
 }) {
   const {t} = useTranslation();
+  const firstInitial = sellerDetails?.firstName?.trim()?.charAt(0)?.toUpperCase() || '';
+  const lastInitial = sellerDetails?.lastName?.trim()?.charAt(0)?.toUpperCase() || '';
+  const sellerInitials = `${firstInitial}${lastInitial}` || 'U';
+  const hasProfileImage = Boolean(sellerDetails?.profileImage);
 
   return (
     <Card className='w-full rounded-2xl shadow-sm border border-gray-200'>
@@ -45,11 +49,17 @@ export default function SellerDetailsCard({
       <CardContent className='flex flex-col gap-4 px-6 pb-6'>
         {/* Seller Info */}
         <div className='flex items-start gap-3'>
-          <img
-            src={sellerDetails?.profileImage}
-            alt={'image'}
-            className='w-14 h-14 rounded-full object-cover border border-gray-300'
-          />
+          {hasProfileImage ? (
+            <img
+              src={sellerDetails.profileImage}
+              alt={`${sellerDetails?.firstName} ${sellerDetails?.lastName}`}
+              className='w-14 h-14 rounded-full object-cover border border-gray-300'
+            />
+          ) : (
+            <div className='w-14 h-14 rounded-full border border-gray-300 bg-gray-100 text-gray-700 flex items-center justify-center text-lg font-semibold'>
+              {sellerInitials}
+            </div>
+          )}
           <div className='flex flex-col'>
             <p className='font-semibold text-gray-900 text-base mb-1'>
               {`${sellerDetails?.firstName} ${sellerDetails?.lastName}`}

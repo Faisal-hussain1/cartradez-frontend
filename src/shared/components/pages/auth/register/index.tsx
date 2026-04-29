@@ -21,6 +21,7 @@ import {
 import Image from 'next/image';
 import Logo from '@/shared/components/common/logo';
 import PhoneInputText from '@/shared/components/common/inputs/phoneInput';
+import GoogleAuthButton from '@/shared/components/pages/auth/googleButton';
 
 export default function RegisterForm() {
   const {t, ct} = useTranslation();
@@ -187,6 +188,7 @@ const selectedCountry = watch("country");
   buttonText={t('auth.signup')}
   disabled={!(acceptTerms && acceptPrivacy)}
 />
+          <GoogleAuthButton text='Sign up with Google' />
 
           <Link href={AUTH_ROUTES.login}>{t('auth.allReadyAccount')}</Link>
         </AuthFormContainer>
