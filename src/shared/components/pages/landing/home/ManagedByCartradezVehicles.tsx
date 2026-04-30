@@ -2,23 +2,27 @@
 
 import Image from 'next/image';
 import {stringToTitleCase, truncateChars} from '@/shared/utils/general';
-import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
-import {CartradezVehicle, Vehicle} from '@/shared/interfaces/common';
+import {CartradezVehicle} from '@/shared/interfaces/common';
 import EmptyDataPlaceholder from '@/shared/components/common/EmptyDataPlaceholder';
-import { useMemo } from 'react';
-import { useQueries } from '@/shared/reactQuery/vehicles/queries';
+import {useMemo} from 'react';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import {PUBLIC_ROUTES, USER_ROUTES} from '@/shared/constants/PATHS';
 
-export default function ManagedByCartradezVehicles({vehicles}: any) {
-
-  const {useFetchAllVehicleList}=useQueries();
-  const {data,isLoading}=useFetchAllVehicleList();
-
-  const v=data?.vehicles;
+export default function ManagedByCartradezVehicles({
+  vehicles,
+}: {
+  vehicles: CartradezVehicle[];
+}) {
+  const router = useLocaleRouter();
 
   const managedByCarTradez = useMemo(() => {
-  return v?.filter((v: Vehicle) => v.isManagedByCartradez==true);
-}, [v]);
-  if (isLoading) return <GlobalLoader height='h-[400px]' />;
+    return Array.isArray(vehicles) ? vehicles : [];
+  }, [vehicles]);
+
+  const topFiveVehicles = useMemo(
+    () => managedByCarTradez.slice(0, 5),
+    [managedByCarTradez]
+  );
 
   return (
     <>
@@ -28,10 +32,15 @@ export default function ManagedByCartradezVehicles({vehicles}: any) {
 
       {managedByCarTradez?.length > 0 ? (
         <div className='flex flex-col gap-4'>
-          {vehicles?.map((vehicle: CartradezVehicle) => (
+          {topFiveVehicles?.map((vehicle: CartradezVehicle) => (
             <div
               key={vehicle._id}
-              className='relative flex items-center bg-white shadow-md rounded-xl overflow-hidden w-full hover:shadow-lg transition-all'
+              onClick={() =>
+                router.push(USER_ROUTES.vehicleDetails(vehicle._id), {
+                  scroll: true,
+                })
+              }
+              className='relative flex items-center bg-white shadow-md rounded-xl overflow-hidden w-full hover:shadow-lg transition-all cursor-pointer'
             >
               <div className='relative w-[130px] h-[105px] flex-shrink-0 rounded-lg overflow-hidden'>
                 <Image
@@ -65,6 +74,17 @@ export default function ManagedByCartradezVehicles({vehicles}: any) {
               </div>
             </div>
           ))}
+
+          {managedByCarTradez.length > 0 && (
+            <button
+              onClick={() =>
+                router.push(PUBLIC_ROUTES.vehicles.managedByCartradez)
+              }
+              className='w-full bg-white rounded-xl py-3 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-all'
+            >
+              View All
+            </button>
+          )}
         </div>
       ) : (
         <div className='flex-1 flex items-center justify-center w-full'>

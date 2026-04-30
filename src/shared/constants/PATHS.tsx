@@ -66,6 +66,7 @@ export const USER_ROUTES = {
 export const PUBLIC_ROUTES = {
   vehicles: {
     all: path(VEHICLE_ROOT, '/all'),
+    managedByCartradez: path(VEHICLE_ROOT, '/managed-by-cartradez'),
 
     // vehicleDetails: (vehicleId: string) => path(VEHICLE_ROOT, `/${vehicleId}`),
   },
@@ -135,15 +136,15 @@ export const LANDING_MENU_BAR_LINKS = {
     label: 'Home',
     url: '/',
   },
-  newVehicles: {
-    value: 'newVehicles',
-    label: 'New Vehicles',
-    url: '/under-development',
-  },
+  // newVehicles: {
+  //   value: 'newVehicles',
+  //   label: 'New Vehicles',
+  //   url: '/under-development',
+  // },
   managedByCartradez: {
     value: 'managedByCartradez',
     label: 'Managed By Cartradez',
-    url: '/under-development',
+    url: PUBLIC_ROUTES.vehicles.managedByCartradez,
   },
   buyerAndSellerGuide: {
     value: 'buyerAndSellerGuide',
@@ -199,7 +200,7 @@ export const LANDING_FOOTER_LINKS = {
     {
       value: 'managedByCartradez',
       label: 'Managed by Cartradez',
-      url: '/under-development',
+      url: PUBLIC_ROUTES.vehicles.managedByCartradez,
     },
     {
       value: 'buyersGuide',
