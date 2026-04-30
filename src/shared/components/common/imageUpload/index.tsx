@@ -5,7 +5,7 @@ import Image from 'next/image';
 import {UseFormSetValue, UseFormWatch} from 'react-hook-form';
 import {cn} from '@/shared/utils/shadCNUtils';
 import {Button} from '@/shared/components/ui/button';
-import {Upload} from 'lucide-react'; // nice icon from lucide-react
+import {Upload} from 'lucide-react';
 
 interface ImageUploadInputProps {
   name: string;
@@ -32,7 +32,6 @@ export default function ImageUploadInput({
 
     if (images.length + newFiles.length > max) {
       setError(`You can upload a maximum of ${max} images`);
-
       return;
     }
 
@@ -53,7 +52,6 @@ export default function ImageUploadInput({
 
   return (
     <div className='w-full'>
-      {/* Dropzone area */}
       <div
         onDrop={handleDrop}
         onDragOver={(e) => {
@@ -72,7 +70,7 @@ export default function ImageUploadInput({
       >
         <Upload className='w-8 h-8 text-gray-500 mb-3' />
         <p className='font-semibold text-gray-700'>
-          Drag and drop images here, or click “Upload” to select
+          Drag and drop images here, or click "Upload" to select
         </p>
         <p className='text-sm text-gray-500 mt-1'>
           Upload photos that best represent your vehicle.
@@ -97,15 +95,14 @@ export default function ImageUploadInput({
           onChange={(e) => handleImageUpload(e.target.files)}
         />
       </div>
-      {/* 
+
       {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
       {images.length < min && (
         <p className='text-yellow-600 text-sm mt-1 text-center'>
           Please add at least {min} images.
         </p>
-      )} */}
+      )}
 
-      {/* Preview grid */}
       {images.length > 0 && (
         <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mt-4'>
           {images.map((file, idx) => (
@@ -124,7 +121,7 @@ export default function ImageUploadInput({
                 onClick={() => handleRemoveImage(idx)}
                 className='absolute top-1 right-1 bg-black/60 text-white text-xs rounded px-1 cursor-pointer'
               >
-                ✕
+                X
               </button>
             </div>
           ))}
