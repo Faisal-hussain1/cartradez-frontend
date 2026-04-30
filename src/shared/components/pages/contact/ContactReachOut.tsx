@@ -23,7 +23,7 @@ const ContactReachOut = () => {
             <div>
               <h3 className='block text-l font-medium'>Email</h3>
               <p className='text-gray-600 cursor-pointer'>
-                Cartradez@gmail.com
+                info@cartradez.com
               </p>
             </div>
           </div>
