@@ -55,6 +55,8 @@
     "brandRequired": "Brand is required",
     "descriptionMax": "Description too long",
     "imageRequired": "At least one image is required",
+    "imagesMin": "Please upload at least 3 images",
+    "imagesMax": "You can upload a maximum of 9 images",
     "imageInvalid": "Invalid image file",
     "numberPlateRequired": "Vehicle number plate is required",
     "currencyInvalid": "Vehicle currency is invalid type"

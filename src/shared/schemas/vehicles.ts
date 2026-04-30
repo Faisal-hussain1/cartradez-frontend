@@ -85,6 +85,7 @@ export const newVehicleSchema = (t: TranslateFunction) =>
             (file): file is File => file instanceof File
           )
       )
-      .min(1, t('vehicle:vehicleListingValidation.imageRequired'))
+      .min(3, t('vehicle:vehicleListingValidation.imagesMin'))
+      .max(9, t('vehicle:vehicleListingValidation.imagesMax'))
       .default([]) as unknown as Yup.Schema<File[]>,
   });
