@@ -5,6 +5,7 @@ import {resetAllSlices} from './resetAllSlices';
 import {invalidateQueries} from './queryClient';
 import {RequestParams, ServerRequestParams} from '@/shared/interfaces/utils';
 import {GENERAL_ERRORS_TYPES} from '@/shared/constants/responses/errors/general';
+import {normalizeError, getErrorMessage} from './errorMessage';
 
 export const API_SERVER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
 
@@ -26,9 +27,8 @@ request.interceptors.response.use(
       invalidateQueries();
     }
     const {t} = await translationUtilsValues();
-    const errorMessage = error?.response?.data || t('errorResponse.message');
-
-    return Promise.reject(errorMessage);
+    const normalizedError = normalizeError(error, t('errorResponse.message'));
+    return Promise.reject(normalizedError);
   }
 );
 request.interceptors.request.use((config) => {
@@ -107,10 +107,6 @@ export async function getServerRequest<T = any>({
 
     return response;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error.response.data;
-    } else {
-      throw new Error('Failed to fetch');
-    }
+    throw normalizeError(error, getErrorMessage(error, 'Failed to fetch'));
   }
 }

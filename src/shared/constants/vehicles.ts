@@ -17,6 +17,7 @@ export const VEHICLE_MAKES = {
   lexus: {value: 'lexus', label: 'Lexus'},
   tesla: {value: 'tesla', label: 'Tesla'},
   landrover: {value: 'landrover', label: 'Land Rover'},
+  rangerover: {value: 'rangerover', label: 'Range Rover'},
   proton: {value: 'proton', label: 'Proton'},
   daihatsu: {value: 'daihatsu', label: 'Daihatsu'},
   subaru: {value: 'subaru', label: 'Subaru'},
