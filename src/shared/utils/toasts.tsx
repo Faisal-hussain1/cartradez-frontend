@@ -2,6 +2,7 @@ import {toast, ToastPosition} from 'react-toastify';
 import {TOASTS_POSITION} from '@/shared/constants/toasts';
 import {ToasterComponent} from '@/shared/components/common/toasts';
 import {ShowToastProps} from '@/shared/interfaces/utils';
+import {getErrorMessage} from './errorMessage';
 
 export const showToast = ({
   type = 'info', // Set the default type as 'info'
@@ -9,7 +10,11 @@ export const showToast = ({
   id,
   position = TOASTS_POSITION.TOP_RIGHT as ToastPosition,
 }: ShowToastProps) => {
-  const toastId = id || message;
+  const safeMessage =
+    type === 'error'
+      ? getErrorMessage(message, 'Something went wrong. Please try again.')
+      : message?.trim() || 'Done';
+  const toastId = id || safeMessage;
 
   if (toast.isActive(toastId)) {
     toast.update(toastId, {
@@ -17,17 +22,17 @@ export const showToast = ({
         <ToasterComponent
           type={type}
           title={type.toUpperCase()}
-          message={message}
+          message={safeMessage}
         />
       ),
       position,
     });
   } else {
     toast(
-      <ToasterComponent
+        <ToasterComponent
         type={type}
         title={type.toUpperCase()}
-        message={message}
+        message={safeMessage}
       />,
       {
         toastId,

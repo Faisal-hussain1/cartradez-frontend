@@ -34,7 +34,7 @@ export interface RequestParams {
 
 export interface ShowToastProps {
   type?: 'info' | 'success' | 'warning' | 'error';
-  message: string;
+  message?: string;
   id?: string | number;
   position?: ToastPosition | null | undefined;
 }
