@@ -1,5 +1,4 @@
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
-import {VehicleCardProps} from '@/shared/interfaces/vehicles';
 import EmptyDataPlaceholder from '@/shared/components/common/EmptyDataPlaceholder';
 import {Vehicle} from '@/shared/interfaces/common';
 import VehicleCard from '../vehicleCard';
@@ -9,6 +8,8 @@ export default function VehicleListing({
   filteredData,
   isLoading,
   isPaginationShow = true,
+  cardClassName = '',
+  gridClassName = '',
 }: any) {
   if (isLoading) return <GlobalLoader height='h-[400px]' />;
 
@@ -17,9 +18,15 @@ export default function VehicleListing({
     <div className='w-full'>
       {filteredData.length > 0 ? (
         <div className='flex flex-col w-full min-h-96'>
-          <div className='grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div
+            className={`grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${gridClassName}`}
+          >
             {(filteredData as Vehicle[]).map((vehicle: Vehicle) => (
-              <VehicleCard key={vehicle._id} vehicle={vehicle} />
+              <VehicleCard
+                key={vehicle._id}
+                vehicle={vehicle}
+                className={cardClassName}
+              />
             ))}
           </div>
 

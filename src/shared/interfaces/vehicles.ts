@@ -27,6 +27,7 @@ export interface VehiclePayload {
 
 export interface VehicleCardProps {
   vehicle: Vehicle;
+  className?: string;
 }
 
 export interface vehicleDetailsPageProps {

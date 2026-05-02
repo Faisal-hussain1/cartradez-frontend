@@ -187,16 +187,16 @@ export const LANDING_FOOTER_LINKS = {
     },
   ],
   buyACar: [
-    {
-      value: 'browseAllCars',
-      label: 'Browse All Cars',
-      url: '/under-development',
-    },
-    {
-      value: 'featuredCars',
-      label: 'Featured Cars',
-      url: '/under-development',
-    },
+    // {
+    //   value: 'browseAllCars',
+    //   label: 'Browse All Cars',
+    //   url: '/under-development',
+    // },
+    // {
+    //   value: 'featuredCars',
+    //   label: 'Featured Cars',
+    //   url: '/under-development',
+    // },
     {
       value: 'managedByCartradez',
       label: 'Managed by Cartradez',
@@ -214,21 +214,21 @@ export const LANDING_FOOTER_LINKS = {
       label: 'Post an Ad',
       url: '/vehicles/add',
     },
-    {
-      value: 'pricingPlans',
-      label: 'Pricing Plans',
-      url: '/under-development',
-    },
+    // {
+    //   value: 'pricingPlans',
+    //   label: 'Pricing Plans',
+    //   url: '/under-development',
+    // },
     {
       value: 'sellersGuide',
       label: "Seller's Guide",
       url: '/guidelines',
     },
-    {
-      value: 'verificationProcess',
-      label: 'Verification Process',
-      url: '/under-development',
-    },
+    // {
+    //   value: 'verificationProcess',
+    //   label: 'Verification Process',
+    //   url: '/under-development',
+    // },
   ],
   socials: [
     {
@@ -237,23 +237,23 @@ export const LANDING_FOOTER_LINKS = {
       icon: <FacebookIcon size={20} />,
       url: 'https://www.facebook.com/cartradez',
     },
-    {
-      value: 'twitter',
-      label: 'Twitter',
-      icon: <TwitterIcon size={20} />,
-      url: `${APP_URL}/under-development`,
-    },
+    // {
+    //   value: 'twitter',
+    //   label: 'Twitter',
+    //   icon: <TwitterIcon size={20} />,
+    //   url: `${APP_URL}/under-development`,
+    // },
     {
       value: 'instagram',
       label: 'Instagram',
       icon: <InstagramIcon size={20} />,
-      url: `${APP_URL}/under-development`,
+      url: `https://www.instagram.com/cartradezofficial?igsh=b2V1dml1cHgyOWN2`,
     },
-    {
-      value: 'linkedin',
-      label: 'LinkedIn',
-      icon: <LinkedinIcon size={20} />,
-      url: `${APP_URL}/under-development`,
-    },
+    // {
+    //   value: 'linkedin',
+    //   label: 'LinkedIn',
+    //   icon: <LinkedinIcon size={20} />,
+    //   url: `${APP_URL}/under-development`,
+    // },
   ],
 };

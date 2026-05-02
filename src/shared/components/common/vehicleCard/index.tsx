@@ -9,7 +9,7 @@ import PrimaryButton from '../buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { USER_ROUTES } from '@/shared/constants/PATHS';
 
-export default function VehicleCard({ vehicle }: VehicleCardProps) {
+export default function VehicleCard({ vehicle, className = '' }: VehicleCardProps) {
   const router = useLocaleRouter();
   const handleViewDetails = () => {
     router.push(USER_ROUTES.vehicleDetails(vehicle._id), { scroll: true });
@@ -17,16 +17,18 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
 
   return (
-    <Card onClick={handleViewDetails}
-  className="
-    group relative overflow-hidden rounded-xl shadow-sm
-    transition-all duration-300 cursor-pointer
-    hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01]
-    bg-white
-    w-full max-w-[260px]
-    flex flex-col h-full
-  "
->
+    <Card
+      onClick={handleViewDetails}
+      className={`
+        group relative overflow-hidden rounded-xl shadow-sm
+        transition-all duration-300 cursor-pointer
+        hover:shadow-lg hover:-translate-y-1 hover:scale-[1.01]
+        bg-white
+        w-full max-w-[260px]
+        flex flex-col h-full
+        ${className}
+      `}
+    >
       {/* Image */}
       <div className="relative w-full h-36">
         <Image
