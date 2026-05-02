@@ -89,6 +89,8 @@ export default function ManagedByCartradezVehiclesPage() {
             filteredData={frontendFilteredVehicles}
             isLoading={isLoading}
             isPaginationShow={true}
+            cardClassName='max-w-[230px]'
+            gridClassName='gap-2'
           />
         </div>
       </Container>
