@@ -30,7 +30,7 @@ export default function PrivacyPolicy() {
 
       <p>
         <strong>Company Name:</strong> Car Tradez <br />
-        <strong>Email:</strong> Cartradez@gmail.com<br/> 
+        <strong>Email:</strong> info@cartradez.com<br/> 
         <strong>Phone:</strong> +260 977 123 456<br />
         <strong>Address:</strong> NO.14089, Rockfield Chalaia, Lusaka, Zambia
       </p>

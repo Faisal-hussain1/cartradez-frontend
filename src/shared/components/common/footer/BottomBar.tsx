@@ -18,12 +18,13 @@ export default function BottomBar() {
 
         <p className='flex items-center space-x-1 text-white'>
           <span>
-            Developed by{' '}
+            Powered by{' '}
             <a href='#' className='hover:underline font-semibold text-white'>
               {t('ourCompanyName')}
             </a>
           </span>
         </p>
+        {/* <p>Reproduction of material from any CarTradez.com pages without permission is strictly prohibited.</p> */}
 
         <div className='flex space-x-5 text-white'>
           <a href='/terms' className='hover:underline'>

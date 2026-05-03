@@ -9,10 +9,10 @@ interface StatItem {
 
 const stats: StatItem[] = [
   {title: 'Active Listings', value: '5,617'},
-  {title: 'Pending Reviews', value: '453'},
-  {title: 'Managed Listings', value: '1,074'},
-  {title: 'New Users (7d)', value: '352'},
-  {title: 'Support Tickets', value: '967'},
+  {title: 'Pending Listings', value: '453'},
+  {title: 'Managed Listings', value: '0'},
+  // {title: 'New Users (7d)', value: '352'},
+  // {title: 'Support Tickets', value: '967'},
 ];
 
 export default function DashboardStatsCards() {

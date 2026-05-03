@@ -8,6 +8,8 @@ import {LIST_TYPES} from '@/shared/constants/general';
 import {vehiclesQueries} from '@/shared/reactQuery';
 import useServerSideListFilters from '@/shared/hooks/listFilters/useServerSideListFilters';
 import {Vehicle} from '@/shared/interfaces/common';
+import {FilterSearchIcon} from '@/shared/components/icons';
+import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 
 const normalizeText = (value: any) =>
   String(value || '')
@@ -75,12 +77,39 @@ export default function ManagedByCartradezVehiclesPage() {
           Browse all vehicles verified and managed by Cartradez.
         </p>
 
-        <div className='flex justify-center mt-8'>
-          <FiltersBar
-            setFilters={setFilters}
-            filters={filters}
-            hideSelect={true}
-          />
+        <div className="w-full h-[300px] bg-[url('/images/home/banner.png')] bg-cover mt-3 rounded-2xl bg-center bg-no-repeat flex items-center justify-center">
+          <div className='w-[85%] max-w-6xl bg-white/30 backdrop-blur-lg rounded-2xl shadow-lg border border-white/10 p-6'>
+            <div className='grid grid-cols-12'>
+              <div className='col-span-12'>
+                <p className='text-2xl text-primary font-semibold'>
+                  Find the Car You&apos;ll Love
+                </p>
+              </div>
+            </div>
+
+            <div className='grid grid-cols-12 gap-1 md:gap-3 mt-5'>
+              <div className='col-span-12 md:col-span-9'>
+                <FiltersBar
+                  setFilters={setFilters}
+                  filters={filters}
+                  hideSelect={true}
+                  placeholder='Search by Make, Model, Price, Listing Type'
+                />
+              </div>
+
+              {/* <div className='col-span-12 md:col-span-3 flex justify-center md:justify-end'>
+                <PrimaryButton
+                  buttonText={
+                    <>
+                      <FilterSearchIcon className='h-6 w-6' />
+                      {'Advanced Filters'}
+                    </>
+                  }
+                  styles='h-[48px] bg-white text-primary hover:text-white'
+                />
+              </div> */}
+            </div>
+          </div>
         </div>
 
         <div className='mt-8'>

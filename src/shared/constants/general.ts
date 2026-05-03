@@ -93,7 +93,7 @@ export const LIST_TYPES = {
     },
     page: {
       pageNo: FILTERS_CONFIG.pageNo,
-      pageLimit: FILTERS_CONFIG.pageLimit,
+      pageLimit: FILTERS_CONFIG.managedByCartradezPageLimit,
     },
     path: ADMIN_ROUTES.temp.all,
   },

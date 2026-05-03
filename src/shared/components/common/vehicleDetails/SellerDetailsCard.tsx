@@ -74,7 +74,7 @@ export default function SellerDetailsCard({
         </div>
 
         <div className='space-y-3 text-sm text-gray-700 border-t border-gray-100 pt-4'>
-          <div className='flex items-center gap-3'>
+          {/* <div className='flex items-center gap-3'>
             <Car className='w-4 h-4 text-gray-500 flex-shrink-0' />
             <div className='flex items-center gap-1'>
               <span className='text-blue-600 hover:underline cursor-pointer font-medium'>
@@ -84,7 +84,7 @@ export default function SellerDetailsCard({
                 currently listed on {t('mainPageTitle.appName')}
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className='flex items-center gap-3'>
             <Phone className='w-4 h-4 text-gray-500 flex-shrink-0' />

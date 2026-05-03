@@ -4,7 +4,8 @@ import {API_ENDPOINTS} from './apiEndpoints';
 export const FILTERS_CONFIG = {
   pageNo: 1,
   pageLimit: 12,
-  homePageLimit: 30,
+  homePageLimit: 60,
+  managedByCartradezPageLimit: 60,
   search: '',
   sortBy: '',
   sortDir: '',
