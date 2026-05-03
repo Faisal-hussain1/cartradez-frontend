@@ -33,21 +33,23 @@ export function CommonCarousel({
   useEffect(() => {
     const updateSlides = () => {
       const width = window.innerWidth;
+      const maxSlides = Math.max(1, slidesToShow);
 
-      if (width < 640) setResponsiveSlides(2);
-      else if (width < 768) setResponsiveSlides(3);
-      else if (width < 1024) setResponsiveSlides(4);
-      else if (width < 1280) setResponsiveSlides(5);
-      else setResponsiveSlides(6);
+      if (width < 640) setResponsiveSlides(Math.min(2, maxSlides));
+      else if (width < 768) setResponsiveSlides(Math.min(3, maxSlides));
+      else if (width < 1024) setResponsiveSlides(Math.min(4, maxSlides));
+      else if (width < 1280) setResponsiveSlides(Math.min(5, maxSlides));
+      else setResponsiveSlides(Math.min(6, maxSlides));
     };
 
     updateSlides();
     window.addEventListener('resize', updateSlides);
 
     return () => window.removeEventListener('resize', updateSlides);
-  }, []);
+  }, [slidesToShow]);
 
   const itemWidth = `${100 / responsiveSlides}%`;
+  const isSliderNeeded = items.length > responsiveSlides;
 
   return (
     <div className="relative w-full">
@@ -61,7 +63,8 @@ export function CommonCarousel({
         <Carousel
           opts={{
             align: 'start',
-            slidesToScroll: responsiveSlides,
+            slidesToScroll: 1,
+            loop: false,
           }}
           className="w-full"
         >
@@ -77,7 +80,7 @@ export function CommonCarousel({
             ))}
           </CarouselContent>
 
-          {isShowArrows && (
+          {isShowArrows && isSliderNeeded && (
             <>
               <CarouselPrevious
                 className="

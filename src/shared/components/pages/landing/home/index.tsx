@@ -107,7 +107,7 @@ export default function Home() {
               />
             </div>
 
-            <div className='col-span-12 md:col-span-3 flex justify-center md:justify-end'>
+            {/* <div className='col-span-12 md:col-span-3 flex justify-center md:justify-end'>
               <PrimaryButton
                 buttonText={
                   <>
@@ -117,7 +117,7 @@ export default function Home() {
                 }
                 styles='h-[48px] bg-white text-primary hover:text-white'
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

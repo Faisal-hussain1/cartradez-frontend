@@ -63,10 +63,10 @@ export default function VehicleDetails({
                   {/* Bugatti Chiron Super Sport 2022 */}
                   {`${stringToTitleCase({str: vehicleDetail?.vehicle.make})} ${stringToTitleCase({str: vehicleDetail.vehicle.model})} ${vehicleDetail.vehicle.year}`}
                 </h1>
-                <div className='flex gap-4 mt-4 md:mt-0'>
+                {/* <div className='flex gap-4 mt-4 md:mt-0'>
                   <Share2 className='w-6 h-6 text-gray-400 hover:text-black cursor-pointer transition' />
                   <Heart className='w-6 h-6 text-gray-400 hover:text-red100 cursor-pointer transition' />
-                </div>
+                </div> */}
               </div>
               <p className='text-primary font-bold text-2xl md:text-3xl mb-5'>
                 {`${vehicleDetail.vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicleDetail.vehicle.price.toLocaleString()}`}

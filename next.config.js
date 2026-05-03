@@ -45,6 +45,7 @@ const nextConfig = {
       },
     ],
     unoptimized: true,
+    contentDispositionType: 'inline',
   },
 };
 module.exports = nextConfig;

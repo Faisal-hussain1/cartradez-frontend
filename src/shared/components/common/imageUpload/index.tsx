@@ -7,6 +7,9 @@ import {cn} from '@/shared/utils/shadCNUtils';
 import {Button} from '@/shared/components/ui/button';
 import {Upload} from 'lucide-react';
 
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+
 interface ImageUploadInputProps {
   name: string;
   setValue: UseFormSetValue<any>;
@@ -32,6 +35,22 @@ export default function ImageUploadInput({
 
     if (images.length + newFiles.length > max) {
       setError(`You can upload a maximum of ${max} images`);
+      return;
+    }
+
+    const invalidTypeFile = newFiles.find(
+      (file) => !ALLOWED_IMAGE_TYPES.includes(file.type)
+    );
+    if (invalidTypeFile) {
+      setError('Only JPG and PNG images are allowed.');
+      return;
+    }
+
+    const oversizedFile = newFiles.find(
+      (file) => file.size > MAX_FILE_SIZE_BYTES
+    );
+    if (oversizedFile) {
+      setError('Each image must be 5 MB or smaller.');
       return;
     }
 
