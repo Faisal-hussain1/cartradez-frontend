@@ -11,6 +11,8 @@ export default function CustomSelectInput({
   placeholder = 'Please Select an Option',
   isRequired = false,
   options,
+  isCreatable = false,
+  isSearchable = true,
 }: {
   label: string;
   name: string;
@@ -18,6 +20,8 @@ export default function CustomSelectInput({
   placeholder?: string;
   isRequired?: boolean;
   options: {value: string; label: string}[];
+  isCreatable?: boolean;
+  isSearchable?: boolean;
 }) {
   return (
     <>
@@ -31,6 +35,8 @@ export default function CustomSelectInput({
           name={name}
           placeholder={placeholder}
           isRequired={isRequired}
+          isCreatable={isCreatable}
+          isSearchable={isSearchable}
         />
       </div>
     </>

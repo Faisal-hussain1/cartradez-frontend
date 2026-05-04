@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
 import { Bell } from "lucide-react";
@@ -9,6 +10,7 @@ import { userMutations } from "@/shared/reactQuery";
 import { connectSocket } from "@/shared/socket";
 import { useInbox } from "@/shared/hooks/useInbox";
 import { useUnRead } from "@/shared/hooks/useUnReadMessages";
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 
 export default function Topbar() {
   const user = useSelector(getCurrentUser);
@@ -89,10 +91,16 @@ export default function Topbar() {
               {user?.firstName}
             </span>
 
-            <img
-              src={user?.profileImage}
-              className="w-9 h-8 rounded-full border"
-            />
+            <Avatar className="w-9 h-8 border">
+              <AvatarImage
+                src={user?.profileImage}
+                alt="Profile Image"
+                className="object-cover"
+              />
+              <AvatarFallback>
+                {user?.firstName?.[0]?.toUpperCase()}{user?.lastName?.[0]?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
           </div>
 
           {open && (

@@ -17,11 +17,25 @@ import {
 import {userMutations} from '@/shared/reactQuery';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/shared/redux/slices/users';
+
 export default function HoverAvatarDropdown({
   profileImageUrl,
 }: {
   profileImageUrl?: string;
 }) {
+  const currentUser = useSelector(getCurrentUser);
+
+  // Helper to get initials from first and last name
+  function getInitials() {
+    if (currentUser) {
+      const first = currentUser.firstName?.[0] || '';
+      const last = currentUser.lastName?.[0] || '';
+      return (first + last).toUpperCase() || currentUser.username?.[0]?.toUpperCase() || '?';
+    }
+    return '?';
+  }
   const [open, setOpen] = useState(false);
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -52,7 +66,7 @@ export default function HoverAvatarDropdown({
                 src={profileImageUrl}
                 alt='User Profile Image'
               />
-              <AvatarFallback>KA</AvatarFallback>
+              <AvatarFallback>{getInitials()}</AvatarFallback>
             </Avatar>
           </div>
         </DropdownMenuTrigger>

@@ -59,9 +59,8 @@ export default function TermsConditions() {
         <li>a direct vehicle seller,</li>
         <li>a marketplace connecting buyers and sellers,</li>
         <li>
-          a service provider offering inspection, listing, or logistics support,
+          a service provider offering listing.
         </li>
-        <li>or a combination of these.</li>
       </ul>
       <p>
         Unless explicitly stated otherwise, CarTradez does not guarantee that
@@ -93,7 +92,6 @@ export default function TermsConditions() {
         <li>vehicle condition,</li>
         <li>ownership,</li>
         <li>documentation,</li>
-        <li>mileage,</li>
         <li>features,</li>
         <li>accident history,</li>
         <li>pricing,</li>
@@ -112,9 +110,6 @@ export default function TermsConditions() {
       <p>Payments made through CarTradez may include:</p>
       <ul className="list-disc ml-5">
         <li>token/booking amount,</li>
-        <li>inspection fee,</li>
-        <li>service fee,</li>
-        <li>transport fee,</li>
         <li>full or partial purchase payments.</li>
       </ul>
       <p>Users agree that:</p>

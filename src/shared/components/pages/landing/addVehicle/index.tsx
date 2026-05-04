@@ -34,6 +34,9 @@ import { useState } from 'react';
 import { CheckboxList } from '@/shared/components/common/checkboxList';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import { showToast } from '@/shared/utils/toasts';
+
+const MAX_TOTAL_UPLOAD_SIZE_BYTES = 30 * 1024 * 1024;
 
 export default function AddVehicleForm() {
   const { t } = useTranslation();
@@ -61,8 +64,8 @@ export default function AddVehicleForm() {
         price: 0,
         registrationCity: '',
         registrationNumber: '',
-        registrationYear: 0,
-        numberOfOwners: 0,
+        registrationYear: '',
+        numberOfOwners: '',
         features: [],
         images: [],
         description: '',
@@ -82,6 +85,20 @@ export default function AddVehicleForm() {
     });
 
   const onSubmit: SubmitHandler<VehiclePayload> = (data) => {
+    const totalUploadBytes = data.images.reduce(
+      (sum, file) => sum + (file?.size || 0),
+      0
+    );
+
+    if (totalUploadBytes > MAX_TOTAL_UPLOAD_SIZE_BYTES) {
+      showToast({
+        type: 'error',
+        message:
+          'Total upload size is too large. Please compress images or upload fewer images (recommended total: up to 30 MB).',
+      });
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append('make', data.make);
@@ -102,8 +119,8 @@ export default function AddVehicleForm() {
 
     formData.append('registrationCity', data.registrationCity);
     formData.append('registrationNumber', data.registrationNumber);
-    formData.append('registrationYear', data.registrationYear.toString());
-    formData.append('numberOfOwners', data.numberOfOwners.toString());
+    formData.append('registrationYear', data.registrationYear);
+    formData.append('numberOfOwners', data.numberOfOwners);
 
     formData.append('description', data.description);
 
@@ -150,6 +167,10 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
 
   return (
    <div className="mb-10">
+      {/* Disclaimer Section */}
+      <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded text-yellow-900 text-sm">
+        <strong>Disclaimer:</strong> CarTradz only provides a platform for users to buy and sell cars. We are not involved in any transaction between the buyer and seller. Users must read our <a href="/guidelines" className="underline text-blue-700 hover:text-blue-900" target="_blank" rel="noopener noreferrer">Buyer & Seller Safety Guide</a> before proceeding.
+      </div>
       <div className="w-full">
         <img
           src="/images/home/add-vehicle-banner-image.png"
@@ -169,19 +190,20 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                 {/* Basic Car Information */}
                 <BoxContainer
                   heading='Basic Car Information'
-                  subHeading='(All fields marked with * are mandatory)'
+                  subHeading='(Only Make, Model, Year, and Images are required)'
                 >
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12' data-field-name='make'>
-  <CustomSelectInput
-    label='Make'
-    name='make'
-    placeholder='Select Makes'
-    control={control}
-    options={Object.values(VEHICLE_MAKES)}
-    isRequired={true}
-  />
-</div>
+                      <CustomSelectInput
+                        label='Make'
+                        name='make'
+                        placeholder='Select or type Make'
+                        control={control}
+                        options={Object.values(VEHICLE_MAKES)}
+                        isRequired={true}
+                        isCreatable={true}
+                      />
+                    </div>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomTextInput
                         label='Model'
@@ -194,66 +216,66 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
+                    <div className='md:col-span-6 col-span-12' data-field-name='year'>
+                      <CustomSelectInput
+                        label='Year'
+                        name='year'
+                        placeholder='Select or type Year'
+                        control={control}
+                        options={getYearsList({start: 1900, end: 2026})}
+                        isRequired={true}
+                        isCreatable={true}
+                      />
+                    </div>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomTextInput
-                        label='Variant'
+                        label='Variant (optional)'
                         name='variant'
                         placeholder='Enter Variant (if applicable)'
                         control={control}
+                        isRequired={false}
                       />
                     </div>
-                     <div className='md:col-span-6 col-span-12' data-field-name='year'>
-  <CustomSelectInput
-    label='Year'
-    name='year'
-    placeholder='Select Year'
-    control={control}
-    options={getYearsList({start: 1900, end: 2026})}
-    isRequired={true}
-  />
-</div>
                   </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                     <div className='md:col-span-6 col-span-12' data-field-name='condition'>
-  <CustomSelectInput
-    label='Condition'
-    name='condition'
-    placeholder='Select Condition'
-    control={control}
-    options={Object.values(VEHICLE_CONDITIONS)}
-    isRequired={true}
-  />
-</div>
-                      <div className='md:col-span-6 col-span-12' data-field-name='bodyType'>
-  <CustomSelectInput
-    label='Body Type'
-    name='bodyType'
-    placeholder='Select Body Type'
-    control={control}
-    options={Object.values(VEHICLE_BODY_TYPES)}
-    isRequired={true}
-  />
-</div>
-                    </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomTextInput
-                        label='Color'
+                        label='Condition (optional)'
+                        name='condition'
+                        placeholder='Enter Condition'
+                        control={control}
+                        isRequired={false}
+                      />
+                    </div>
+                    <div className='md:col-span-6 col-span-12'>
+                      <CustomTextInput
+                        label='Body Type (optional)'
+                        name='bodyType'
+                        placeholder='Enter Body Type'
+                        control={control}
+                        isRequired={false}
+                      />
+                    </div>
+                  </div>
+
+                  <div className='grid grid-cols-12 gap-2 mt-3'>
+                    <div className='md:col-span-6 col-span-12'>
+                      <CustomTextInput
+                        label='Color (optional)'
                         name='color'
                         placeholder='Enter Color'
                         control={control}
-                        isRequired={true}
+                        isRequired={false}
                       />
                     </div>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomNumberInput
-                        label='Mileage (km)'
+                        label='Mileage (km) (optional)'
                         name='mileage'
                         placeholder='Type Mileage (KM)'
                         control={control}
-                        isRequired={true}
+                        isRequired={false}
                       />
                     </div>
                   </div>
@@ -261,46 +283,45 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomNumberInput
-                        label='Engine Capacity (cc)'
+                        label='Engine Capacity (cc) (optional)'
                         name='engineSize'
                         placeholder='Type Engine Capacity'
                         control={control}
-                        isRequired={true}
+                        isRequired={false}
                       />
                     </div>
-                     <div className='md:col-span-6 col-span-12' data-field-name='transmission'>
-  <CustomSelectInput
-    label='Transmission'
-    name='transmission'
-    placeholder='Select Transmission'
-    control={control}
-    options={Object.values(VEHICLE_TRANSMISSION_TYPES)}
-    isRequired={true}
-  />
-</div>
+                    <div className='md:col-span-6 col-span-12'>
+                      <CustomTextInput
+                        label='Transmission (optional)'
+                        name='transmission'
+                        placeholder='Enter Transmission'
+                        control={control}
+                        isRequired={false}
+                      />
+                    </div>
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
-                     <div className='md:col-span-6 col-span-12' data-field-name='fuelType'>
-  <CustomSelectInput
-    label='Fuel Type'
-    name='fuelType'
-    placeholder='Select Fuel Type'
-    control={control}
-    options={Object.values(VEHICLE_FUEL_TYPES)}
-    isRequired={true}
-  />
-</div>
-                     <div className='md:col-span-6 col-span-12' data-field-name='driveType'>
-  <CustomSelectInput
-    label='Drive Type'
-    name='driveType'
-    placeholder='Select Drive Type'
-    control={control}
-    options={Object.values(VEHICLE_DRIVE)}
-    isRequired={true}
-  />
-</div>
+                    <div className='md:col-span-6 col-span-12'>
+                      <CustomTextInput
+                        label='Drive Type (optional)'
+                        name='driveType'
+                        placeholder='Enter Drive Type'
+                        control={control}
+                        isRequired={false}
+                      />
+                    </div>
+                    <div className='md:col-span-6 col-span-12' data-field-name='fuelType'>
+                      <CustomSelectInput
+                        label='Fuel Type (optional)'
+                        name='fuelType'
+                        placeholder='Select or type Fuel Type'
+                        control={control}
+                        options={Object.values(VEHICLE_FUEL_TYPES)}
+                        isRequired={false}
+                        isCreatable={true}
+                      />
+                    </div>
                   </div>
                 </BoxContainer>
 
@@ -311,10 +332,11 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
   <CustomSelectInput
     label='Currency'
     name='currency'
-    placeholder='Select Currency'
+    placeholder='Select or type Currency'
     control={control}
     options={Object.values(VEHICLE_CURRENCY_TYPES)}
     isRequired={true}
+    isCreatable={true}
   />
 </div>
                     <div className='md:col-span-6 col-span-12'>
@@ -334,42 +356,41 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomTextInput
-                        label='Registration City'
+                        label='Available City (optional)'
                         name='registrationCity'
-                        placeholder='Enter Registration City'
+                        placeholder='Enter Available City'
                         control={control}
-                        isRequired={true}
+                        isRequired={false}
                       />
                     </div>
-                     <div className='md:col-span-6 col-span-12' data-field-name='registrationYear'>
-  <CustomSelectInput
-    label='Registration Year'
-    name='registrationYear'
-    placeholder='Select Registration Year'
-    control={control}
-    options={getYearsList({start: 1900, end: 2026})}
-    isRequired={true}
-  />
-</div>
+                    <div className='md:col-span-6 col-span-12'>
+                      <CustomTextInput
+                        label='Registration Year (optional)'
+                        name='registrationYear'
+                        placeholder='Enter Registration Year'
+                        control={control}
+                        isRequired={false}
+                      />
+                    </div>
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12'>
                       <CustomTextInput
-                        label='Registration Number'
+                        label='Registration Number (optional)'
                         name='registrationNumber'
                         placeholder='Enter Registration Number'
                         control={control}
-                        isRequired={true}
+                        isRequired={false}
                       />
                     </div>
                     <div className='md:col-span-6 col-span-12'>
-                      <CustomNumberInput
-                        label='Number of Owners'
+                      <CustomTextInput
+                        label='Number of Owners (optional)'
                         name='numberOfOwners'
-                        placeholder='Enter Owners'
+                        placeholder='1,2 or Freshly imported'
                         control={control}
-                        isRequired={true}
+                        isRequired={false}
                       />
                     </div>
                   </div>
@@ -433,7 +454,7 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                 {/* Description */}
                 <BoxContainer heading='Description'>
                   <div className='mt-3'>
-                    <Label text={'Description'} isRequired={true} />
+                    <Label text={'Description'}/>
                   </div>
                   <div className='mt-1'>
                     <DescriptionBox
