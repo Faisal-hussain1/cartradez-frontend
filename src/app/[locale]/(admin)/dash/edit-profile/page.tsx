@@ -1,9 +1,11 @@
 "use client";
 
+
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
 import { useState } from "react";
 import { useMutations } from "@/shared/reactQuery/users/mutations";
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 
 export default function EditProfile() {
 
@@ -74,12 +76,18 @@ export default function EditProfile() {
         </h2>
 
         {/* Profile Image */}
-        <div className="flex items-center gap-5 mb-6">
 
-          <img
-            src={imagePreview}
-            className="w-20 h-20 rounded-full object-cover border"
-          />
+        <div className="flex items-center gap-5 mb-6">
+          <Avatar className="w-20 h-20 border">
+            <AvatarImage
+              src={imagePreview}
+              alt="Profile Image"
+              className="object-cover"
+            />
+            <AvatarFallback>
+              {user?.firstName?.[0]?.toUpperCase()}{user?.lastName?.[0]?.toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
 
           <label className="cursor-pointer bg-[#414279] text-white px-4 py-2 rounded-lg text-sm">
             Change Image
@@ -90,7 +98,6 @@ export default function EditProfile() {
               onChange={handleImageChange}
             />
           </label>
-
         </div>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">

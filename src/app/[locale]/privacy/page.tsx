@@ -111,7 +111,6 @@ export default function PrivacyPolicy() {
         <li>Display and manage vehicle listings</li>
         <li>Process inquiries, and transactions</li>
         <li>Verify seller or buyer identity where needed</li>
-        <li>Provide inspection, logistics, support, or related services</li>
         <li>Improve website performance and user experience</li>
         <li>
           Communicate with you regarding listings, purchases, updates, and
@@ -146,7 +145,6 @@ export default function PrivacyPolicy() {
         <li>Payment processors</li>
         <li>Hosting providers</li>
         <li>Inspection partners</li>
-        <li>Delivery/logistics partners</li>
         <li>Customer support tools</li>
         <li>Analytics providers</li>
         <li>Marketing service providers</li>
@@ -221,7 +219,7 @@ export default function PrivacyPolicy() {
         <li>Request a copy of your data</li>
       </ul>
       <p>
-        To exercise these rights, contact us at [Insert Email Address].
+        To exercise these rights, contact us at info@cartradez.com.
       </p>
 
       <h2 className="font-semibold text-lg mt-6">9. Third-Party Links</h2>

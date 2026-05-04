@@ -36,6 +36,22 @@ const isGenericRequestFailure = (message?: string): boolean => {
   );
 };
 
+const getFriendlyTokenMessage = (message?: string): string | null => {
+  if (!message) return null;
+  const normalized = message.toLowerCase();
+  const hasToken = normalized.includes('token') || normalized.includes('jwt');
+  const isInvalidOrExpired =
+    normalized.includes('invalid') ||
+    normalized.includes('expired') ||
+    normalized.includes('malformed');
+
+  if (hasToken && isInvalidOrExpired) {
+    return 'Session expired. Please login again.';
+  }
+
+  return null;
+};
+
 export const getErrorMessage = (
   error: unknown,
   fallback = DEFAULT_ERROR_MESSAGE
@@ -66,6 +82,11 @@ export const getErrorMessage = (
 
   if (isGenericRequestFailure(bestMessage) && statusMessage) {
     return statusMessage;
+  }
+
+  const friendlyTokenMessage = getFriendlyTokenMessage(bestMessage);
+  if (friendlyTokenMessage) {
+    return friendlyTokenMessage;
   }
 
   return bestMessage;

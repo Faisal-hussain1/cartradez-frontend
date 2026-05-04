@@ -2,7 +2,7 @@
 
 import {JSX} from 'react';
 import {vehicleDetailsLinkProps} from '@/shared/interfaces/vehicles';
-import {Heart, MapPin, Share2} from 'lucide-react';
+import {MapPin} from 'lucide-react';
 import VehicleDetailsSidebar from './vehicleDetailsSidebar';
 import VehicleImages from './vehicleImage';
 import OverviewCard from '@/shared/components/common/vehicleDetails/overviewCard';
@@ -30,16 +30,42 @@ export default function VehicleDetails({
   const {
     data: vehicleDetail,
     isPending,
-    error,
   } = useFetchVehicleById({
     params: {vehicleId},
   });
-  
+
+  const vehicle = vehicleDetail?.vehicle;
+  const naValue = (value: unknown): string => {
+    if (value === null || value === undefined) return 'N/A';
+    if (typeof value === 'string' && !value.trim()) return 'N/A';
+    return String(value);
+  };
+
+  const titleParts = [
+    vehicle?.make ? stringToTitleCase({str: vehicle.make}) : '',
+    vehicle?.model ? stringToTitleCase({str: vehicle.model}) : '',
+    vehicle?.year ? String(vehicle.year) : '',
+  ].filter(Boolean);
+
+  const locationParts = [
+    vehicle?.creatorId?.address,
+    vehicle?.creatorId?.city,
+    vehicle?.creatorId?.country,
+  ].filter((part) => typeof part === 'string' && part.trim());
+
+  const priceLabel =
+    typeof vehicle?.price === 'number'
+      ? `${vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicle.price.toLocaleString()}`
+      : 'N/A';
 
   if (isPending) return <GlobalLoader />;
 
   return (
     <Container className='bg-[#F3F4F6] py-6' key={vehicleId}>
+      {/* Disclaimer Section */}
+      <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded text-yellow-900 text-sm">
+        <strong>Disclaimer:</strong> CarTradz only provides a platform for users to buy and sell cars. We are not involved in any transaction between the buyer and seller. Users must read our <a href="/guidelines" className="underline text-blue-700 hover:text-blue-900" target="_blank" rel="noopener noreferrer">Buyer & Seller Safety Guide</a> before proceeding.
+      </div>
       <div className='flex flex-col gap-6'>
         <div className='grid grid-cols-12 gap-6'>
           {/* ================= Left Section ================= */}
@@ -60,8 +86,7 @@ export default function VehicleDetails({
               {/* Title + Icons */}
               <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-5'>
                 <h1 className='text-2xl md:text-3xl font-bold text-black leading-tight'>
-                  {/* Bugatti Chiron Super Sport 2022 */}
-                  {`${stringToTitleCase({str: vehicleDetail?.vehicle.make})} ${stringToTitleCase({str: vehicleDetail.vehicle.model})} ${vehicleDetail.vehicle.year}`}
+                  {titleParts.length > 0 ? titleParts.join(' ') : 'N/A'}
                 </h1>
                 {/* <div className='flex gap-4 mt-4 md:mt-0'>
                   <Share2 className='w-6 h-6 text-gray-400 hover:text-black cursor-pointer transition' />
@@ -69,47 +94,49 @@ export default function VehicleDetails({
                 </div> */}
               </div>
               <p className='text-primary font-bold text-2xl md:text-3xl mb-5'>
-                {`${vehicleDetail.vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicleDetail.vehicle.price.toLocaleString()}`}
+                {priceLabel}
               </p>
 
               {/* Location + Date */}
               <div className='flex items-center justify-between text-sm md:text-base text-gray-600 mb-6'>
                 <div className='flex items-center gap-2'>
                   <MapPin className='w-4 h-4 text-gray80' />{' '}
-                  <span className='truncate'>{vehicleDetail?.vehicle?.creatorId?.address}, {vehicleDetail?.vehicle?.creatorId?.city}, {vehicleDetail?.vehicle?.creatorId?.country}</span>
+                  <span className='truncate'>
+                    {locationParts.length > 0 ? locationParts.join(', ') : 'N/A'}
+                  </span>
                 </div>
                 <div className='whitespace-nowrap text-gray80'>
                   Published:{' '}
-                  {formatDate({
-                    date: vehicleDetail.vehicle.createdAt,
-                    format: 'LLL dd, yyyy',
-                  })}
+                  {vehicle?.createdAt
+                    ? formatDate({
+                        date: vehicle.createdAt,
+                        format: 'LLL dd, yyyy',
+                      })
+                    : 'N/A'}
                 </div>
               </div>
               {/* Vehicle Images */}
               <VehicleImages
-                images={vehicleDetail.vehicle.images}
+                images={vehicle?.images || []}
                 maxThumbnailsToShow={3}
               />
             </div>
 
             {/* ================= Overview ================= */}
             <OverviewCard
-              registrationYear={vehicleDetail.vehicle.year}
-              mileage={vehicleDetail.vehicle.mileage}
+              registrationYear={naValue(vehicle?.year)}
+              mileage={naValue(vehicle?.mileage)}
               fuelType={
                 VEHICLE_FUEL_TYPES[
-                  vehicleDetail.vehicle
-                    .fuelType as keyof typeof VEHICLE_FUEL_TYPES
-                ].label
+                  vehicle?.fuelType as keyof typeof VEHICLE_FUEL_TYPES
+                ]?.label || 'N/A'
               }
               transmission={
                 VEHICLE_TRANSMISSION_TYPES[
-                  vehicleDetail.vehicle
-                    .transmission as keyof typeof VEHICLE_TRANSMISSION_TYPES
-                ].label
+                  vehicle?.transmission as keyof typeof VEHICLE_TRANSMISSION_TYPES
+                ]?.label || 'N/A'
               }
-              features={vehicleDetail.vehicle.features || []}
+              features={vehicle?.features || []}
             />
 
             {/* ================= Key Info ================= */}
@@ -122,11 +149,11 @@ export default function VehicleDetails({
                 'Number of Owners',
               ]}
               leftValues={[
-                `${vehicleDetail.vehicle.make}`,
-                `${vehicleDetail.vehicle.bodyType}`,
-                `${vehicleDetail.vehicle.engineSize}`,
-                `${vehicleDetail.vehicle.color}`,
-                `${vehicleDetail.vehicle.numberOfOwners}`,
+                naValue(vehicle?.make),
+                naValue(vehicle?.bodyType),
+                naValue(vehicle?.engineSize),
+                naValue(vehicle?.color),
+                naValue(vehicle?.numberOfOwners),
               ]}
               rightLabels={[
                 'Model',
@@ -135,24 +162,24 @@ export default function VehicleDetails({
                 'Registration City',
               ]}
               rightValues={[
-                `${vehicleDetail.vehicle.model}`,
-                `${vehicleDetail.vehicle.condition}`,
-                `${vehicleDetail.vehicle.driveType}`,
-                `${vehicleDetail.vehicle.registrationCity}`,
+                naValue(vehicle?.model),
+                naValue(vehicle?.condition),
+                naValue(vehicle?.driveType),
+                naValue(vehicle?.registrationCity),
               ]}
             />
 
             {/* ================= Description ================= */}
             <DescriptionCard
               title='Description'
-              paragraphs={[`${vehicleDetail.vehicle.description}`]}
+              paragraphs={[naValue(vehicle?.description)]}
             />
           </div>
 
           {/* ================= Sidebar ================= */}
           <div className='col-span-12 lg:col-span-3'>
             <VehicleDetailsSidebar
-              sellerDetails={vehicleDetail.vehicle.creatorId}
+              sellerDetails={vehicle?.creatorId}
             />
           </div>
         </div>

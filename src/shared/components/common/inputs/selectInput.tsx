@@ -1,6 +1,7 @@
 import {useId} from 'react';
 import {Controller} from 'react-hook-form';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import ErrorMessage from './errorMessage';
 import {SelectInputProps} from '@/shared/interfaces/inputs';
 
@@ -10,15 +11,22 @@ function SelectInput({
   control,
   name,
   placeholder = 'Select a Type',
+  isCreatable = false,
+  isSearchable = true,
   ...rest
 }: SelectInputProps) {
   const id = useId();
+  const SelectComponent = isCreatable ? CreatableSelect : Select;
 
   return (
     <Controller
       control={control}
       name={name}
       render={({field: {value, onChange}, fieldState: {error}}) => {
+        const selectedOption =
+          options?.find((option) => option.value === value) ||
+          (value ? {value, label: String(value)} : null);
+
         return (
           <div className='flex flex-col relative'>
             <label className='font-medium text-gray-700 mb-[1px] inline-flex items-center gap-1'>
@@ -27,14 +35,16 @@ function SelectInput({
                 <span className='inline-flex sm:hidden text-red100'>*</span>
               )} */}
             </label>
-            <Select
+            <SelectComponent
               onChange={(selectedOption) => {
-                onChange(selectedOption?.value);
+                if (Array.isArray(selectedOption)) return;
+                onChange(selectedOption?.value ?? '');
               }}
               className={`react-select ${error && 'border-danger'}`}
               options={options}
               placeholder={placeholder}
-              value={options?.filter((option) => option.value === value)}
+              isSearchable={isSearchable}
+              value={selectedOption}
               instanceId={id}
               styles={{
                 control: (base, state) => ({

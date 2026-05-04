@@ -1,12 +1,5 @@
 import * as Yup from 'yup';
 import {TranslateFunction} from '@/shared/types/common';
-import {
-  VEHICLE_BODY_TYPES_VALUES,
-  VEHICLE_CURRENCY_TYPES_VALUES,
-  VEHICLE_DRIVE_VALUES,
-  VEHICLE_FUEL_TYPES_VALUES,
-  VEHICLE_TRANSMISSION_TYPES_VALUES,
-} from '../constants/vehicles';
 
 export const newVehicleSchema = (t: TranslateFunction) =>
   Yup.object({
@@ -18,59 +11,27 @@ export const newVehicleSchema = (t: TranslateFunction) =>
       .required(t('vehicleListingValidation.yearRequired'))
       .min(1900, t('vehicleListingValidation.yearMin'))
       .max(2026, t('vehicleListingValidation.yearMax')),
-    condition: Yup.string().required(
-      t('vehicleListingValidation.conditionRequired')
+    condition: Yup.string(),
+    bodyType: Yup.string(),
+    color: Yup.string(),
+    mileage: Yup.number(),
+    engineSize: Yup.number(),
+    transmission: Yup.string(),
+    fuelType: Yup.string(),
+    driveType: Yup.string(),
+    currency: Yup.string().required(
+      t('vehicleListingValidation.currencyRequired')
     ),
-    bodyType: Yup.string()
-      .required(t('Body type is required')),
-    color: Yup.string().required(t('vehicleListingValidation.colorRequired')),
-    mileage: Yup.number().required(
-      t('vehicleListingValidation.mileageRequired')
-    ),
-    engineSize: Yup.number().required(
-      t('vehicleListingValidation.engineSizeRequired')
-    ),
-    transmission: Yup.string()
-      .oneOf(
-        VEHICLE_TRANSMISSION_TYPES_VALUES,
-        t('vehicleListingValidation.transmissionInvalid')
-      )
-      .required(t('vehicleListingValidation.transmissionRequired')),
-    fuelType: Yup.string()
-      .oneOf(
-        VEHICLE_FUEL_TYPES_VALUES,
-        t('vehicleListingValidation.fuelTypeInvalid')
-      )
-      .required(t('vehicleListingValidation.fuelTypeRequired')),
-    driveType: Yup.string()
-      .required(t('Drive Type is required')),
-    currency: Yup.string()
-      .oneOf(
-        VEHICLE_CURRENCY_TYPES_VALUES,
-        t('vehicleListingValidation.currencyInvalid')
-      )
-      .required(t('vehicleListingValidation.currencyRequired')),
     price: Yup.number()
       .typeError(t('vehicleListingValidation.priceRequired'))
       .required(t('vehicleListingValidation.priceRequired'))
       .min(2000, t('vehicleListingValidation.priceMin')),
 
-    registrationCity: Yup.string().required(
-      t('vehicleListingValidation.registrationCityRequired')
-    ),
-    registrationNumber: Yup.string().required(
-      t('vehicleListingValidation.registrationNumberRequired')
-    ),
-    registrationYear: Yup.number()
-      .typeError(t('vehicleListingValidation.registrationYearRequired'))
-      .required(t('vehicleListingValidation.registrationYearRequired')),
-    numberOfOwners: Yup.number()
-      .typeError(t('vehicleListingValidation.numberOfOwnersRequired'))
-      .required(t('vehicleListingValidation.numberOfOwnersRequired'))
-      .min(1, t('vehicleListingValidation.numberOfOwnersMin')),
-    description: Yup.string().required(
-      t('vehicleListingValidation.descriptionRequired')
-    ),
+    registrationCity: Yup.string(),
+    registrationNumber: Yup.string(),
+    registrationYear: Yup.string(),
+    numberOfOwners: Yup.string(),
+    description: Yup.string(),
     features: Yup.array()
       .of(Yup.string().required()) // every item MUST be string
       .optional() // field itself is optional

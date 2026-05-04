@@ -17,8 +17,8 @@ export interface VehiclePayload {
   price: number;
   registrationCity: string;
   registrationNumber: string;
-  registrationYear: number;
-  numberOfOwners: number;
+  registrationYear: string;
+  numberOfOwners: string;
   features: string[];
   images: File[];
   description: string;
