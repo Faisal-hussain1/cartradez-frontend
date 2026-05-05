@@ -16,7 +16,7 @@ import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {getRedirectUrl} from '@/shared/utils/auth';
 import {AUTH_ROUTES} from '@/shared/constants/PATHS';
 
-const {POST} = HTTP_METHODS;
+const {POST, PATCH, DELETE} = HTTP_METHODS;
 
 const getVehicleUploadErrorMessage = (error: any): string => {
   const status = error?.response?.status;
@@ -78,5 +78,83 @@ export const useMutations = () => {
             }),
         },
       }),
+      useUpdateVehicleMutation: ({
+  vehicleId,
+  callBackFuncs,
+}: {
+  vehicleId: string;
+  callBackFuncs?: MutationCallbacks;
+}) =>
+  useMutationHandler({
+    endpoint: API_ENDPOINTS.VEHICLES.UPDATE_VEHICLE({id: vehicleId}),
+    method: PATCH,
+    callBackFuncs: {
+      ...callBackFuncs,
+
+      onSuccessAlways: async (response: any) => {
+        await queryClient.invalidateQueries({
+          queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
+        });
+
+        showToast({
+          type: 'success',
+          message: response?.message || 'Vehicle updated successfully',
+        });
+
+        callBackFuncs?.onSuccessAlways?.(response);
+      },
+
+      onErrorAlways: (error: any) => {
+        showToast({
+          type: 'error',
+          message:
+            error?.response?.data?.message ||
+            error?.message ||
+            'Failed to update vehicle',
+        });
+
+        callBackFuncs?.onErrorAlways?.(error);
+      },
+    },
+  }),
+    useDeleteVehicleMutation: ({
+  vehicleId,
+  callBackFuncs,
+}: {
+  vehicleId: string;
+  callBackFuncs?: MutationCallbacks;
+}) =>
+  useMutationHandler({
+    endpoint: API_ENDPOINTS.VEHICLES.DELETE_VEHICLE({id: vehicleId}),
+    method: DELETE,
+    callBackFuncs: {
+      ...callBackFuncs,
+
+      onSuccessAlways: async (response: any) => {
+        await queryClient.invalidateQueries({
+          queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
+        });
+
+        showToast({
+          type: 'success',
+          message: response?.message || 'Vehicle deleted successfully',
+        });
+
+        await callBackFuncs?.onSuccessAlways?.(response);
+      },
+
+      onErrorAlways: (error: any) => {
+        showToast({
+          type: 'error',
+          message:
+            error?.response?.data?.message ||
+            error?.message ||
+            'Failed to delete vehicle',
+        });
+
+        callBackFuncs?.onErrorAlways?.(error);
+      },
+    },
+  }),
   };
 };

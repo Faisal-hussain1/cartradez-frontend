@@ -59,6 +59,7 @@ export const USER_ROUTES = {
   vehicles: path(VEHICLE_ROOT, '/'),
   selectRole: path(ROOT_ROUTE, '/selectRole'),
   addVehicle: path(VEHICLE_ROOT, '/add'),
+  editListing: (vehicleId: string) => `/dashboard/listings/${vehicleId}/edit`,
   vehicleDetails: (vehicleId: string) =>
     path(VEHICLE_ROOT, `/detail/${vehicleId}`),
 };

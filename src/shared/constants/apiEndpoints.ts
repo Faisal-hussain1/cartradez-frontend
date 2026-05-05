@@ -23,6 +23,13 @@ export const API_ENDPOINTS = {
   VEHICLES: {
     GET_VEHICLES_LIST: '/vehicles',
     GET_CARTRADEZ_VEHICLES_LIST: '/vehicles/cartradez',
+    GET_VEHICLES_BY_USER_ID: ({id}: {id: string}) => `/vehicles/user/${id}`,
+ 
+  // PATCH /vehicles/:id
+  UPDATE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
+ 
+  // DELETE /vehicles/:id
+  DELETE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
     ADD_VEHICLE: '/vehicles/add',
     GET_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
   },

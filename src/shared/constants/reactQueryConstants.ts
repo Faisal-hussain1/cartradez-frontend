@@ -24,25 +24,25 @@ export const USERS = {
       buildDynamicURL(API_ENDPOINTS.USERS.GET_USERS_LIST, params),
     activeServerSidePagination: true,
   },
-   fetchUserById: {
-    queryKey: 'getUserById', // 👈 keep string
-   endpoint: (userId: string) => `/users/${userId}`
+  fetchUserById: {
+    queryKey: 'getUserById',
+    endpoint: (userId: string) => `/users/${userId}`,
   },
 };
 
 export const CHATS = {
   fetchMessagesByUser: {
-    queryKey: ["getMessagesByUser"],
-    endpoint: (userId: string) => `/chat/${userId}`, // 👈 matches your backend
+    queryKey: ['getMessagesByUser'],
+    endpoint: (userId: string) => `/chat/${userId}`,
   },
   fetchInbox: {
-  queryKey: (userId:string)=>["getInbox",userId],
-  endpoint: "/chat/inbox",
-},
-fetchUnRead:{
-  queryKey:["getUnreadMessages"],
-  endpoint:(userId:string)=>`/chat/unread/${userId}`
-}
+    queryKey: (userId: string) => ['getInbox', userId],
+    endpoint: '/chat/inbox',
+  },
+  fetchUnRead: {
+    queryKey: ['getUnreadMessages'],
+    endpoint: (userId: string) => `/chat/unread/${userId}`,
+  },
 };
 
 export const VEHICLES = {
@@ -51,22 +51,45 @@ export const VEHICLES = {
     endpoint: (params: any) =>
       buildDynamicURL(API_ENDPOINTS.VEHICLES.GET_VEHICLES_LIST, params),
   },
+
   fetchAllCartradezVehiclesList: {
     queryKey: 'getAllCartradezVehicles',
     endpoint: (params: any) =>
       buildDynamicURL(
         API_ENDPOINTS.VEHICLES.GET_CARTRADEZ_VEHICLES_LIST,
-        params
+        params,
       ),
   },
+
   fetchVehicleById: {
-  queryKey: (vehicleId: string) => ['getVehicleById', vehicleId], // ✅ dynamic key
-  endpoint: (params: any) =>
-    buildDynamicURL(
-      API_ENDPOINTS.VEHICLES.GET_VEHICLE({
-        id: params.vehicleId,
-      }),
-      params
-    ),
-},
+    queryKey: (vehicleId: string) => ['getVehicleById', vehicleId],
+    endpoint: (params: any) =>
+      buildDynamicURL(
+        API_ENDPOINTS.VEHICLES.GET_VEHICLE({id: params.vehicleId}),
+        params,
+      ),
+  },
+
+  // Fetches all vehicles belonging to a specific user — hits GET /vehicles/user/:userId
+  fetchVehiclesByUserId: {
+    queryKey: ['getVehiclesByUserId'],
+    endpoint: (params: {userId: string; page?: number; limit?: number}) =>
+      buildDynamicURL(
+        API_ENDPOINTS.VEHICLES.GET_VEHICLES_BY_USER_ID({id: params.userId}),
+        // strip userId from query-string params — it lives in the path already
+        {pageNo: params?.page, pageLimit: params?.limit},
+      ),
+  },
+
+  // PATCH /vehicles/:vehicleId
+  updateVehicle: {
+    endpoint: (params: {vehicleId: string}) =>
+      API_ENDPOINTS.VEHICLES.UPDATE_VEHICLE({id: params.vehicleId}),
+  },
+
+  // DELETE /vehicles/:vehicleId
+  deleteVehicle: {
+    endpoint: (params: {vehicleId: string}) =>
+      API_ENDPOINTS.VEHICLES.DELETE_VEHICLE({id: params.vehicleId}),
+  },
 };
