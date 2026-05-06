@@ -36,7 +36,11 @@ interface Vehicle {
   engineCapacity?: number;
   registrationCity?: string;
   registrationYear?: number;
+  registrationNumber?: string;
+  numberOfOwners?: string | number;
   condition?: string;
+  driveType?: string;
+  variant?: string;
   description?: string;
   features?: string[];
 }
@@ -154,18 +158,29 @@ function PosterDesign({
   const image = getVehicleImage(vehicle, useProxyImage);
 
   const details = [
-    {label: 'Year', value: vehicle.year || 'N/A'},
-    {
-      label: 'Mileage',
-      value: vehicle.mileage
-        ? `${vehicle.mileage.toLocaleString()} KM`
-        : 'N/A',
-    },
-    {label: 'Fuel', value: vehicle.fuelType || 'N/A'},
-    {label: 'Transmission', value: vehicle.transmission || 'N/A'},
-    {label: 'Body Type', value: vehicle.bodyType || 'N/A'},
-    {label: 'Color', value: vehicle.color || 'N/A'},
-  ];
+  {label: 'Year', value: vehicle.year || 'N/A'},
+  {label: 'Variant', value: vehicle.variant || 'N/A'},
+  {
+    label: 'Mileage',
+    value: vehicle.mileage
+      ? `${vehicle.mileage.toLocaleString()} KM`
+      : 'N/A',
+  },
+  {label: 'Fuel', value: vehicle.fuelType || 'N/A'},
+  {label: 'Transmission', value: vehicle.transmission || 'N/A'},
+  {label: 'Body Type', value: vehicle.bodyType || 'N/A'},
+  {label: 'Color', value: vehicle.color || 'N/A'},
+  {label: 'Condition', value: vehicle.condition || 'N/A'},
+  {
+    label: 'Engine',
+    value: vehicle.engineCapacity
+      ? `${vehicle.engineCapacity} cc`
+      : 'N/A',
+  },
+  {label: 'Drive Type', value: vehicle.driveType || 'N/A'},
+  {label: 'Reg. City', value: vehicle.registrationCity || 'N/A'},
+  {label: 'Owners', value: vehicle.numberOfOwners || 'N/A'},
+];
 
   return (
     <div
@@ -186,7 +201,7 @@ function PosterDesign({
       </div>
 
       {/* Vehicle Image */}
-      <div className='absolute left-0 top-[120px] h-[610px] w-full bg-neutral-200'>
+      <div className='absolute left-0 top-[120px] h-[500px] w-full bg-neutral-200'>
         <img
           src={image}
           alt={title}
@@ -209,35 +224,35 @@ function PosterDesign({
       </div>
 
       {/* Details */}
-      <div className='absolute left-0 top-[730px] w-full px-14'>
-        <div className='grid grid-cols-2 gap-5'>
-          {details.map((item) => (
-            <div
-              key={item.label}
-              className='rounded-3xl border border-black/10 bg-white p-7 shadow-sm'
-            >
-              <p className='text-2xl font-semibold text-black/45'>
-                {item.label}
-              </p>
-              <p className='mt-3 text-4xl font-black capitalize text-black'>
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div className='absolute left-0 top-[640px] w-full px-12'>
+       <div className='grid grid-cols-3 gap-4'>
+  {details.map((item) => (
+    <div
+      key={item.label}
+      className='rounded-2xl border border-black/10 bg-white px-5 py-4 shadow-sm'
+    >
+      <p className='text-xl font-semibold text-black/45'>
+        {item.label}
+      </p>
+      <p className='mt-2 truncate text-3xl font-black capitalize text-black'>
+        {item.value}
+      </p>
+    </div>
+  ))}
+</div>
 
-        <div className='mt-8 rounded-[32px] bg-black px-10 py-8 text-center text-white'>
-          <h3 className='text-4xl font-black'>Interested in this vehicle?</h3>
-          <p className='mt-3 text-2xl font-medium text-white/70'>
-            Visit CarTradez and contact the seller directly.
-          </p>
-        </div>
+        <div className='mt-6 rounded-[28px] bg-black px-8 py-6 text-center text-white'>
+  <h3 className='text-3xl font-black'>Interested in this vehicle?</h3>
+  <p className='mt-2 text-xl font-medium text-white/70'>
+    Visit CarTradez and contact the seller directly.
+  </p>
+</div>
       </div>
 
       {/* Footer */}
       <div className='absolute bottom-0 left-0 w-full bg-white px-14 py-9 text-center'>
         <p className='text-2xl font-bold text-black'>www.cartradez.com</p>
-        <p className='mt-3 text-xl font-medium leading-snug text-black/55'>
+        <p className='mt-3 text-xl font-medium leading-snug text-black/60'>
           We are not selling vehicles. We only provide online ad/listing
           packages.
         </p>
@@ -361,14 +376,14 @@ export default function VehiclePngModal({
           >
             Cancel
           </button>
-          {/* <button
+          <button
             onClick={handleDownload}
             disabled={isDownloading || isLoading}
             className='flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50'
           >
             <Download size={16} />
             {isDownloading ? 'Generating...' : 'Download PNG'}
-          </button> */}
+          </button>
         </div>
       </div>
     </div>
