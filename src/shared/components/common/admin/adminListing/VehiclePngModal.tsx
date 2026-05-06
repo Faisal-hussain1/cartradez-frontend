@@ -52,7 +52,8 @@ function formatPrice(currency?: string, price?: number) {
 // the entire download — we just let it render with whatever the browser has,
 // which is either the broken-image placeholder or the fallback src already
 // swapped in by the <img onError> handler below.
-async function waitForImages(element: HTMLElement) {
+// FIX 3: Added timeout per image (3s) to prevent hanging on slow/failed loads
+async function waitForImages(element: HTMLElement, timeoutMs = 3000) {
   const images = Array.from(element.querySelectorAll('img'));
 
   await Promise.all(
@@ -61,23 +62,37 @@ async function waitForImages(element: HTMLElement) {
       if (img.complete && img.naturalWidth > 0) return Promise.resolve();
 
       return new Promise<void>((resolve) => {
-        img.onload = () => resolve();
+        const timeoutId = setTimeout(() => {
+          resolve(); // Timeout - just resolve anyway to prevent hanging
+        }, timeoutMs);
+
+        img.onload = () => {
+          clearTimeout(timeoutId);
+          resolve();
+        };
         // FIX: was `reject(new Error(...))` — that threw and killed the download
         // for a missing fallback image. Now we resolve so toPng still runs.
-        img.onerror = () => resolve();
+        img.onerror = () => {
+          clearTimeout(timeoutId);
+          resolve();
+        };
       });
     }),
   );
 }
 
-// FIX 2: pre-load the fallback image so the browser has it in cache before
-// toPng tries to embed it. html-to-image inlines images as base64 and needs
-// the image to actually be loadable at capture time.
 function preloadFallback(src: string): Promise<void> {
   return new Promise((resolve) => {
+    const timeoutId = setTimeout(() => resolve(), 2000); // 2s timeout
     const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = () => resolve(); // still resolve — best-effort
+    img.onload = () => {
+      clearTimeout(timeoutId);
+      resolve();
+    };
+    img.onerror = () => {
+      clearTimeout(timeoutId);
+      resolve();
+    }; // still resolve — best-effort
     img.src = src;
   });
 }
@@ -101,9 +116,12 @@ function makeImageUrl(url?: string) {
 }
 
 function getProxyImageUrl(url: string) {
+  // Only use proxy for AWS S3 URLs that might have CORS issues
   if (url.startsWith('https://cartradez.s3.eu-north-1.amazonaws.com')) {
     return `/api/image-proxy?url=${encodeURIComponent(url)}`;
   }
+  // For all other URLs (including public URLs), use them directly
+  // This avoids adding latency for images that don't need proxying
   return url;
 }
 
@@ -302,7 +320,7 @@ export default function VehiclePngModal({
               Vehicle PNG Poster
             </h3>
             <p className='text-sm text-muted-foreground'>
-              Preview advertising post and download high-quality PNG.
+              Preview advertising post.
             </p>
           </div>
           <button
@@ -343,14 +361,14 @@ export default function VehiclePngModal({
           >
             Cancel
           </button>
-          <button
+          {/* <button
             onClick={handleDownload}
             disabled={isDownloading || isLoading}
             className='flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50'
           >
             <Download size={16} />
             {isDownloading ? 'Generating...' : 'Download PNG'}
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
