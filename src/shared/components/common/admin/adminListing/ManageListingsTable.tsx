@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import {Eye, Trash2, Pencil, X, AlertTriangle} from 'lucide-react';
+import {Eye, Trash2, Pencil, X, AlertTriangle,
+  Image as ImageIcon,} from 'lucide-react';
 import {
   useFetchAllVehicleList,
   useDeleteVehicle,
@@ -16,6 +17,7 @@ import {useRouter} from 'next/navigation';
 import {USER_ROUTES} from '@/shared/constants/PATHS';
 import { useMutations } from '@/shared/reactQuery/vehicles/mutations';
 import { vehiclesQueries } from '@/shared/reactQuery';
+import VehiclePngModal from './VehiclePngModal';
 import { number } from 'yup';
 import { middleware } from '@/middleware';
 import { features } from 'process';
@@ -512,12 +514,14 @@ function VehicleRow({
   index,
   onView,
   onEdit,
+  onPng,
   onDeleteRequest,
 }: {
   item: Vehicle;
   index: number;
   onView: (id: string) => void;
   onEdit: (id: string) => void;
+  onPng: (vehicle: Vehicle) => void;
   onDeleteRequest: (vehicle: Vehicle) => void;
 }) {
   return (
@@ -566,26 +570,36 @@ function VehicleRow({
           : '—'}
       </span>
 
-      <div className='flex justify-end gap-2'>
-        <ActionButton
-          type='view'
-          icon={<Eye size={14} />}
-          label='View listing'
-          onClick={() => onView(item._id)}
-        />
-        <ActionButton
-          type='edit'
-          icon={<Pencil size={14} />}
-          label='Edit listing'
-          onClick={() => onEdit(item._id)}
-        />
-        <ActionButton
-          type='delete'
-          icon={<Trash2 size={14} />}
-          label='Delete listing'
-          onClick={() => onDeleteRequest(item)}
-        />
-      </div>
+     <div className='flex justify-end gap-2'>
+  <ActionButton
+    type='view'
+    icon={<Eye size={14} />}
+    label='View listing'
+    onClick={() => onView(item._id)}
+  />
+
+  <ActionButton
+    type='edit'
+    icon={<Pencil size={14} />}
+    label='Edit listing'
+    onClick={() => onEdit(item._id)}
+  />
+
+  <ActionButton
+    type='png'
+    icon={<ImageIcon size={14} />}
+    label='See PNG'
+    onClick={() => onPng(item)}
+    showText
+  />
+
+  <ActionButton
+    type='delete'
+    icon={<Trash2 size={14} />}
+    label='Delete listing'
+    onClick={() => onDeleteRequest(item)}
+  />
+</div>
     </div>
   );
 }
@@ -633,6 +647,7 @@ export default function ManageListingsTable() {
   const user = useSelector(getCurrentUser);
  const [vehicleToDelete, setVehicleToDelete] = useState<Vehicle | null>(null);
 const [vehicleToEdit, setVehicleToEdit] = useState<Vehicle | null>(null);
+const [vehicleToPng, setVehicleToPng] = useState<Vehicle | null>(null);
 
   const {data, isLoading,refetch} = useFetchAllVehicleList();
 
@@ -695,6 +710,12 @@ const [vehicleToEdit, setVehicleToEdit] = useState<Vehicle | null>(null);
     onClose={() => setVehicleToEdit(null)}
   />
 )}
+{vehicleToPng && (
+  <VehiclePngModal
+    vehicle={vehicleToPng}
+    onClose={() => setVehicleToPng(null)}
+  />
+)}
 
       <section className='bg-card border border-border rounded-xl overflow-hidden'>
         {/* Header */}
@@ -716,14 +737,15 @@ const [vehicleToEdit, setVehicleToEdit] = useState<Vehicle | null>(null);
         </div>
 
         {listings.map((item, index) => (
-          <VehicleRow
-            key={item._id}
-            item={item}
-            index={index}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDeleteRequest={setVehicleToDelete}
-          />
+         <VehicleRow
+  key={item._id}
+  item={item}
+  index={index}
+  onView={handleView}
+  onEdit={handleEdit}
+  onPng={setVehicleToPng}
+  onDeleteRequest={setVehicleToDelete}
+/>
         ))}
       </section>
     </>
@@ -749,6 +771,11 @@ const ACTION_STYLES = {
     border-[color:var(--red100)]
     hover:bg-[color:var(--error-light)]
   `,
+  png: `
+    text-[color:var(--green100)]
+    border-[color:var(--green100)]
+    hover:bg-[color:var(--green10)]
+  `,
 } as const;
 
 function ActionButton({
@@ -757,12 +784,14 @@ function ActionButton({
   label,
   onClick,
   disabled,
+  showText = false,
 }: {
   icon: React.ReactNode;
   type: keyof typeof ACTION_STYLES;
   label: string;
   onClick?: () => void;
   disabled?: boolean;
+  showText?: boolean;
 }) {
   return (
     <button
@@ -771,7 +800,8 @@ function ActionButton({
       onClick={onClick}
       disabled={disabled}
       className={`
-        h-8 w-8
+        h-8
+        ${showText ? 'w-auto px-2 gap-1.5' : 'w-8'}
         flex items-center justify-center
         rounded-md
         border
@@ -781,6 +811,11 @@ function ActionButton({
       `}
     >
       {icon}
+      {showText && (
+        <span className='text-[11px] font-semibold leading-none'>
+          {label}
+        </span>
+      )}
     </button>
   );
 }
