@@ -52,7 +52,7 @@ function EditVehicleModal({
 
 
   const {
-    data
+    data,refetch: refetchVehicleDetail
   } = useFetchVehicleById({
     params: {vehicleId:vehicle._id},
   });
@@ -89,6 +89,7 @@ function EditVehicleModal({
     callBackFuncs: {
        onSuccessAlways: async () => {
       await refetch?.();
+      await refetchVehicleDetail?.();
       onClose();
     },
     },
