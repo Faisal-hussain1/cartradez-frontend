@@ -5,11 +5,9 @@ import {Eye, Trash2, Pencil, X, AlertTriangle,
   Image as ImageIcon,} from 'lucide-react';
 import {
   useFetchAllVehicleList,
-  useDeleteVehicle,
-  useFetchVehicleById,
 } from '@/shared/reactQuery/vehicles/queries';
 import GlobalLoader from '../../loaders/GlobalLoader';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {formatDate} from 'date-fns';
 import {useSelector} from 'react-redux';
 import {getCurrentUser} from '@/shared/redux/slices/users';
@@ -18,10 +16,8 @@ import {USER_ROUTES} from '@/shared/constants/PATHS';
 import { useMutations } from '@/shared/reactQuery/vehicles/mutations';
 import { vehiclesQueries } from '@/shared/reactQuery';
 import VehiclePngModal from './VehiclePngModal';
-import { number } from 'yup';
-import { middleware } from '@/middleware';
-import { features } from 'process';
 import { VEHICLE_FUEL_TYPES, VEHICLE_MAKES } from '@/shared/constants/vehicles';
+import {showToast} from '@/shared/utils/toasts';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -36,6 +32,7 @@ interface Vehicle {
   currency: string;
   listingType: string | null;
   coverImage: {key: string; url: string};
+  images?: Array<{key: string; url: string}>;
   creatorId: string;
   createdAt?: string;
   title?: string;
@@ -59,30 +56,62 @@ function EditVehicleModal({
     params: {vehicleId:vehicle._id},
   });
   const vehicleDetail = data?.vehicle;
+  const [replacementFilesByKey, setReplacementFilesByKey] = useState<Record<string, File>>({});
+  const [replacementPreviewByKey, setReplacementPreviewByKey] = useState<Record<string, string>>({});
+  const [removedImageKeys, setRemovedImageKeys] = useState<string[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
   
   const [form, setForm] = useState({
-    make: vehicleDetail?.make || '',
-    model: vehicleDetail?.model || '',
-    year: vehicleDetail?.year || '',
-    variant: vehicleDetail?.variant || '',
-    registrationCity: vehicleDetail?.registrationCity || '',
-    registrationYear: vehicleDetail?.registrationYear || '',
-    registrationNumber: vehicleDetail?.registrationNumber || '',
-    numberOfOwners: vehicleDetail?.numberOfOwners || '',
-    condition: vehicleDetail?.condition || '',
-    mileage: vehicleDetail?.mileage || 0,
-    features: vehicleDetail?.features || [],
-    description: vehicleDetail?.description || '',
-    bodyType: vehicleDetail?.bodyType || '',
-    fuelType: vehicleDetail?.fuelType || '',
-    transmission: vehicleDetail?.transmission || '',
-    color: vehicleDetail?.color || '',
-    engineSize: vehicleDetail?.engineSize || 0,
-    driveType: vehicleDetail?.driveType || '',
-    price: vehicleDetail?.price || '',
-    currency: vehicleDetail?.currency || 'ZMW',
-    listingType: vehicleDetail?.listingType || '',
+    make: '',
+    model: '',
+    year: '',
+    variant: '',
+    registrationCity: '',
+    registrationYear: '',
+    registrationNumber: '',
+    numberOfOwners: '',
+    condition: '',
+    mileage: 0,
+    features: [] as string[],
+    description: '',
+    bodyType: '',
+    fuelType: '',
+    transmission: '',
+    color: '',
+    engineSize: 0,
+    driveType: '',
+    price: '',
+    currency: 'ZMW',
+    listingType: '',
   });
+
+  useEffect(() => {
+    if (!vehicleDetail) return;
+    setForm({
+      make: vehicleDetail?.make || '',
+      model: vehicleDetail?.model || '',
+      year: vehicleDetail?.year || '',
+      variant: vehicleDetail?.variant || '',
+      registrationCity: vehicleDetail?.registrationCity || '',
+      registrationYear: vehicleDetail?.registrationYear || '',
+      registrationNumber: vehicleDetail?.registrationNumber || '',
+      numberOfOwners: vehicleDetail?.numberOfOwners || '',
+      condition: vehicleDetail?.condition || '',
+      mileage: vehicleDetail?.mileage || 0,
+      features: vehicleDetail?.features || [],
+      description: vehicleDetail?.description || '',
+      bodyType: vehicleDetail?.bodyType || '',
+      fuelType: vehicleDetail?.fuelType || '',
+      transmission: vehicleDetail?.transmission || '',
+      color: vehicleDetail?.color || '',
+      engineSize: vehicleDetail?.engineSize || 0,
+      driveType: vehicleDetail?.driveType || '',
+      price: vehicleDetail?.price || '',
+      currency: vehicleDetail?.currency || 'ZMW',
+      listingType: vehicleDetail?.listingType || '',
+    });
+  }, [vehicleDetail]);
 
   const {useUpdateVehicleMutation} = useMutations();
 
@@ -102,16 +131,86 @@ function EditVehicleModal({
   ) => {
     const {name, value} = e.target;
 
+    if (name === 'features') {
+      setForm((prev) => ({
+        ...prev,
+        features: value
+          .split(',')
+          .map((feature) => feature.trim())
+          .filter(Boolean),
+      }));
+      return;
+    }
+
     setForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  const handleSingleImageReplace = (
+    imageKey: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setReplacementFilesByKey((prev) => ({
+      ...prev,
+      [imageKey]: file,
+    }));
+    setReplacementPreviewByKey((prev) => ({
+      ...prev,
+      [imageKey]: URL.createObjectURL(file),
+    }));
+  };
+
+  const handleRemoveExistingImage = (imageKey: string) => {
+    setRemovedImageKeys((prev) => (prev.includes(imageKey) ? prev : [...prev, imageKey]));
+    setReplacementFilesByKey((prev) => {
+      const next = {...prev};
+      delete next[imageKey];
+      return next;
+    });
+    setReplacementPreviewByKey((prev) => {
+      const next = {...prev};
+      delete next[imageKey];
+      return next;
+    });
+  };
+
+  const handleAddNewImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const currentCount = (vehicleDetail?.images || []).length - removedImageKeys.length + newImages.length;
+    if (currentCount + files.length > 9) {
+      showToast({type: 'error', message: 'Total images cannot exceed 9.'});
+      return;
+    }
+
+    setNewImages((prev) => [...prev, ...files]);
+    setNewImagePreviews((prev) => [...prev, ...files.map((file) => URL.createObjectURL(file))]);
+  };
+
+  const handleRemoveNewImage = (index: number) => {
+    setNewImages((prev) => prev.filter((_, idx) => idx !== index));
+    setNewImagePreviews((prev) => prev.filter((_, idx) => idx !== index));
+  };
+
  const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
+  const finalCount =
+    (vehicleDetail?.images || []).length - removedImageKeys.length + newImages.length;
+  if (finalCount > 9) {
+    showToast({type: 'error', message: 'Total images cannot exceed 9.'});
+    return;
+  }
+  if (finalCount < 1) {
+    showToast({type: 'error', message: 'At least one vehicle image is required.'});
+    return;
+  }
 
-  const payload = {
+  const payload = new FormData();
+  const textPayload = {
     make: form.make,
     model: form.model,
     year: Number(form.year),
@@ -120,16 +219,38 @@ function EditVehicleModal({
     listingType: form.listingType,
     fuelType: form.fuelType,
     transmission: form.transmission,
+    bodyType: form.bodyType,
+    condition: form.condition,
+    mileage: Number(form.mileage),
     color: form.color,
     engineSize: Number(form.engineSize),
     driveType: form.driveType,
     variant: form.variant,
+    registrationCity: form.registrationCity,
     registrationYear: form.registrationYear,
     registrationNumber: form.registrationNumber,
     numberOfOwners: form.numberOfOwners,
     features: form.features,
     description: form.description,
   };
+
+  Object.entries(textPayload).forEach(([key, value]) => {
+    if (key === 'features') return;
+    if (value !== undefined && value !== null) {
+      payload.append(key, String(value));
+    }
+  });
+  form.features.forEach((feature) => payload.append('features[]', feature));
+  Object.entries(replacementFilesByKey).forEach(([imageKey, file]) => {
+    payload.append('replaceImageKeys[]', imageKey);
+    payload.append('files', file);
+  });
+  removedImageKeys.forEach((imageKey) => {
+    payload.append('removedImageKeys[]', imageKey);
+  });
+  newImages.forEach((file) => {
+    payload.append('files', file);
+  });
 
   mutate({
     payload,
@@ -159,6 +280,73 @@ function EditVehicleModal({
         </div>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
+          <div>
+            <label className='text-sm font-medium'>Vehicle Images ({(vehicleDetail?.images || []).length - removedImageKeys.length + newImages.length}/9)</label>
+            <div className='mt-3 grid grid-cols-2 md:grid-cols-3 gap-3'>
+              {(vehicleDetail?.images || []).map((image) => {
+                if (removedImageKeys.includes(image.key)) return null;
+                const preview = replacementPreviewByKey[image.key] || image.url;
+                return (
+                  <div key={image.key} className='rounded-lg border border-border p-2 space-y-2 relative'>
+                    <button
+                      type='button'
+                      onClick={() => handleRemoveExistingImage(image.key)}
+                      className='absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs'
+                    >
+                      <X size={12} />
+                    </button>
+                    <Image
+                      src={preview}
+                      alt='Vehicle image'
+                      width={220}
+                      height={150}
+                      className='w-full h-28 rounded-md object-cover'
+                    />
+                    <label className='block text-center text-xs px-2 py-1 rounded border border-border cursor-pointer hover:bg-muted'>
+                      Replace Image
+                      <input
+                        type='file'
+                        accept='image/*'
+                        hidden
+                        onChange={(e) => handleSingleImageReplace(image.key, e)}
+                      />
+                    </label>
+                  </div>
+                );
+              })}
+              {newImagePreviews.map((preview, idx) => (
+                <div key={`${preview}-${idx}`} className='rounded-lg border border-border p-2 space-y-2 relative'>
+                  <button
+                    type='button'
+                    onClick={() => handleRemoveNewImage(idx)}
+                    className='absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs'
+                  >
+                    <X size={12} />
+                  </button>
+                  <Image
+                    src={preview}
+                    alt='New vehicle image'
+                    width={220}
+                    height={150}
+                    className='w-full h-28 rounded-md object-cover'
+                  />
+                  <p className='text-xs text-muted-foreground text-center'>New image</p>
+                </div>
+              ))}
+            </div>
+            <div className='mt-3'>
+              <label className='inline-block text-center text-xs px-3 py-2 rounded border border-border cursor-pointer hover:bg-muted'>
+                Add New Images
+                <input
+                  type='file'
+                  accept='image/*'
+                  hidden
+                  multiple
+                  onChange={handleAddNewImages}
+                />
+              </label>
+            </div>
+          </div>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
            <div>
   <label className='text-sm font-medium'>Make</label>

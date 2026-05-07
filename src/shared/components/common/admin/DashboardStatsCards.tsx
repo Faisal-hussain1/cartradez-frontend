@@ -1,30 +1,39 @@
 'use client';
 
 import {ArrowUpRight} from 'lucide-react';
+import {useMemo} from 'react';
+import {vehiclesQueries} from '@/shared/reactQuery';
 
 interface StatItem {
   title: string;
   value: number | string;
 }
 
-const stats: StatItem[] = [
-  {title: 'Active Listings', value: '5,617'},
-  {title: 'Pending Listings', value: '453'},
-  {title: 'Managed Listings', value: '0'},
-  // {title: 'New Users (7d)', value: '352'},
-  // {title: 'Support Tickets', value: '967'},
-];
-
 export default function DashboardStatsCards() {
+  const {useFetchActiveListingsCount} = vehiclesQueries();
+  const {data, isLoading} = useFetchActiveListingsCount();
+  const activeListingsCount = useMemo(() => {
+    return data?.count ?? 0;
+  }, [data]);
+
+  const stats: StatItem[] = [
+    {title: 'Active Listings', value: activeListingsCount.toLocaleString()},
+    // {title: 'Pending Listings', value: '453'},
+    // {title: 'Managed Listings', value: '0'},
+    // {title: 'New Users (7d)', value: '352'},
+    // {title: 'Support Tickets', value: '967'},
+  ];
   return (
-    <section className='w-full'>
+    <section className='w-full px-2 sm:px-4'>
       <div
         className='
           grid grid-cols-1
           sm:grid-cols-2
-          lg:grid-cols-3
+          md:grid-cols-3
+          lg:grid-cols-4
           xl:grid-cols-5
-          gap-3
+          gap-2
+          sm:gap-3
           items-stretch
         '
       >

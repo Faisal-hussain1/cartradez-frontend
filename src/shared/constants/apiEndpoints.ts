@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
     GET_VEHICLES_LIST: '/vehicles',
     GET_CARTRADEZ_VEHICLES_LIST: '/vehicles/cartradez',
     GET_VEHICLES_BY_USER_ID: ({id}: {id: string}) => `/vehicles/user/${id}`,
+    GET_ACTIVE_LISTINGS_COUNT: '/vehicles/stats/active-listings-count',
  
   // PATCH /vehicles/:id
   UPDATE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,

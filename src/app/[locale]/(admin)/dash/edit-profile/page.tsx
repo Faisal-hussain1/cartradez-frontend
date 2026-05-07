@@ -133,6 +133,16 @@ export default function EditProfile() {
           </div>
 
           <div>
+            <label className="text-sm text-gray-600">Email</label>
+            <input
+              name="email"
+              value={user?.email || ""}
+              readOnly
+              className="w-full border rounded-lg px-3 py-2 mt-1 bg-gray-100 text-gray-600 cursor-not-allowed"
+            />
+          </div>
+
+          <div>
             <label className="text-sm text-gray-600">Country</label>
             <input
               name="country"

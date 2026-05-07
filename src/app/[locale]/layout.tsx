@@ -14,6 +14,7 @@ import {
 import 'react-toastify/dist/ReactToastify.css';
 import {RootLayoutProps} from '@/shared/interfaces/common';
 import ClientProviders from '@/shared/providers/ClientProviders';
+import WhatsAppFloatingButton from '@/shared/components/common/whatsappFloatingButton';
 
 export function generateStaticParams() {
   return i18nConfig.locales.map((locale: string) => ({locale}));
@@ -58,6 +59,7 @@ export default async function LocaleLayout({
         theme='light'
         icon={false}
       />
+      <WhatsAppFloatingButton />
     </Fragment>
   );
 }

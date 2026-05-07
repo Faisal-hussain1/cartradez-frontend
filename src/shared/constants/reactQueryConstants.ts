@@ -61,6 +61,11 @@ export const VEHICLES = {
       ),
   },
 
+  fetchActiveListingsCount: {
+    queryKey: 'getActiveListingsCount',
+    endpoint: API_ENDPOINTS.VEHICLES.GET_ACTIVE_LISTINGS_COUNT,
+  },
+
   fetchVehicleById: {
     queryKey: (vehicleId: string) => ['getVehicleById', vehicleId],
     endpoint: (params: any) =>
