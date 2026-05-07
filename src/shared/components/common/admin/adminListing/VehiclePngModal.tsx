@@ -33,7 +33,7 @@ interface Vehicle {
   transmission?: string;
   bodyType?: string;
   color?: string;
-  engineCapacity?: number;
+  engineSize?: number;
   registrationCity?: string;
   registrationYear?: number;
   registrationNumber?: string;
@@ -43,6 +43,10 @@ interface Vehicle {
   variant?: string;
   description?: string;
   features?: string[];
+}
+
+function shouldFetchVehicleDetail(vehicle: Vehicle) {
+  return !vehicle.variant || !vehicle.fuelType || !vehicle.transmission;
 }
 
 function formatPrice(currency?: string, price?: number) {
@@ -104,7 +108,7 @@ function preloadFallback(src: string): Promise<void> {
 function getVehicleTitle(vehicle: Vehicle) {
   return (
     vehicle.title ||
-    [vehicle.make, vehicle.model, vehicle.year ? `(${vehicle.year})` : '']
+    [vehicle.make.charAt(0).toUpperCase() + vehicle.make.slice(1), vehicle.model, vehicle.year ? `(${vehicle.year})` : '']
       .filter(Boolean)
       .join(' ')
   );
@@ -156,7 +160,6 @@ function PosterDesign({
 }) {
   const title = getVehicleTitle(vehicle);
   const image = getVehicleImage(vehicle, useProxyImage);
-
   const details = [
   {label: 'Year', value: vehicle.year || 'N/A'},
   {label: 'Variant', value: vehicle.variant || 'N/A'},
@@ -166,19 +169,19 @@ function PosterDesign({
       ? `${vehicle.mileage.toLocaleString()} KM`
       : 'N/A',
   },
-  {label: 'Fuel', value: vehicle.fuelType || 'N/A'},
+  {label: 'Fuel Type', value: vehicle.fuelType || 'N/A'},
   {label: 'Transmission', value: vehicle.transmission || 'N/A'},
   {label: 'Body Type', value: vehicle.bodyType || 'N/A'},
   {label: 'Color', value: vehicle.color || 'N/A'},
   {label: 'Condition', value: vehicle.condition || 'N/A'},
   {
     label: 'Engine',
-    value: vehicle.engineCapacity
-      ? `${vehicle.engineCapacity} cc`
+    value: vehicle.engineSize
+      ? `${vehicle.engineSize} cc`
       : 'N/A',
   },
   {label: 'Drive Type', value: vehicle.driveType || 'N/A'},
-  {label: 'Reg. City', value: vehicle.registrationCity || 'N/A'},
+  {label: 'Available.City', value: vehicle.registrationCity || 'N/A'},
   {label: 'Owners', value: vehicle.numberOfOwners || 'N/A'},
 ];
 
@@ -213,7 +216,7 @@ function PosterDesign({
             }
           }}
         />
-        <div className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/75 to-transparent px-14 pb-12 pt-36 text-white'>
+        <div className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/30 to-transparent px-14 pb-12 pt-36 text-white'>
           <h1 className='max-w-[850px] text-6xl font-black leading-tight'>
             {title}
           </h1>
@@ -272,9 +275,10 @@ export default function VehiclePngModal({
   const [isDownloading, setIsDownloading] = useState(false);
 
   const {useFetchVehicleById} = vehiclesQueries();
+  const shouldFetchDetail = shouldFetchVehicleDetail(vehicle);
 
   const {data, isLoading} = useFetchVehicleById({
-    params: {vehicleId: vehicle._id},
+    params: {vehicleId: shouldFetchDetail ? vehicle._id : ''},
   });
 
   const fullVehicle: Vehicle = useMemo(() => {
@@ -304,8 +308,8 @@ export default function VehiclePngModal({
       await new Promise((r) => setTimeout(r, 150));
 
       const dataUrl = await toPng(posterRef.current, {
-        cacheBust: true,
-        pixelRatio: 3,
+        cacheBust: false,
+        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         backgroundColor: '#ffffff',
         skipAutoScale: true,
       });
@@ -346,7 +350,7 @@ export default function VehiclePngModal({
           </button>
         </div>
 
-        {isLoading ? (
+        {isLoading && shouldFetchDetail ? (
           <div className='flex h-[420px] items-center justify-center rounded-xl bg-muted text-sm text-muted-foreground'>
             Loading vehicle poster...
           </div>

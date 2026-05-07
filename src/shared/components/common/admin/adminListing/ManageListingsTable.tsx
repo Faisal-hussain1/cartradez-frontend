@@ -77,7 +77,7 @@ function EditVehicleModal({
     fuelType: vehicleDetail?.fuelType || '',
     transmission: vehicleDetail?.transmission || '',
     color: vehicleDetail?.color || '',
-    engineCapacity: vehicleDetail?.engineCapacity || 0,
+    engineSize: vehicleDetail?.engineSize || 0,
     driveType: vehicleDetail?.driveType || '',
     price: vehicleDetail?.price || '',
     currency: vehicleDetail?.currency || 'ZMW',
@@ -121,7 +121,7 @@ function EditVehicleModal({
     fuelType: form.fuelType,
     transmission: form.transmission,
     color: form.color,
-    engineCapacity: Number(form.engineCapacity),
+    engineSize: Number(form.engineSize),
     driveType: form.driveType,
     variant: form.variant,
     registrationYear: form.registrationYear,
@@ -251,8 +251,8 @@ function EditVehicleModal({
             <div>
               <label className='text-sm font-medium'>Engine Capacity</label>
               <input
-                name='engineCapacity'
-                value={form.engineCapacity}
+                name='engineSize'
+                value={form.engineSize}
                 onChange={handleChange}
                 className='mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
                 
@@ -623,7 +623,6 @@ function DeleteHandler({
     vehicleId: vehicle._id,
     callBackFuncs: {
       onSuccessAlways: async () => {
-        await refetch?.();
         onCancel();
       },
     },
