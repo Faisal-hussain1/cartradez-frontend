@@ -102,7 +102,7 @@ export default function VehicleDetails({
                 <div className='flex items-center gap-2'>
                   <MapPin className='w-4 h-4 text-gray80' />{' '}
                   <span className='truncate'>
-                    {locationParts.length > 0 ? locationParts.join(', ') : 'N/A'}
+                   N/A
                   </span>
                 </div>
                 <div className='whitespace-nowrap text-gray80'>
