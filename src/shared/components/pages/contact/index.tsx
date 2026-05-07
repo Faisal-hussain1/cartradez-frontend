@@ -18,7 +18,7 @@ export default function ContactPage() {
         <div className='absolute inset-0 bg-black/40'></div>
       </div>
 
-      <div className='max-w-6xl  px-20 mt-10 text-start'>
+      <div className='max-w-6xl mx-auto px-4 sm:px-8 md:px-12 lg:px-20 mt-10 text-start'>
         <h1 className='text-4xl md:text-4xl  text-black font-bold'>
           Contact Us
         </h1>

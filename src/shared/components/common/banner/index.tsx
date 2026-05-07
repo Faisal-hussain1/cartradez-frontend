@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function Banner({heading}: BannerProps) {
   return (
-    <div className="relative bg-[url('/images/background.png')] bg-cover bg-center h-[500px]">
+    <div className="relative bg-[url('/images/background.png')] bg-cover bg-center h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]">
       {/* Black overlay */}
       <div className='absolute inset-0 bg-black/50'></div>
 

@@ -76,6 +76,24 @@ export const useFetchAllCartradezVehicleList = ({
     },
   });
 
+export const useFetchActiveListingsCount = ({
+  callBackFuncs,
+}: {
+  callBackFuncs?: QueryCallbacks;
+} = {}) =>
+  useQueryHandler({
+    queryKey: VEHICLES.fetchActiveListingsCount.queryKey,
+    endpoint: VEHICLES.fetchActiveListingsCount.endpoint,
+    customQueryOptions: {
+      staleTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: true,
+      gcTime: 0,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  });
+
 export const useFetchVehicleById = ({
   callBackFuncs,
   params,
@@ -194,6 +212,7 @@ export const useQueries = () => ({
   useFetchAllVehicleList,
   useFetchVehiclesByUserId,
   useFetchAllCartradezVehicleList,
+  useFetchActiveListingsCount,
   useFetchVehicleById,
 });
 

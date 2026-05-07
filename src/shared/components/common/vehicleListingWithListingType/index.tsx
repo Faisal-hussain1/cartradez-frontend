@@ -69,7 +69,7 @@ export default function VehicleListingWithListingType({
       title: 'Standard Listings',
       emptyTitle: 'standard vehicle',
       items: standardVehicles,
-      slidesToShow,
+      slidesToShow:5,
     },
   ];
 

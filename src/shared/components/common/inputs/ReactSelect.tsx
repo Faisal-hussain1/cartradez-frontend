@@ -14,10 +14,10 @@ const ReactSelect = ({value, onChange, className = ''}: ReactSelectProps) => {
       height: '48px',
       minHeight: '48px',
       borderRadius: '6px 0 0 6px',
-      minWidth: '150px',
+      minWidth: 'min(100%, 150px)',
       boxShadow: 'none',
       backgroundColor: THEME.color.mist,
-      marginRight: '14px',
+      marginRight: '0px',
       border: 'none',
     }),
     valueContainer: (provided: any) => ({

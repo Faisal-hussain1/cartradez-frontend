@@ -28,7 +28,7 @@ export default function VehiclesListView({
           >
             <CardContent className='p-0'>
               <div className='flex flex-row gap-3'>
-                <div className='w-[220px] h-[150px] relative flex-shrink-0 overflow-hidden'>
+                <div className='w-[120px] h-[85px] sm:w-[150px] sm:h-[100px] md:w-[180px] md:h-[120px] lg:w-[220px] lg:h-[150px] relative flex-shrink-0 overflow-hidden'>
                   <Image
                     src={vehicle.coverImage.url}
                     alt={vehicle.make}

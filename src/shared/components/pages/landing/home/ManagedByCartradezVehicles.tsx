@@ -42,7 +42,7 @@ export default function ManagedByCartradezVehicles({
               }
               className='relative flex items-center bg-white shadow-md rounded-xl overflow-hidden w-full hover:shadow-lg transition-all cursor-pointer'
             >
-              <div className='relative w-[130px] h-[105px] flex-shrink-0 rounded-lg overflow-hidden'>
+              <div className='relative w-[100px] h-[80px] sm:w-[110px] sm:h-[88px] md:w-[120px] md:h-[96px] lg:w-[130px] lg:h-[105px] flex-shrink-0 rounded-lg overflow-hidden'>
                 <Image
                   src={vehicle.coverImage?.url}
                   alt={vehicle._id}

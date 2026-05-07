@@ -55,7 +55,7 @@ function SelectInput({
                       ? 'var(--success-light)'
                       : 'var(--white)',
                   minHeight: '50px',
-                  minWidth: '200px',
+                  minWidth: 'min(100%, 200px)',
                   borderRadius: '4px',
                   cursor: 'pointer',
                   color: 'black',

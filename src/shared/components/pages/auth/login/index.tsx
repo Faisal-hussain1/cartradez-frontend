@@ -84,7 +84,7 @@ export default function LoginForm() {
           alt='login-image'
           width={400}
           height={700}
-          className='h-screen fixed w-[25%]'
+          className='h-screen fixed md:w-[25%] w-full'
         />
       </LeftSideContainer>
       <RightSideContainer>
