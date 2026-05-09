@@ -2,7 +2,7 @@
 
 import {MessageCircle} from 'lucide-react';
 
-const FALLBACK_WHATSAPP_NUMBER = '03060624288';
+const FALLBACK_WHATSAPP_NUMBER = '+260574928425';
 
 export default function WhatsAppFloatingButton() {
   const whatsappNumber =
