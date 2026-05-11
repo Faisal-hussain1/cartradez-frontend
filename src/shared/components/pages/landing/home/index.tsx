@@ -52,6 +52,7 @@ const getVehicleSearchText = (vehicle: any) => {
 
 export default function Home() {
   const user=useSelector(getCurrentUser);
+  console.log('Current User in Home Component:', user);
   const { useFetchAllVehicleList, useFetchAllCartradezVehicleList } =
     vehiclesQueries();
 

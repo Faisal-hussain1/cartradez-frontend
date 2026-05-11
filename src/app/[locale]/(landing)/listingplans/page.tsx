@@ -1,6 +1,8 @@
 'use client';
 
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
+import {useSelector} from 'react-redux';
+import {getCurrentUser} from '@/shared/redux/slices/users';
 
 type Plan = {
   name: string;
@@ -11,6 +13,21 @@ type Plan = {
 };
 
 export default function ListingPlans() {
+  const currentUser: any = useSelector(getCurrentUser);
+  const history = Array.isArray(currentUser?.dealerStatusHistory)
+    ? currentUser.dealerStatusHistory
+    : [];
+  const latestHistoryStatus =
+    history.length > 0 ? history[history.length - 1]?.status : null;
+  const effectiveDealerStatus = latestHistoryStatus || currentUser?.dealerStatus;
+  const hasDealerHistory = Boolean(currentUser?.dealerStatusHistory?.length);
+  const isRejectedDealer = effectiveDealerStatus === 'rejected';
+  const isApprovedDealer = effectiveDealerStatus === 'approved';
+  const shouldShowPendingMessage = hasDealerHistory && !isApprovedDealer;
+  const dealerGateMessage = isRejectedDealer
+    ? 'Your dealer request was rejected. Please update your details and apply again.'
+    : 'Once you will be approved, you can see the plans and Your dealer request limit is 3';
+
   const plans: Plan[] = [
     {
       name: 'Premium',
@@ -42,6 +59,13 @@ export default function ListingPlans() {
         </p>
       </div>
 
+      {shouldShowPendingMessage && (
+        <div className='mx-auto mb-8 max-w-3xl rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-center text-sm text-amber-900'>
+          {dealerGateMessage}
+        </div>
+      )}
+
+      {!shouldShowPendingMessage && (
       <div className='grid md:grid-cols-3 gap-6 max-w-5xl mx-auto'>
         {plans.map((plan, index) => (
           <div
@@ -83,6 +107,7 @@ export default function ListingPlans() {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 }

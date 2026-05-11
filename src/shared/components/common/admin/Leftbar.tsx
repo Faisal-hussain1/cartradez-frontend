@@ -1,15 +1,27 @@
 'use client';
 
-import { LayoutDashboard, List, Shield, Users, Menu, X } from 'lucide-react';
+import { LayoutDashboard, List, Shield, Users, Menu, X, BadgeDollarSign } from 'lucide-react';
 import Image from 'next/image';
 import { SidebarItem } from './Sidebaritem';
 import { useSelector } from 'react-redux';
-import { getUserRole } from '@/shared/redux/slices/users';
+import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
 import { useState } from 'react';
 
 export default function Leftbar() {
   const role = useSelector(getUserRole);
+  const currentUser: any = useSelector(getCurrentUser);
   const [open, setOpen] = useState(false);
+  const history = Array.isArray(currentUser?.dealerStatusHistory)
+    ? currentUser.dealerStatusHistory
+    : [];
+  const latestHistoryStatus =
+    history.length > 0 ? history[history.length - 1]?.status : null;
+  const effectiveDealerStatus = latestHistoryStatus || currentUser?.dealerStatus;
+  const isDealerApproved = effectiveDealerStatus === 'approved';
+  const isDealerRejected = effectiveDealerStatus === 'rejected';
+  const dealerStatusMessage = isDealerRejected
+    ? 'Your dealer request was rejected. Please update your details and apply again.'
+    : 'Your dealer account is pending approval. Plans will be available once approved.';
 
   return (
     <>
@@ -84,6 +96,20 @@ export default function Leftbar() {
             label="Listings"
           />
 
+          {role === 'dealer' && isDealerApproved && (
+            <SidebarItem
+              href="/listingplans"
+              icon={<BadgeDollarSign size={18} />}
+              label="Plans"
+            />
+          )}
+
+          {role === 'dealer' && !isDealerApproved && (
+            <div className='rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900'>
+              {dealerStatusMessage}
+            </div>
+          )}
+
           {role === 'admin' && (
             <>
               <SidebarItem
@@ -96,6 +122,11 @@ export default function Leftbar() {
                 href="/users"
                 icon={<Users size={18} />}
                 label="Users"
+              />
+              <SidebarItem
+                href="/dealers"
+                icon={<Users size={18} />}
+                label="Dealers"
               />
             </>
           )}

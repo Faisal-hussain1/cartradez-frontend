@@ -1,16 +1,18 @@
 'use client';
 
 import { JSX, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useRouteType from '@/shared/hooks/useRouterType';
-import { getCurrentUser } from '@/shared/redux/slices/users';
+import { actions, getCurrentUser } from '@/shared/redux/slices/users';
 import { AUTH_ROUTES } from '@/shared/constants/PATHS';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { NodeChildrenProps } from '@/shared/interfaces/common';
 import { getRedirectUrl, getRoleFlags } from '@/shared/utils/auth';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
+import {getRequest} from '@/shared/utils/requests';
 
 const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
+  const dispatch = useDispatch();
   const {
     isAuthRoute,
     isAdminRoute,
@@ -24,8 +26,40 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
   const isLoggedIn = Boolean(currentUser?._id);
 
   const [mount, setMount] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    const hydrateUser = async () => {
+      if (typeof window === 'undefined') {
+        setIsHydrated(true);
+        return;
+      }
+
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setIsHydrated(true);
+        return;
+      }
+
+      try {
+        const res: any = await getRequest({endpoint: '/users/me'});
+        const latestUser = res?.data?.body?.user;
+        if (latestUser?._id) {
+          dispatch(actions.setCurrentUser(latestUser));
+        }
+      } catch (error) {
+        // keep persisted user as fallback
+      } finally {
+        setIsHydrated(true);
+      }
+    };
+
+    hydrateUser();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
     const role = currentUser?.systemRole;
     const url = getRedirectUrl({ role: role as string });
 
@@ -64,6 +98,7 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     isManagerRoute,
     isUserRoute,
     isPublicRoute,
+    isHydrated,
     router,
     currentUser,
   ]);

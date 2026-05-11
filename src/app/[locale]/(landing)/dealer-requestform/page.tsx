@@ -14,6 +14,8 @@ import { useSelector } from 'react-redux';
 import { actions, getCurrentUser } from '@/shared/redux/slices/users';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { dispatch } from '@/shared/redux/store';
+import {showToast} from '@/shared/utils/toasts';
+const API_URL=`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
 
 // type DealerPayload = {
 //   showroomName: string;
@@ -34,36 +36,42 @@ export default function DealerRequestForm() {
   const token=localStorage.getItem('accessToken')
 
  const onSubmit: SubmitHandler<any> = async (data) => {
-    const res = await fetch(
-      `http://localhost:3001/api/v1/users/dealer-form/${user?._id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization':`Bearer ${token}`
-        },
-        body: JSON.stringify({
-          carTypes: data.carTypes,
-          experience: data.experience,
-          nrcNo: data.nrcNo,
-          ntnNo: data.ntnNo,
-          showroomAddress: data.showroomAddress,
-          showroomName: data.showroomName,
-          socialMedia: data.socialMedia,
-        }),
+    try {
+      const res = await fetch(
+        `${API_URL}/users/dealer-form/${user?._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization':`Bearer ${token}`
+          },
+          body: JSON.stringify({
+            carTypes: data.carTypes,
+            experience: data.experience,
+            nrcNo: data.nrcNo,
+            ntnNo: data.ntnNo,
+            showroomAddress: data.showroomAddress,
+            showroomName: data.showroomName,
+            socialMedia: data.socialMedia,
+          }),
+        }
+      );
+
+      const result = await res.json();
+
+      if (res.ok && result?.success === true) {
+        dispatch(actions.setCurrentUser(result?.updatedUser));
+        showToast({type: 'success', message: result?.message || 'Dealer request submitted successfully'});
+        reset();
+        router.push('/dash');
+        return;
       }
-    );
 
-    const  result= await res.json(); // safer
-
-    if(result.success==true){
-      dispatch(actions.setCurrentUser(result?.updatedUser))
-      reset();
-      router.push('/dash');
-    }else{
-      console.log("Something went wrong");
+      showToast({type: 'error', message: result?.message || 'Failed to submit dealer request'});
+    } catch (error: any) {
+      showToast({type: 'error', message: error?.message || 'Failed to submit dealer request'});
     }
-};
+ };
   const [agreed, setAgreed] = useState(false);
 
   return (
@@ -144,6 +152,15 @@ export default function DealerRequestForm() {
                       isRequired
                     />
                   </div>
+                   <div className='md:col-span-6 col-span-12'>
+                    <CustomNumberInput
+                      label='Years of Experience'
+                      name='experience'
+                      placeholder='Enter Experience'
+                      control={control}
+                      isRequired
+                    />
+                  </div>
                 </div>
 
                 <div className='grid grid-cols-12 gap-2 mt-3'>
@@ -156,12 +173,11 @@ export default function DealerRequestForm() {
                       isRequired
                     />
                   </div>
-
-                  <div className='md:col-span-6 col-span-12'>
+                   <div className='md:col-span-6 col-span-12'>
                     <CustomNumberInput
-                      label='Years of Experience'
-                      name='experience'
-                      placeholder='Enter Experience'
+                      label='NTN No'
+                      name='ntnNo'
+                      placeholder='XXXXXXX'
                       control={control}
                       isRequired
                     />
@@ -191,16 +207,6 @@ export default function DealerRequestForm() {
                       label='Showroom Address'
                       name='showroomAddress'
                       placeholder='Enter Full Address'
-                      control={control}
-                      isRequired
-                    />
-                  </div>
-
-                  <div className='md:col-span-6 col-span-12'>
-                    <CustomNumberInput
-                      label='NTN No'
-                      name='ntnNo'
-                      placeholder='XXXXXXX'
                       control={control}
                       isRequired
                     />
@@ -239,9 +245,9 @@ export default function DealerRequestForm() {
                 />
                 <label htmlFor='terms' className='ml-2 text-sm'>
                   I agree to the{' '}
-                  <span className='text-primary font-semibold underline cursor-pointer'>
+                  <a href='/terms' target='_blank' rel='noopener noreferrer' className='text-primary font-semibold underline cursor-pointer'>
                     Terms & Conditions
-                  </span>
+                  </a>
                 </label>
               </div>
 
