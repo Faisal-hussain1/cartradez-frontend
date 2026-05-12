@@ -3,14 +3,19 @@
 import { LayoutDashboard, List, Shield, Users, Menu, X, BadgeDollarSign } from 'lucide-react';
 import Image from 'next/image';
 import { SidebarItem } from './Sidebaritem';
-import { useSelector } from 'react-redux';
-import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions, getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getRequest } from '@/shared/utils/requests';
+import { AppDispatch } from '@/shared/redux/store';
 
 export default function Leftbar() {
+  const dispatch = useDispatch<AppDispatch>();
   const role = useSelector(getUserRole);
   const currentUser: any = useSelector(getCurrentUser);
   const [open, setOpen] = useState(false);
+  const syncInFlightRef = useRef(false);
+  const lastSyncedAtRef = useRef(0);
   const history = Array.isArray(currentUser?.dealerStatusHistory)
     ? currentUser.dealerStatusHistory
     : [];
@@ -22,6 +27,40 @@ export default function Leftbar() {
   const dealerStatusMessage = isDealerRejected
     ? 'Your dealer request was rejected. Please update your details and apply again.'
     : 'Your dealer account is pending approval. Plans will be available once approved.';
+
+  const syncDealerUser = useCallback(async () => {
+    if (role !== 'dealer') return;
+    if (syncInFlightRef.current) return;
+    if (typeof window === 'undefined') return;
+    if (!localStorage.getItem('accessToken')) return;
+
+    const now = Date.now();
+    if (now - lastSyncedAtRef.current < 60000) return;
+
+    syncInFlightRef.current = true;
+    try {
+      const res: any = await getRequest({endpoint: '/users/me'});
+      const latestUser =
+        res?.data?.body?.user ||
+        res?.data?.body ||
+        res?.data?.data?.user ||
+        res?.data?.data ||
+        res?.data?.user;
+
+      if (latestUser?._id) {
+        dispatch(actions.setCurrentUser(latestUser));
+        lastSyncedAtRef.current = Date.now();
+      }
+    } catch (error) {
+      // keep existing user state as fallback
+    } finally {
+      syncInFlightRef.current = false;
+    }
+  }, [dispatch, role]);
+
+  useEffect(() => {
+    syncDealerUser();
+  }, [syncDealerUser]);
 
   return (
     <>

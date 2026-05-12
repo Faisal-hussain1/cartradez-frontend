@@ -12,7 +12,20 @@ const slice = createSlice({
   reducers: {
     resetUserState: () => defaultState,
     setCurrentUser(state, action: PayloadAction<User | null>) {
-      state.currentUser = action.payload;
+      const user: any = action.payload;
+
+      if (!user) {
+        state.currentUser = null;
+        return;
+      }
+
+      const normalizedRole =
+        user?.systemRole || user?.currentActiveOrganization?.role || 'user';
+
+      state.currentUser = {
+        ...user,
+        systemRole: normalizedRole,
+      };
     },
   },
 });
@@ -27,4 +40,5 @@ export const getCurrentUser = (state: {users: UsersState}) =>
 export const getUsersList = (state: {users: UsersState}) => state.users.list;
 
 export const getUserRole = (state: {users: UsersState}) =>
-  state.users.currentUser?.systemRole;
+  (state.users.currentUser as any)?.systemRole ||
+  (state.users.currentUser as any)?.currentActiveOrganization?.role;
