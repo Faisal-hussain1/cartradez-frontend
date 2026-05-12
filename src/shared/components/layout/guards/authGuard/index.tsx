@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useEffect, useState } from 'react';
+import { JSX, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useRouteType from '@/shared/hooks/useRouterType';
 import { actions, getCurrentUser } from '@/shared/redux/slices/users';
@@ -27,6 +27,58 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
 
   const [mount, setMount] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const syncInFlightRef = useRef(false);
+  const lastSyncedAtRef = useRef(0);
+  const SYNC_MIN_GAP_MS = 60000;
+  const RATE_LIMIT_COOLDOWN_MS = 120000;
+
+  const syncCurrentUser = useCallback(
+    async ({force = false}: {force?: boolean} = {}) => {
+      if (typeof window === 'undefined') return;
+
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+      if (syncInFlightRef.current) return;
+
+      const blockedUntilRaw = localStorage.getItem('usersMeBlockedUntil');
+      const blockedUntil = blockedUntilRaw ? Number(blockedUntilRaw) : 0;
+      if (!force && blockedUntil && Date.now() < blockedUntil) return;
+
+      const now = Date.now();
+      if (!force && now - lastSyncedAtRef.current < SYNC_MIN_GAP_MS) return;
+
+      syncInFlightRef.current = true;
+      try {
+        const res: any = await getRequest({endpoint: '/users/me'});
+        const latestUser =
+          res?.data?.body?.user ||
+          res?.data?.body ||
+          res?.data?.data?.user ||
+          res?.data?.data ||
+          res?.data?.user;
+
+        if (latestUser?._id) {
+          dispatch(actions.setCurrentUser(latestUser));
+          lastSyncedAtRef.current = Date.now();
+          localStorage.removeItem('usersMeBlockedUntil');
+        }
+      } catch (error: any) {
+        const errType = error?.error?.type || error?.type;
+
+        if (errType === 'TEMPORARILY_BLOCKED_REQUEST_LIMIT_EXCEEDED.') {
+          localStorage.setItem(
+            'usersMeBlockedUntil',
+            String(Date.now() + RATE_LIMIT_COOLDOWN_MS)
+          );
+        }
+
+        // keep persisted user as fallback
+      } finally {
+        syncInFlightRef.current = false;
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     const hydrateUser = async () => {
@@ -41,21 +93,40 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
         return;
       }
 
-      try {
-        const res: any = await getRequest({endpoint: '/users/me'});
-        const latestUser = res?.data?.body?.user;
-        if (latestUser?._id) {
-          dispatch(actions.setCurrentUser(latestUser));
-        }
-      } catch (error) {
-        // keep persisted user as fallback
-      } finally {
-        setIsHydrated(true);
-      }
+      await syncCurrentUser({force: true});
+      setIsHydrated(true);
     };
 
     hydrateUser();
-  }, [dispatch]);
+  }, [syncCurrentUser]);
+
+  useEffect(() => {
+    if (!isHydrated || !isLoggedIn) return;
+
+    const onFocus = () => {
+      syncCurrentUser();
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncCurrentUser();
+      }
+    };
+
+    const onOnline = () => {
+      syncCurrentUser({force: true});
+    };
+
+    window.addEventListener('focus', onFocus);
+    window.addEventListener('online', onOnline);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener('online', onOnline);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, [isHydrated, isLoggedIn, syncCurrentUser]);
 
   useEffect(() => {
     if (!isHydrated) return;

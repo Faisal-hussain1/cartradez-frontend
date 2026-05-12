@@ -10,6 +10,7 @@ export type Organization = {
 export type User = {
   _id: string;
   name?: string;
+  systemRole?: string;
   firstName: string;
   lastName: string;
   username: string;
@@ -19,6 +20,12 @@ export type User = {
   organizations: Organization[];
   currentActiveOrganization: Organization;
   isSellerOnboarded: boolean;
+  dealerStatus?: 'pending' | 'approved' | 'rejected';
+  dealerStatusHistory?: Array<{
+    status: string;
+    reason?: string | null;
+    updatedAt?: string;
+  }>;
   onboardingLink?: string;
   paymentEmailTemplate?: {
     subject: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {getRequest, patchRequest} from '@/shared/utils/requests';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {showToast} from '@/shared/utils/toasts';
@@ -30,6 +30,8 @@ export default function DealersPage() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [rejectDealerId, setRejectDealerId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
+  const hasFetchedRef = useRef(false);
+  const actionInFlightRef = useRef<Set<string>>(new Set());
 
   const fetchDealers = async () => {
     setLoading(true);
@@ -44,10 +46,14 @@ export default function DealersPage() {
   };
 
   useEffect(() => {
+    if (hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
     fetchDealers();
   }, []);
 
   const handleApprove = async (dealerId: string) => {
+    if (actionInFlightRef.current.has(dealerId)) return;
+    actionInFlightRef.current.add(dealerId);
     setUpdatingId(dealerId);
     try {
       await patchRequest({
@@ -55,10 +61,11 @@ export default function DealersPage() {
         payload: {status: 'approved'},
       });
       showToast({type: 'success', message: 'Dealer approved successfully'});
-      fetchDealers();
+      await fetchDealers();
     } catch (error: any) {
       showToast({type: 'error', message: error?.message || 'Failed to approve dealer'});
     } finally {
+      actionInFlightRef.current.delete(dealerId);
       setUpdatingId(null);
     }
   };
@@ -70,6 +77,8 @@ export default function DealersPage() {
       return;
     }
 
+    if (actionInFlightRef.current.has(rejectDealerId)) return;
+    actionInFlightRef.current.add(rejectDealerId);
     setUpdatingId(rejectDealerId);
     try {
       await patchRequest({
@@ -79,10 +88,11 @@ export default function DealersPage() {
       showToast({type: 'success', message: 'Dealer rejected successfully'});
       setRejectDealerId(null);
       setRejectReason('');
-      fetchDealers();
+      await fetchDealers();
     } catch (error: any) {
       showToast({type: 'error', message: error?.message || 'Failed to reject dealer'});
     } finally {
+      actionInFlightRef.current.delete(rejectDealerId);
       setUpdatingId(null);
     }
   };

@@ -34,8 +34,20 @@ export default function DealerRequestForm() {
   const user=useSelector(getCurrentUser);
   const router=useLocaleRouter();
   const token=localStorage.getItem('accessToken')
+  const usedAttempts = Number((user as any)?.requestLimit || 0);
+  const maxAttempts = 3;
+  const limitReached = usedAttempts >= maxAttempts;
 
  const onSubmit: SubmitHandler<any> = async (data) => {
+    if (limitReached) {
+      showToast({
+        type: 'error',
+        message:
+          'Dealer request limit reached (3/3). You cannot submit the dealer form again.',
+      });
+      return;
+    }
+
     try {
       const res = await fetch(
         `${API_URL}/users/dealer-form/${user?._id}`,
@@ -235,6 +247,12 @@ export default function DealerRequestForm() {
 
               {/* Buttons */}
               {/* Terms & Conditions */}
+              {limitReached && (
+                <div className='mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700'>
+                  Dealer request limit reached (3/3). You cannot submit the dealer form again.
+                </div>
+              )}
+
               <div className='mt-5 flex items-center'>
                 <input
                   type='checkbox'
@@ -261,7 +279,7 @@ export default function DealerRequestForm() {
                   <SubmitButton
                     buttonText='Submit Request'
                     styles='w-[150px] ml-3'
-                    disabled={!agreed}
+                    disabled={!agreed || limitReached}
                   />
                 </div>
               </div>
