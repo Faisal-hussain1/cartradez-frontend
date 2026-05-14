@@ -3,7 +3,7 @@ import ManageListingsTable from '@/shared/components/common/admin/adminListing/M
 
 const ListingPage = () => {
   return (
-    <div>
+    <div className='w-full space-y-4'>
       <ManageListingsHeader />
       <ManageListingsTable />
     </div>

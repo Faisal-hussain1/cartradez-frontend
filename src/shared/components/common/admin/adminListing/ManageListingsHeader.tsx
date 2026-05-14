@@ -45,13 +45,14 @@ export default function ManageListingsHeader() {
   return (
     <section className='space-y-4'>
       {/* Top row */}
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-2xl font-semibold text-[var(--blue100)]'>
           Manage Listings
         </h1>
 
         {isAdminDealer ? <button onClick={() => router.push('/vehicles/add')}
           className='cursor-pointer
+            w-full sm:w-auto
             px-4 py-2
             text-sm font-medium
             rounded-md
@@ -64,6 +65,7 @@ export default function ManageListingsHeader() {
           Create a New Listing
         </button> : <button onClick={() => router.push('/selectRole')}
           className='cursor-pointer
+            w-full sm:w-auto
             px-4 py-2
             text-sm font-medium
             rounded-md

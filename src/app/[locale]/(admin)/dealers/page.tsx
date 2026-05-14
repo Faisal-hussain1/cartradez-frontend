@@ -109,19 +109,76 @@ export default function DealersPage() {
   }, [dealers]);
 
   const canApproveDealer = (dealer: Dealer) =>
-    Boolean(dealer.showroomName?.trim()) || Boolean(dealer.ntnNo?.trim());
+    dealer.dealerStatus !== 'approved' &&
+    (Boolean(dealer.showroomName?.trim()) || Boolean(dealer.ntnNo?.trim()));
   const canRejectDealer = (dealer: Dealer) =>
     dealer.dealerStatus === 'pending' || dealer.dealerStatus === 'approved';
 
   return (
-    <div className='p-6'>
+    <div className='px-3 py-4 sm:px-4 md:px-6'>
       <div className='mb-5'>
-        <h1 className='text-2xl font-semibold text-gray-900'>Dealers</h1>
+        <h1 className='text-xl sm:text-2xl font-semibold text-gray-900'>Dealers</h1>
         <p className='text-sm text-gray-500'>Manage dealer approvals and rejections.</p>
       </div>
 
-      <div className='overflow-x-auto rounded-lg border border-gray-200 bg-white'>
-        <table className='w-full text-sm'>
+      <div className='md:hidden space-y-3'>
+        {!loading &&
+          rows.map((dealer) => (
+            <div key={dealer._id} className='rounded-lg border border-gray-200 bg-white p-3 space-y-3'>
+              <div>
+                <p className='font-medium text-gray-900'>
+                  {dealer.firstName} {dealer.lastName}
+                </p>
+                <p className='text-sm text-gray-600'>{dealer.email}</p>
+              </div>
+              <div className='grid grid-cols-2 gap-2 text-sm'>
+                <p className='text-gray-500'>Showroom</p>
+                <p className='text-gray-700 text-right'>{dealer.showroomName || '-'}</p>
+                <p className='text-gray-500'>City</p>
+                <p className='text-gray-700 text-right'>{dealer.city || '-'}</p>
+                <p className='text-gray-500'>Status</p>
+                <p className='text-right'>
+                  <span className='rounded-full bg-gray-100 px-3 py-1 text-xs capitalize'>
+                    {dealer.dealerStatus || 'pending'}
+                  </span>
+                </p>
+              </div>
+              <div className='flex flex-wrap gap-2'>
+                <button
+                  className='rounded bg-blue-600 px-3 py-1.5 text-xs text-white'
+                  onClick={() => router.push(`/dealers/${dealer._id}`)}
+                >
+                  View
+                </button>
+                {canApproveDealer(dealer) && (
+                  <button
+                    disabled={updatingId === dealer._id}
+                    className='rounded bg-green-600 px-3 py-1.5 text-xs text-white disabled:opacity-50'
+                    onClick={() => handleApprove(dealer._id)}
+                  >
+                    Approve
+                  </button>
+                )}
+                {canRejectDealer(dealer) && (
+                  <button
+                    disabled={updatingId === dealer._id}
+                    className='rounded bg-red-600 px-3 py-1.5 text-xs text-white disabled:opacity-50'
+                    onClick={() => setRejectDealerId(dealer._id)}
+                  >
+                    Reject
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        {loading && <div className='p-6 text-sm text-gray-500 rounded-lg border border-gray-200 bg-white'>Loading dealers...</div>}
+        {!loading && !rows.length && (
+          <div className='p-6 text-sm text-gray-500 rounded-lg border border-gray-200 bg-white'>No dealer records found.</div>
+        )}
+      </div>
+
+      <div className='hidden md:block overflow-x-auto rounded-lg border border-gray-200 bg-white'>
+        <table className='w-full min-w-[780px] text-sm'>
           <thead className='bg-gray-50 text-left text-gray-600'>
             <tr>
               <th className='px-4 py-3'>Name</th>
@@ -148,7 +205,7 @@ export default function DealersPage() {
                     </span>
                   </td>
                   <td className='px-4 py-3'>
-                    <div className='flex justify-end gap-2'>
+                    <div className='flex justify-end gap-2 flex-wrap'>
                       <button
                         className='rounded bg-blue-600 px-3 py-1.5 text-xs text-white'
                         onClick={() => router.push(`/dealers/${dealer._id}`)}
@@ -196,7 +253,7 @@ export default function DealersPage() {
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder='Reason for rejection'
             />
-            <div className='mt-4 flex justify-end gap-2'>
+            <div className='mt-4 flex justify-end gap-2 flex-wrap'>
               <button
                 className='rounded border border-gray-300 px-3 py-1.5 text-sm'
                 onClick={() => {

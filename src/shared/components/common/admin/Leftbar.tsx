@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, List, Shield, Users, Menu, X, BadgeDollarSign } from 'lucide-react';
+import { LayoutDashboard, List, Shield, Users, X, BadgeDollarSign } from 'lucide-react';
 import Image from 'next/image';
 import { SidebarItem } from './Sidebaritem';
 import { useDispatch, useSelector } from 'react-redux';
@@ -62,23 +62,14 @@ export default function Leftbar() {
     syncDealerUser();
   }, [syncDealerUser]);
 
+  useEffect(() => {
+    const openSidebar = () => setOpen(true);
+    window.addEventListener('open-admin-sidebar', openSidebar);
+    return () => window.removeEventListener('open-admin-sidebar', openSidebar);
+  }, []);
+
   return (
     <>
-      {/* Mobile Topbar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 flex items-center justify-between px-4 bg-card border-b border-border z-50">
-        <button onClick={() => setOpen(true)}>
-          <Menu size={22} />
-        </button>
-
-        <Image
-          src="/images/logo-black.png"
-          alt="Car Tradez"
-          width={90}
-          height={30}
-          priority
-        />
-      </div>
-
       {/* Overlay */}
       {open && (
         <div
@@ -135,14 +126,7 @@ export default function Leftbar() {
             label="Listings"
           />
 
-          {role === 'dealer' && isDealerApproved && (
-            <p>Coming Soon</p>
-            // <SidebarItem
-            //   href="/listingplans"
-            //   icon={<BadgeDollarSign size={18} />}
-            //   label="Plans"
-            // />
-          )}
+          {role === 'dealer' && isDealerApproved && <p>Coming Soon</p>}
 
           {role === 'dealer' && !isDealerApproved && (
             <div className='rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900'>
