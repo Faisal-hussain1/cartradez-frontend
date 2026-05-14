@@ -836,7 +836,7 @@ export default function ManageListingsTable() {
   const searchParams = useSearchParams();
   const user = useSelector(getCurrentUser);
   const role = useSelector(getUserRole);
-  const isAdmin = role === 'admin';
+  const canViewAllListings = role === 'admin';
   const pageNoFromUrl = Number(searchParams.get('page') || '1');
   const pageNo = Number.isNaN(pageNoFromUrl) || pageNoFromUrl < 1 ? 1 : pageNoFromUrl;
   const pageLimit = 10;
@@ -847,6 +847,7 @@ export default function ManageListingsTable() {
   const listingTypeFilter = searchParams.get('listingType') || '';
   const startDateFilter = searchParams.get('startDate') || '';
   const endDateFilter = searchParams.get('endDate') || '';
+  const shouldFetchListings = canViewAllListings || Boolean(user?._id);
 
   const {data, isLoading,refetch} = useFetchAllVehicleList({
     params: {
@@ -856,11 +857,17 @@ export default function ManageListingsTable() {
       ...(listingTypeFilter ? {listingType: listingTypeFilter} : {}),
       ...(startDateFilter ? {startDate: startDateFilter} : {}),
       ...(endDateFilter ? {endDate: endDateFilter} : {}),
-      ...(isAdmin ? {} : {creatorId: user?._id || '__no_user__'}),
+      ...(!canViewAllListings && user?._id ? {creatorId: user._id} : {}),
     },
   });
 
-  const vehicles: Vehicle[] = data?.data?.vehicles ?? data?.vehicles ?? [];
+  const vehicles: Vehicle[] = useMemo(() => {
+    const rawVehicles: Vehicle[] = data?.data?.vehicles ?? data?.vehicles ?? [];
+    if (canViewAllListings) return rawVehicles;
+    if (!user?._id) return [];
+    // Safety net: enforce owner-only records client-side for non-admin users.
+    return rawVehicles.filter((vehicle) => vehicle.creatorId === user._id);
+  }, [canViewAllListings, data?.data?.vehicles, data?.vehicles, user?._id]);
   const paginationData = data?.pagination;
   const totalActiveListings = paginationData?.count ?? 0;
   const totalPages = paginationData?.totalPages ?? 1;
@@ -888,6 +895,10 @@ export default function ManageListingsTable() {
     params.set('page', String(nextPage));
     router.replace(`${pathname}?${params.toString()}`, {scroll: false});
   };
+
+  if (!shouldFetchListings) {
+    return <GlobalLoader height='h-[200px]' />;
+  }
 
   if (isLoading) return <GlobalLoader height='h-[200px]' />;
 
@@ -926,7 +937,8 @@ export default function ManageListingsTable() {
 
       <section className='bg-card border border-border rounded-xl overflow-hidden'>
         <div className='px-4 py-3 border-b border-border text-sm font-medium text-foreground'>
-          Total Listings: {totalActiveListings.toLocaleString()}
+          {canViewAllListings ? 'Total Active Listings' : 'My Listings'}:{' '}
+          {totalActiveListings.toLocaleString()}
         </div>
         <div className='md:hidden p-3 space-y-3'>
           {listings.length ? (

@@ -51,7 +51,6 @@ const getVehicleSearchText = (vehicle: any) => {
 };
 
 export default function Home() {
-  const user=useSelector(getCurrentUser);
   const { useFetchAllVehicleList, useFetchAllCartradezVehicleList } =
     vehiclesQueries();
 
