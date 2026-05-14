@@ -1,5 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   const imageUrl = request.nextUrl.searchParams.get('url');
 
@@ -8,11 +11,18 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const upstream = await fetch(imageUrl, {
+    const parsedUrl = new URL(imageUrl);
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      return NextResponse.json({message: 'Invalid image URL protocol'}, {status: 400});
+    }
+
+    const upstream = await fetch(parsedUrl.toString(), {
       headers: {
         'user-agent': 'Mozilla/5.0',
+        accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
       },
       cache: 'no-store',
+      redirect: 'follow',
     });
 
     if (!upstream.ok) {
@@ -30,6 +40,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'content-type': contentType,
         'cache-control': 'public, max-age=300, stale-while-revalidate=600',
+        'access-control-allow-origin': '*',
       },
     });
   } catch (error) {
