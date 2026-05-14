@@ -2,7 +2,7 @@
 
 import {useMemo, useRef, useState} from 'react';
 import {Download, X} from 'lucide-react';
-import {toPng} from 'html-to-image';
+import {toBlob, toPng} from 'html-to-image';
 import {vehiclesQueries} from '@/shared/reactQuery';
 
 interface Vehicle {
@@ -124,13 +124,8 @@ function makeImageUrl(url?: string) {
 }
 
 function getProxyImageUrl(url: string) {
-  // Only use proxy for AWS S3 URLs that might have CORS issues
-  if (url.startsWith('https://cartradez.s3.eu-north-1.amazonaws.com')) {
-    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
-  }
-  // For all other URLs (including public URLs), use them directly
-  // This avoids adding latency for images that don't need proxying
-  return url;
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return url;
+  return `/api/image-proxy?url=${encodeURIComponent(url)}`;
 }
 
 function getVehicleImage(vehicle: Vehicle, useProxy = false) {
@@ -307,18 +302,38 @@ export default function VehiclePngModal({
       // finished re-rendering before we capture
       await new Promise((r) => setTimeout(r, 150));
 
-      const dataUrl = await toPng(posterRef.current, {
-        cacheBust: false,
+      const filename = `${getVehicleTitle(fullVehicle)
+        .replace(/\s+/g, '-')
+        .toLowerCase()}-cartradez-poster.png`;
+
+      const blob = await toBlob(posterRef.current, {
+        cacheBust: true,
         pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         backgroundColor: '#ffffff',
         skipAutoScale: true,
       });
 
       const link = document.createElement('a');
+      if (blob) {
+        const objectUrl = URL.createObjectURL(blob);
+        link.href = objectUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(objectUrl);
+        return;
+      }
+
+      const dataUrl = await toPng(posterRef.current, {
+        cacheBust: true,
+        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+        backgroundColor: '#ffffff',
+        skipAutoScale: true,
+      });
+
       link.href = dataUrl;
-      link.download = `${getVehicleTitle(fullVehicle)
-        .replace(/\s+/g, '-')
-        .toLowerCase()}-cartradez-poster.png`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -357,8 +372,8 @@ export default function VehiclePngModal({
         ) : (
           <>
             {/* Visible scaled preview */}
-            <div className='mx-auto h-[565px] w-full max-w-[454px] overflow-hidden rounded-2xl border border-border bg-muted shadow-sm'>
-              <div className='origin-top-left scale-[0.42]'>
+            <div className='mx-auto h-[405px] w-full max-w-[324px] overflow-hidden rounded-2xl border border-border bg-muted shadow-sm sm:h-[565px] sm:max-w-[454px]'>
+              <div className='origin-top-left scale-[0.3] sm:scale-[0.42]'>
                 <PosterDesign vehicle={fullVehicle} />
               </div>
             </div>
