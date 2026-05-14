@@ -11,11 +11,15 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   const cookieStore = await cookies();
 
   const cookieToken = cookieStore.get('x-auth-token')?.value;
+  const prefixedAuthCookie = cookieStore
+    .getAll()
+    .find(({name}) => name.startsWith('x-auth-token-'))?.value;
+  const authToken = cookieToken || prefixedAuthCookie;
 
   const {unprotectedRoutes} = getRouteType({pathname: newPath});
 
   // Redirect to login only if the user is trying to access a private page without a token
-  if (!unprotectedRoutes && !cookieToken) {
+  if (!unprotectedRoutes && !authToken) {
     const newRequestUrl = new URL(request.nextUrl.origin);
     newRequestUrl.pathname = AUTH_ROUTES.login;
     const nextResponse = NextResponse.redirect(newRequestUrl);

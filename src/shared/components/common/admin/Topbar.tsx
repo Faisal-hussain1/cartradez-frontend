@@ -1,9 +1,7 @@
 "use client";
-
-
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
-import { Bell } from "lucide-react";
+import { Bell, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { userMutations } from "@/shared/reactQuery";
@@ -55,9 +53,15 @@ export default function Topbar() {
 
   const { useSignOutMutation } = userMutations();
   const { mutate: executeSignOutMutation } = useSignOutMutation();
+  const openSidebar = () => {
+    window.dispatchEvent(new CustomEvent('open-admin-sidebar'));
+  };
 
   return (
-  <header className="sticky top-14 md:top-0 mt-14 md:mt-0 h-16 bg-white border-b z-30 flex items-center justify-between gap-3 px-3 sm:px-6 rounded-b-lg overflow-visible">
+  <header className="sticky top-0 h-14 sm:min-h-16 bg-white border-b z-30 flex items-center justify-between gap-3 px-4 py-2 sm:px-6 rounded-b-lg overflow-visible">
+    <button className="md:hidden shrink-0" onClick={openSidebar} aria-label="Open menu">
+      <Menu size={22} />
+    </button>
     
     {/* Search - Hide on mobile */}
     <input

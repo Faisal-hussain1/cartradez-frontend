@@ -7,6 +7,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { actions } from '@/shared/redux/slices/users';
 import GoogleSignupModal from './GoogleSignupModal';
 import {showToast} from '@/shared/utils/toasts';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import {getRedirectUrl} from '@/shared/utils/auth';
 
 type GoogleAuthButtonProps = {
   text?: string;
@@ -16,6 +18,7 @@ export default function GoogleAuthButton({
   text = 'Continue with Google',
 }: GoogleAuthButtonProps) {
   const dispatch = useDispatch();
+  const router = useLocaleRouter();
   const [showModal, setShowModal] = useState(false);
   const [userDataFromGoogle, setUserDataFromGoogle] = useState<any>(null);
   const [tempAccessToken, setTempAccessToken] = useState('');
@@ -26,6 +29,12 @@ export default function GoogleAuthButton({
     if (user._id) return user;
     if (user.id) return {...user, _id: user.id};
     return user;
+  };
+  const persistAuthToken = (token?: string) => {
+    if (!token) return;
+    localStorage.setItem('accessToken', token);
+    document.cookie = `x-auth-token=${token}; path=/; max-age=2592000; samesite=lax`;
+    document.cookie = `x-auth-token-cartradez=${token}; path=/; max-age=2592000; samesite=lax`;
   };
 
   const responseGoogle = async (authResult: any) => {
@@ -50,12 +59,12 @@ export default function GoogleAuthButton({
             message: 'This Google account is already registered. Please login instead.',
           });
         } else if (user) {
-          if (res?.data?.accessToken) {
-            localStorage.setItem('accessToken', res.data.accessToken);
-          }
-          // Existing user or login flow - store and redirect
-          dispatch(actions.setCurrentUser(normalizeUser(user)));
-          // TODO: Redirect to dashboard or home page
+          persistAuthToken(res?.data?.accessToken);
+          const normalizedUser = normalizeUser(user);
+          dispatch(actions.setCurrentUser(normalizedUser));
+          const redirectUrl = getRedirectUrl({role: normalizedUser?.systemRole});
+          router.push(redirectUrl);
+          showToast({type: 'success', message: res?.data?.message || 'Login successful'});
         } else {
           console.error('Error: Unable to retrieve user information');
         }
@@ -84,8 +93,10 @@ export default function GoogleAuthButton({
   const handleProfileComplete = (completeUser: any) => {
     const normalizedUser = normalizeUser(completeUser);
     dispatch(actions.setCurrentUser(normalizedUser));
+    const redirectUrl = getRedirectUrl({role: normalizedUser?.systemRole});
     handleModalClose();
-    // TODO: Redirect to dashboard or home page
+    router.push(redirectUrl);
+    showToast({type: 'success', message: 'Signup successful'});
   };
 
   return (

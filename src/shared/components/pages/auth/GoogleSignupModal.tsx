@@ -67,7 +67,10 @@ export default function GoogleSignupModal({
         return;
       }
 
-      localStorage.setItem('accessToken', response.data.accessToken);
+      const token = response.data.accessToken;
+      localStorage.setItem('accessToken', token);
+      document.cookie = `x-auth-token=${token}; path=/; max-age=2592000; samesite=lax`;
+      document.cookie = `x-auth-token-cartradez=${token}; path=/; max-age=2592000; samesite=lax`;
       onComplete(completeUser);
     } catch (err: any) {
       setError(err?.response?.data?.message || 'Failed to complete signup');

@@ -3,6 +3,8 @@
 import {ArrowUpRight} from 'lucide-react';
 import {useMemo} from 'react';
 import {vehiclesQueries} from '@/shared/reactQuery';
+import {useSelector} from 'react-redux';
+import {getUserRole} from '@/shared/redux/slices/users';
 
 interface StatItem {
   title: string;
@@ -12,12 +14,18 @@ interface StatItem {
 export default function DashboardStatsCards() {
   const {useFetchActiveListingsCount} = vehiclesQueries();
   const {data, isLoading} = useFetchActiveListingsCount();
+  const role = useSelector(getUserRole);
+  const isAdmin = role === 'admin';
+
   const activeListingsCount = useMemo(() => {
     return data?.count ?? 0;
   }, [data]);
 
   const stats: StatItem[] = [
-    {title: 'Active Listings', value: activeListingsCount.toLocaleString()},
+    {
+      title: isAdmin ? 'Active Listings' : 'Active Listings',
+      value: activeListingsCount.toLocaleString(),
+    },
     // {title: 'Pending Listings', value: '453'},
     // {title: 'Managed Listings', value: '0'},
     // {title: 'New Users (7d)', value: '352'},

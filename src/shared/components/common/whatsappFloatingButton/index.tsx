@@ -19,7 +19,7 @@ export default function WhatsAppFloatingButton() {
       target='_blank'
       rel='noopener noreferrer'
       aria-label='Chat on WhatsApp'
-      className='fixed bottom-5 right-5 z-[60] h-14 w-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 transition-transform flex items-center justify-center'
+      className='fixed bottom-20 md:bottom-5 right-4 md:right-5 z-30 h-14 w-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 transition-transform flex items-center justify-center'
     >
       <MessageCircle size={26} />
     </a>
