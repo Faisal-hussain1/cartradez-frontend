@@ -203,6 +203,8 @@ function PosterDesign({
         <img
           src={image}
           alt={title}
+          crossOrigin='anonymous'
+          referrerPolicy='no-referrer'
           className='h-full w-full object-cover'
           onError={(e) => {
             // Swap to fallback only once to avoid infinite loop
@@ -305,10 +307,11 @@ export default function VehiclePngModal({
       const filename = `${getVehicleTitle(fullVehicle)
         .replace(/\s+/g, '-')
         .toLowerCase()}-cartradez-poster.png`;
+      const exportPixelRatio = window.innerWidth <= 430 ? 1 : Math.min(window.devicePixelRatio || 1, 1.75);
 
       const blob = await toBlob(posterRef.current, {
         cacheBust: true,
-        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+        pixelRatio: exportPixelRatio,
         backgroundColor: '#ffffff',
         skipAutoScale: true,
       });
@@ -327,7 +330,7 @@ export default function VehiclePngModal({
 
       const dataUrl = await toPng(posterRef.current, {
         cacheBust: true,
-        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+        pixelRatio: exportPixelRatio,
         backgroundColor: '#ffffff',
         skipAutoScale: true,
       });
@@ -337,6 +340,11 @@ export default function VehiclePngModal({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      // Last-resort fallback for browsers that block programmatic downloads.
+      if (!link.download) {
+        window.open(dataUrl, '_blank', 'noopener,noreferrer');
+      }
     } catch (error) {
       console.error('PNG download failed:', error);
       alert('PNG download failed. Please check console for details.');
@@ -372,8 +380,8 @@ export default function VehiclePngModal({
         ) : (
           <>
             {/* Visible scaled preview */}
-            <div className='mx-auto h-[405px] w-full max-w-[324px] overflow-hidden rounded-2xl border border-border bg-muted shadow-sm sm:h-[565px] sm:max-w-[454px]'>
-              <div className='origin-top-left scale-[0.3] sm:scale-[0.42]'>
+            <div className='mx-auto h-[360px] w-full max-w-[288px] overflow-hidden rounded-2xl border border-border bg-muted shadow-sm min-[390px]:h-[405px] min-[390px]:max-w-[324px] sm:h-[565px] sm:max-w-[454px]'>
+              <div className='origin-top-left scale-[0.266] min-[390px]:scale-[0.3] sm:scale-[0.42]'>
                 <PosterDesign vehicle={fullVehicle} />
               </div>
             </div>
