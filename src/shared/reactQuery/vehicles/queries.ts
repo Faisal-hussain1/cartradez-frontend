@@ -6,6 +6,18 @@ import {API_ENDPOINTS} from '@/shared/constants/apiEndpoints';
 import {getQueryClient} from '@/shared/utils/queryClient';
 import {showToast} from '@/shared/utils/toasts';
 
+const buildVehicleListQueryKey = (baseKey: string, params?: Record<string, any>) => [
+  baseKey,
+  params?.pageNo ?? 1,
+  params?.pageLimit ?? 10,
+  params?.activeOnly ?? null,
+  params?.creatorId ?? null,
+  params?.listingType ?? null,
+  params?.startDate ?? null,
+  params?.endDate ?? null,
+  params?.search ?? null,
+];
+
 // ---------------------------------------------------------------------------
 // Queries
 // ---------------------------------------------------------------------------
@@ -18,7 +30,10 @@ export const useFetchAllVehicleList = ({
   params?: any;
 } = {}) =>
   useQueryHandler({
-    queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
+    queryKey: buildVehicleListQueryKey(
+      VEHICLES.fetchAllVehiclesList.queryKey,
+      params,
+    ),
     endpoint: VEHICLES.fetchAllVehiclesList.endpoint(params),
     params,
     customQueryOptions: {
@@ -63,7 +78,10 @@ export const useFetchAllCartradezVehicleList = ({
   params?: any;
 } = {}) =>
   useQueryHandler({
-    queryKey: VEHICLES.fetchAllCartradezVehiclesList.queryKey,
+    queryKey: buildVehicleListQueryKey(
+      VEHICLES.fetchAllCartradezVehiclesList.queryKey,
+      params,
+    ),
     endpoint: VEHICLES.fetchAllCartradezVehiclesList.endpoint(params),
     params,
     customQueryOptions: {

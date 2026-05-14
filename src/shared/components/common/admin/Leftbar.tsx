@@ -136,11 +136,12 @@ export default function Leftbar() {
           />
 
           {role === 'dealer' && isDealerApproved && (
-            <SidebarItem
-              href="/listingplans"
-              icon={<BadgeDollarSign size={18} />}
-              label="Plans"
-            />
+            <p>Coming Soon</p>
+            // <SidebarItem
+            //   href="/listingplans"
+            //   icon={<BadgeDollarSign size={18} />}
+            //   label="Plans"
+            // />
           )}
 
           {role === 'dealer' && !isDealerApproved && (
@@ -151,17 +152,17 @@ export default function Leftbar() {
 
           {role === 'admin' && (
             <>
-              <SidebarItem
+              {/* <SidebarItem
                 href="/roles"
                 icon={<Shield size={18} />}
                 label="Roles"
-              />
+              /> */}
 
-              <SidebarItem
+              {/* <SidebarItem
                 href="/users"
                 icon={<Users size={18} />}
                 label="Users"
-              />
+              /> */}
               <SidebarItem
                 href="/dealers"
                 icon={<Users size={18} />}

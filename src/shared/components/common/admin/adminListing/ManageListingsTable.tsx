@@ -10,14 +10,15 @@ import GlobalLoader from '../../loaders/GlobalLoader';
 import {useEffect, useMemo, useState} from 'react';
 import {formatDate} from 'date-fns';
 import {useSelector} from 'react-redux';
-import {getCurrentUser} from '@/shared/redux/slices/users';
-import {useRouter} from 'next/navigation';
+import {getCurrentUser, getUserRole} from '@/shared/redux/slices/users';
+import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {USER_ROUTES} from '@/shared/constants/PATHS';
 import { useMutations } from '@/shared/reactQuery/vehicles/mutations';
 import { vehiclesQueries } from '@/shared/reactQuery';
 import VehiclePngModal from './VehiclePngModal';
 import { VEHICLE_FUEL_TYPES, VEHICLE_MAKES } from '@/shared/constants/vehicles';
 import {showToast} from '@/shared/utils/toasts';
+import Pagination from '@/shared/components/common/pagination';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -831,21 +832,42 @@ function DeleteHandler({
 // ---------------------------------------------------------------------------
 export default function ManageListingsTable() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const user = useSelector(getCurrentUser);
- const [vehicleToDelete, setVehicleToDelete] = useState<Vehicle | null>(null);
-const [vehicleToEdit, setVehicleToEdit] = useState<Vehicle | null>(null);
-const [vehicleToPng, setVehicleToPng] = useState<Vehicle | null>(null);
+  const role = useSelector(getUserRole);
+  const isAdmin = role === 'admin';
+  const pageNoFromUrl = Number(searchParams.get('page') || '1');
+  const pageNo = Number.isNaN(pageNoFromUrl) || pageNoFromUrl < 1 ? 1 : pageNoFromUrl;
+  const pageLimit = 10;
+  const [vehicleToDelete, setVehicleToDelete] = useState<Vehicle | null>(null);
+  const [vehicleToEdit, setVehicleToEdit] = useState<Vehicle | null>(null);
+  const [vehicleToPng, setVehicleToPng] = useState<Vehicle | null>(null);
 
-  const {data, isLoading,refetch} = useFetchAllVehicleList();
+  const listingTypeFilter = searchParams.get('listingType') || '';
+  const startDateFilter = searchParams.get('startDate') || '';
+  const endDateFilter = searchParams.get('endDate') || '';
+
+  const {data, isLoading,refetch} = useFetchAllVehicleList({
+    params: {
+      pageNo,
+      pageLimit,
+      activeOnly: true,
+      ...(listingTypeFilter ? {listingType: listingTypeFilter} : {}),
+      ...(startDateFilter ? {startDate: startDateFilter} : {}),
+      ...(endDateFilter ? {endDate: endDateFilter} : {}),
+      ...(isAdmin ? {} : {creatorId: user?._id || '__no_user__'}),
+    },
+  });
 
   const vehicles: Vehicle[] = data?.data?.vehicles ?? data?.vehicles ?? [];
+  const paginationData = data?.pagination;
+  const totalActiveListings = paginationData?.count ?? 0;
+  const totalPages = paginationData?.totalPages ?? 1;
 
   const listings = useMemo(() => {
-    if (!user?._id) return [];
-    return vehicles.filter(
-      (v) => v.listingType !== null && v.creatorId === user._id,
-    );
-  }, [vehicles, user?._id]);
+    return vehicles.filter((v) => v.listingType !== null);
+  }, [vehicles]);
 
 
   const handleView = (vehicleId: string) => {
@@ -861,20 +883,18 @@ const [vehicleToPng, setVehicleToPng] = useState<Vehicle | null>(null);
   }
 };
 
+  const updatePage = (nextPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', String(nextPage));
+    router.replace(`${pathname}?${params.toString()}`, {scroll: false});
+  };
+
   if (isLoading) return <GlobalLoader height='h-[200px]' />;
 
   if (!user?._id) {
     return (
       <section className='bg-card border border-border rounded-xl p-10 text-center text-muted-foreground text-sm'>
         Loading user information...
-      </section>
-    );
-  }
-
-  if (!listings.length) {
-    return (
-      <section className='bg-card border border-border rounded-xl p-10 text-center text-muted-foreground text-sm'>
-        You have no listings yet.
       </section>
     );
   }
@@ -905,6 +925,9 @@ const [vehicleToPng, setVehicleToPng] = useState<Vehicle | null>(null);
 )}
 
       <section className='bg-card border border-border rounded-xl overflow-hidden'>
+        <div className='px-4 py-3 border-b border-border text-sm font-medium text-foreground'>
+          Total Listings: {totalActiveListings.toLocaleString()}
+        </div>
         {/* Header */}
         <div
           className='
@@ -923,17 +946,33 @@ const [vehicleToPng, setVehicleToPng] = useState<Vehicle | null>(null);
           <span className='text-right'>Actions</span>
         </div>
 
-        {listings.map((item, index) => (
-         <VehicleRow
-  key={item._id}
-  item={item}
-  index={index}
-  onView={handleView}
-  onEdit={handleEdit}
-  onPng={setVehicleToPng}
-  onDeleteRequest={setVehicleToDelete}
-/>
-        ))}
+        {listings.length ? (
+          listings.map((item, index) => (
+            <VehicleRow
+              key={item._id}
+              item={item}
+              index={(pageNo - 1) * pageLimit + index}
+              onView={handleView}
+              onEdit={handleEdit}
+              onPng={setVehicleToPng}
+              onDeleteRequest={setVehicleToDelete}
+            />
+          ))
+        ) : (
+          <div className='p-10 text-center text-muted-foreground text-sm border-t border-border'>
+            You have no active listings yet.
+          </div>
+        )}
+        <div className='px-4 flex justify-end border-t border-border'>
+          <Pagination
+            currentPage={pageNo}
+            totalPages={totalPages}
+            handlePreviousPage={() => updatePage(Math.max(1, pageNo - 1))}
+            handleNextPage={() =>
+              updatePage(Math.min(totalPages, pageNo + 1))
+            }
+          />
+        </div>
       </section>
     </>
   );

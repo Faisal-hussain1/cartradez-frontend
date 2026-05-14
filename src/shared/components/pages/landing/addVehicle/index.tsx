@@ -2,12 +2,15 @@
 
 import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
 
 import { VehiclePayload } from '@/shared/interfaces/vehicles';
 import Container from '@/shared/components/common/containers';
 import { vehiclesMutations } from '@/shared/reactQuery';
+import { vehiclesQueries } from '@/shared/reactQuery';
 import useTranslation from '@/shared/hooks/useTranslation';
 import { newVehicleSchema } from '@/shared/schemas/vehicles';
 import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
@@ -35,19 +38,44 @@ import { CheckboxList } from '@/shared/components/common/checkboxList';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { showToast } from '@/shared/utils/toasts';
+import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
 
 const MAX_TOTAL_UPLOAD_SIZE_BYTES = 30 * 1024 * 1024;
+const LISTING_TYPE_OPTIONS = [
+  { value: 'premium', label: 'Premium' },
+  { value: 'quick sell', label: 'Quick Sell' },
+  { value: 'standard', label: 'Standard' },
+];
+
+const USER_MONTHLY_LIMITS: Record<string, number> = {
+  premium: 1,
+  'quick sell': 1,
+  standard: 1,
+};
+
+const DEALER_MONTHLY_LIMITS: Record<string, number> = {
+  premium: 2,
+  'quick sell': 3,
+  standard: 5,
+};
 
 export default function AddVehicleForm() {
   const { t } = useTranslation();
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const router = useLocaleRouter();
+  const currentUser: any = useSelector(getCurrentUser);
+  const role = useSelector(getUserRole);
+  const isAdmin = role === 'admin';
+  const isDealer = role === 'dealer';
+  const shouldShowMonthlyUsage = !isAdmin;
+  const monthlyLimits = isDealer ? DEALER_MONTHLY_LIMITS : USER_MONTHLY_LIMITS;
 
   const { control, handleSubmit, reset, watch, setValue } =
     useForm<VehiclePayload>({
       resolver: yupResolver(newVehicleSchema(t)),
       shouldFocusError: true,
       defaultValues: {
+        listingType: '',
         make: '',
         model: '',
         variant: '',
@@ -71,6 +99,53 @@ export default function AddVehicleForm() {
         description: '',
       },
     });
+  const { useFetchVehiclesByUserId } = vehiclesQueries();
+  const { data: myVehiclesData, isLoading: isVehiclesLoading } =
+    useFetchVehiclesByUserId({
+      params: {
+        userId: shouldShowMonthlyUsage ? currentUser?._id || '' : '',
+        page: 1,
+        limit: 500,
+      },
+    });
+
+  const monthlyUsageByType = useMemo(() => {
+    if (!shouldShowMonthlyUsage) {
+      return {
+        premium: 0,
+        'quick sell': 0,
+        standard: 0,
+      };
+    }
+
+    const usage: Record<string, number> = {
+      premium: 0,
+      'quick sell': 0,
+      standard: 0,
+    };
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const vehicles = myVehiclesData?.vehicles || [];
+
+    vehicles.forEach((vehicle: any) => {
+      const listingType = String(vehicle?.listingType || '').toLowerCase().trim();
+      if (!usage.hasOwnProperty(listingType)) return;
+
+      const createdAt = vehicle?.createdAt;
+      if (!createdAt) return;
+
+      const createdDate = new Date(createdAt);
+      if (Number.isNaN(createdDate.getTime())) return;
+
+      if (createdDate.getFullYear() === year && createdDate.getMonth() === month) {
+        usage[listingType] += 1;
+      }
+    });
+
+    return usage;
+  }, [myVehiclesData?.vehicles, shouldShowMonthlyUsage]);
 
   const { useAddNewVehicleMutation } = vehiclesMutations();
 
@@ -85,6 +160,36 @@ export default function AddVehicleForm() {
     });
 
   const onSubmit: SubmitHandler<VehiclePayload> = (data) => {
+    const selectedListingType = String(data.listingType || '').toLowerCase().trim();
+    const allowedForType = monthlyLimits[selectedListingType] || 0;
+    const usedForType = monthlyUsageByType[selectedListingType] || 0;
+
+    if (!selectedListingType) {
+      showToast({
+        type: 'error',
+        message: 'Please select a valid listing type.',
+      });
+      return;
+    }
+
+    if (!isAdmin) {
+      if (!allowedForType) {
+        showToast({
+          type: 'error',
+          message: 'Please select a valid listing type.',
+        });
+        return;
+      }
+
+      if (usedForType >= allowedForType) {
+        showToast({
+          type: 'error',
+          message: `Monthly limit reached for ${data.listingType}. You have used ${usedForType}/${allowedForType} this month.`,
+        });
+        return;
+      }
+    }
+
     const totalUploadBytes = data.images.reduce(
       (sum, file) => sum + (file?.size || 0),
       0
@@ -101,6 +206,7 @@ export default function AddVehicleForm() {
 
     const formData = new FormData();
 
+    formData.append('listingType', data.listingType);
     formData.append('make', data.make);
     formData.append('model', data.model);
     if (data.variant) formData.append('variant', data.variant);
@@ -192,6 +298,37 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                   heading='Basic Car Information'
                   subHeading='(Only Make, Model, Year, and Images are required)'
                 >
+                  <div className='grid grid-cols-12 gap-2 mt-3'>
+                    <div className='md:col-span-6 col-span-12' data-field-name='listingType'>
+                      <CustomSelectInput
+                        label='Listing Type'
+                        name='listingType'
+                        placeholder='Select Listing Type'
+                        control={control}
+                        options={LISTING_TYPE_OPTIONS}
+                        isRequired={true}
+                        isCreatable={false}
+                      />
+                    </div>
+                    {shouldShowMonthlyUsage && (
+                      <div className='md:col-span-6 col-span-12 flex items-end'>
+                        <div className='w-full rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm'>
+                          <p className='font-medium'>This Month Usage</p>
+                          <p>
+                            Premium: {monthlyUsageByType.premium}/{monthlyLimits.premium}
+                          </p>
+                          <p>
+                            Quick Sell: {monthlyUsageByType['quick sell']}/{monthlyLimits['quick sell']}
+                          </p>
+                          <p>
+                            Standard: {monthlyUsageByType.standard}/{monthlyLimits.standard}
+                            {isVehiclesLoading ? ' (loading...)' : ''}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <div className='grid grid-cols-12 gap-2 mt-3'>
                     <div className='md:col-span-6 col-span-12' data-field-name='make'>
                       <CustomSelectInput

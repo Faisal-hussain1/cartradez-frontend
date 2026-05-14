@@ -9,6 +9,9 @@ export type BuildDynamicUrlParamsType = {
   status?: string;
   id?: string;
   nextPageStartAfter?: string;
+  activeOnly?: boolean;
+  creatorId?: string;
+  listingType?: string;
 };
 
 export type DecodeTokenResult = {

@@ -1,10 +1,47 @@
 'use client';
 
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import {ChevronDown, Calendar} from 'lucide-react';
+import {getCurrentUser} from '@/shared/redux/slices/users';
+import {usePathname, useSearchParams} from 'next/navigation';
+import {useMemo} from 'react';
+import {useSelector} from 'react-redux';
 
 export default function ManageListingsHeader() {
-  const router=useLocaleRouter();
+  const user = useSelector(getCurrentUser);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const isAdminDealer =
+    user?.systemRole === 'admin' || user?.systemRole === 'dealer';
+  const router = useLocaleRouter();
+
+  const listingType = searchParams.get('listingType') || '';
+  const startDate = searchParams.get('startDate') || '';
+  const endDate = searchParams.get('endDate') || '';
+
+  const listingTypeOptions = useMemo(
+    () => [
+      {label: 'All', value: ''},
+      {label: 'Premium', value: 'premium'},
+      {label: 'Quick Sell', value: 'quick sell'},
+      {label: 'Standard', value: 'standard'},
+    ],
+    []
+  );
+
+  const updateQueryParams = (updates: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+      else params.delete(key);
+    });
+
+    params.set('page', '1');
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname);
+  };
+
   return (
     <section className='space-y-4'>
       {/* Top row */}
@@ -13,7 +50,7 @@ export default function ManageListingsHeader() {
           Manage Listings
         </h1>
 
-        <button onClick={()=>router.push('/selectRole')}
+        {isAdminDealer ? <button onClick={() => router.push('/vehicles/add')}
           className='cursor-pointer
             px-4 py-2
             text-sm font-medium
@@ -25,89 +62,85 @@ export default function ManageListingsHeader() {
           '
         >
           Create a New Listing
-        </button>
+        </button> : <button onClick={() => router.push('/selectRole')}
+          className='cursor-pointer
+            px-4 py-2
+            text-sm font-medium
+            rounded-md
+            text-white
+            bg-[var(--sidebar-dark-blue)]
+            hover:opacity-90
+            transition
+          '
+        >
+          Create a New Listing
+        </button>}
       </div>
 
       {/* Filters */}
       <div
         className='
           grid grid-cols-1
-          md:grid-cols-3
-          gap-4
+          md:grid-cols-4
+          gap-4 mb-3
         '
       >
-        {/* Listed By */}
-        <FilterSelect label='Listed By' placeholder='All' />
+        <div className='space-y-1.5'>
+          <label className='text-xs font-medium text-muted-foreground'>
+            Listing Type
+          </label>
+          <select
+            value={listingType}
+            onChange={(e) => updateQueryParams({listingType: e.target.value})}
+            className='w-full px-3 py-2 bg-card border border-border rounded-md text-sm'
+          >
+            {listingTypeOptions.map((option) => (
+              <option key={option.value || 'all'} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {/* Listing Type */}
-        <FilterSelect label='Listing Type' placeholder='All' />
+        <div className='space-y-1.5'>
+          <label className='text-xs font-medium text-muted-foreground'>
+            Created From
+          </label>
+          <input
+            type='date'
+            value={startDate}
+            onChange={(e) => updateQueryParams({startDate: e.target.value})}
+            className='w-full px-3 py-2 bg-card border border-border rounded-md text-sm'
+          />
+        </div>
 
-        {/* Created On */}
-        <FilterDate />
+        <div className='space-y-1.5'>
+          <label className='text-xs font-medium text-muted-foreground'>
+            Created To
+          </label>
+          <input
+            type='date'
+            value={endDate}
+            onChange={(e) => updateQueryParams({endDate: e.target.value})}
+            className='w-full px-3 py-2 bg-card border border-border rounded-md text-sm'
+          />
+        </div>
+
+        <div className='flex items-end'>
+          <button
+            onClick={() =>
+              updateQueryParams({
+                listingType: '',
+                startDate: '',
+                endDate: '',
+              })
+            }
+            className='w-full px-3 py-2 rounded-md border border-border text-sm hover:bg-muted'
+          >
+            Reset Filters
+          </button>
+        </div>
       </div>
     </section>
-  );
-}
-
-/* ----------------------- */
-
-function FilterSelect({
-  label,
-  placeholder,
-}: {
-  label: string;
-  placeholder: string;
-}) {
-  return (
-    <div className='space-y-1.5'>
-      <label className='text-xs font-medium text-muted-foreground'>
-        {label}
-      </label>
-
-      <div
-        className='
-          flex items-center justify-between
-          px-3 py-2
-          bg-card
-          border border-border
-          rounded-md
-          cursor-pointer
-          hover:border-[var(--blue100)]
-          transition
-        '
-      >
-        <span className='text-sm text-foreground'>{placeholder}</span>
-        <ChevronDown size={16} className='text-muted-foreground' />
-      </div>
-    </div>
-  );
-}
-
-/* ----------------------- */
-
-function FilterDate() {
-  return (
-    <div className='space-y-1.5'>
-      <label className='text-xs font-medium text-muted-foreground'>
-        Created On
-      </label>
-
-      <div
-        className='
-          flex items-center justify-between
-          px-3 py-2
-          bg-card
-          border border-border
-          rounded-md
-          hover:border-[var(--blue100)]
-          transition
-        '
-      >
-        <span className='text-sm text-muted-foreground'>
-          Select Date or Date Range
-        </span>
-        <Calendar size={16} className='text-muted-foreground' />
-      </div>
-    </div>
   );
 }

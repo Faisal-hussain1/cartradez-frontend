@@ -3,6 +3,7 @@ import {TranslateFunction} from '@/shared/types/common';
 
 export const newVehicleSchema = (t: TranslateFunction) =>
   Yup.object({
+    listingType: Yup.string().required('Listing type is required'),
     make: Yup.string().required(t('vehicleListingValidation.makeRequired')),
     model: Yup.string().required(t('vehicleListingValidation.modelRequired')),
     variant: Yup.string(),

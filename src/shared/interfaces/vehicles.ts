@@ -1,6 +1,7 @@
 import {Vehicle} from './common';
 
 export interface VehiclePayload {
+  listingType: string;
   make: string;
   model: string;
   variant?: string;

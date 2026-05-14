@@ -15,6 +15,9 @@ export const buildDynamicURL = (
     status = '',
     id = '',
     nextPageStartAfter = '',
+    activeOnly,
+    creatorId = '',
+    listingType = '',
   } = params || {};
   const queryParams = new URLSearchParams();
 
@@ -27,6 +30,11 @@ export const buildDynamicURL = (
   if (endDate) queryParams.append('endDate', endDate);
   if (status) queryParams.append('status', status);
   if (id) queryParams.append('id', id);
+  if (typeof activeOnly === 'boolean') {
+    queryParams.append('activeOnly', activeOnly.toString());
+  }
+  if (creatorId) queryParams.append('creatorId', creatorId);
+  if (listingType) queryParams.append('listingType', listingType);
   if (nextPageStartAfter)
     queryParams.append('startingAfter', nextPageStartAfter);
 
