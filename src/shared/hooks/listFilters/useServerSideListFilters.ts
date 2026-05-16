@@ -80,6 +80,7 @@ ServerSideListFiltersProps<T> & {
   const {data, isLoading, error, message, statusCode, invalidateQuery} =
     queryToCall({
       params: {
+        ...(listType?.defaultQueryParams || {}),
         ...pageOptions,
         ...(paginationType === PAGINATION_TYPES.cursorBased.value && {
           pageToken: getCurrentPageToken(),

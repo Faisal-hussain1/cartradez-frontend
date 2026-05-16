@@ -11,6 +11,7 @@ const buildVehicleListQueryKey = (baseKey: string, params?: Record<string, any>)
   params?.pageNo ?? 1,
   params?.pageLimit ?? 10,
   params?.activeOnly ?? null,
+  params?.prioritizeListingType ?? null,
   params?.creatorId ?? null,
   params?.listingType ?? null,
   params?.startDate ?? null,
