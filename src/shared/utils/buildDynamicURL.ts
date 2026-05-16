@@ -16,6 +16,7 @@ export const buildDynamicURL = (
     id = '',
     nextPageStartAfter = '',
     activeOnly,
+    prioritizeListingType,
     creatorId = '',
     listingType = '',
   } = params || {};
@@ -32,6 +33,9 @@ export const buildDynamicURL = (
   if (id) queryParams.append('id', id);
   if (typeof activeOnly === 'boolean') {
     queryParams.append('activeOnly', activeOnly.toString());
+  }
+  if (typeof prioritizeListingType === 'boolean') {
+    queryParams.append('prioritizeListingType', prioritizeListingType.toString());
   }
   if (creatorId) queryParams.append('creatorId', creatorId);
   if (listingType) queryParams.append('listingType', listingType);

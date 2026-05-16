@@ -44,6 +44,10 @@ export const LIST_TYPES = {
 
   homePageVehicles: {
     value: 'homePageVehicles',
+    defaultQueryParams: {
+      activeOnly: true,
+      prioritizeListingType: true,
+    },
     search: {
       keys: ['make', 'model'],
     },
