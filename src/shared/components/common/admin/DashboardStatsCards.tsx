@@ -18,7 +18,14 @@ export default function DashboardStatsCards() {
   const isAdmin = role === 'admin';
 
   const activeListingsCount = useMemo(() => {
-    return data?.count ?? 0;
+    const rawCount =
+      data?.count ??
+      data?.data?.count ??
+      data?.data?.body?.count ??
+      data?.body?.count ??
+      0;
+
+    return Number(rawCount) || 0;
   }, [data]);
 
   const stats: StatItem[] = [

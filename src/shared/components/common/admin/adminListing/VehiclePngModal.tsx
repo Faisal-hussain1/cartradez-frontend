@@ -1,6 +1,6 @@
 'use client';
 
-import {useMemo, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {Download, X} from 'lucide-react';
 import {toBlob, toPng} from 'html-to-image';
 import {vehiclesQueries} from '@/shared/reactQuery';
@@ -55,31 +55,22 @@ function formatPrice(currency?: string, price?: number) {
   return `${symbol} ${Number(price).toLocaleString()}`;
 }
 
-// FIX 1: resolve() on onerror instead of reject().
-// If an image fails (network error, CORS, missing file) we should NOT abort
-// the entire download — we just let it render with whatever the browser has,
-// which is either the broken-image placeholder or the fallback src already
-// swapped in by the <img onError> handler below.
-// FIX 3: Added timeout per image (3s) to prevent hanging on slow/failed loads
 async function waitForImages(element: HTMLElement, timeoutMs = 3000) {
   const images = Array.from(element.querySelectorAll('img'));
 
   await Promise.all(
     images.map((img) => {
-      // Already loaded and valid
       if (img.complete && img.naturalWidth > 0) return Promise.resolve();
 
       return new Promise<void>((resolve) => {
         const timeoutId = setTimeout(() => {
-          resolve(); // Timeout - just resolve anyway to prevent hanging
+          resolve();
         }, timeoutMs);
 
         img.onload = () => {
           clearTimeout(timeoutId);
           resolve();
         };
-        // FIX: was `reject(new Error(...))` — that threw and killed the download
-        // for a missing fallback image. Now we resolve so toPng still runs.
         img.onerror = () => {
           clearTimeout(timeoutId);
           resolve();
@@ -91,7 +82,7 @@ async function waitForImages(element: HTMLElement, timeoutMs = 3000) {
 
 function preloadFallback(src: string): Promise<void> {
   return new Promise((resolve) => {
-    const timeoutId = setTimeout(() => resolve(), 2000); // 2s timeout
+    const timeoutId = setTimeout(() => resolve(), 2000);
     const img = new Image();
     img.onload = () => {
       clearTimeout(timeoutId);
@@ -100,7 +91,7 @@ function preloadFallback(src: string): Promise<void> {
     img.onerror = () => {
       clearTimeout(timeoutId);
       resolve();
-    }; // still resolve — best-effort
+    };
     img.src = src;
   });
 }
@@ -118,9 +109,24 @@ const FALLBACK_IMAGE = '/images/default-car.jpg';
 
 function makeImageUrl(url?: string) {
   if (!url) return FALLBACK_IMAGE;
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  if (url.startsWith('/')) return url;
-  return `/${url}`;
+  const normalized = String(url).trim().replace(/\\/g, '/');
+  if (normalized.startsWith('data:')) return normalized;
+  if (normalized.startsWith('http://') || normalized.startsWith('https://')) {
+    return normalized;
+  }
+  if (normalized.startsWith('//')) return `https:${normalized}`;
+  if (normalized.startsWith('/')) return normalized;
+
+  const bucketHost = process.env.NEXT_PUBLIC_AWS_BUCKET_HOSTNAME?.replace(
+    /^https?:\/\//,
+    '',
+  );
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, '');
+
+  if (bucketHost) return `https://${bucketHost}/${normalized}`;
+  if (serverUrl) return `${serverUrl}/${normalized}`;
+
+  return `/${normalized}`;
 }
 
 function getProxyImageUrl(url: string) {
@@ -154,31 +160,46 @@ function PosterDesign({
   useProxyImage?: boolean;
 }) {
   const title = getVehicleTitle(vehicle);
-  const image = getVehicleImage(vehicle, useProxyImage);
+
+  // Derive URLs fresh from props on every render — no stale state
+  const rawImage = getVehicleImage(vehicle, false);
+  const proxiedImage = getVehicleImage(vehicle, true);
+
+  // imgOverride only tracks error-fallback state.
+  // Reset to null whenever the source vehicle image changes so a newly
+  // resolved fullVehicle always shows its own cover image.
+  const [imgOverride, setImgOverride] = useState<string | null>(null);
+
+  useEffect(() => {
+    setImgOverride(null);
+  }, [rawImage, proxiedImage]);
+
+  const imageSrc = imgOverride ?? (useProxyImage ? proxiedImage : rawImage);
+
   const details = [
-  {label: 'Year', value: vehicle.year || 'N/A'},
-  {label: 'Variant', value: vehicle.variant || 'N/A'},
-  {
-    label: 'Mileage',
-    value: vehicle.mileage
-      ? `${vehicle.mileage.toLocaleString()} KM`
-      : 'N/A',
-  },
-  {label: 'Fuel Type', value: vehicle.fuelType || 'N/A'},
-  {label: 'Transmission', value: vehicle.transmission || 'N/A'},
-  {label: 'Body Type', value: vehicle.bodyType || 'N/A'},
-  {label: 'Color', value: vehicle.color || 'N/A'},
-  {label: 'Condition', value: vehicle.condition || 'N/A'},
-  {
-    label: 'Engine',
-    value: vehicle.engineSize
-      ? `${vehicle.engineSize} cc`
-      : 'N/A',
-  },
-  {label: 'Drive Type', value: vehicle.driveType || 'N/A'},
-  {label: 'Available.City', value: vehicle.registrationCity || 'N/A'},
-  {label: 'Owners', value: vehicle.numberOfOwners || 'N/A'},
-];
+    {label: 'Year', value: vehicle.year || 'N/A'},
+    {label: 'Variant', value: vehicle.variant || 'N/A'},
+    {
+      label: 'Mileage',
+      value: vehicle.mileage
+        ? `${vehicle.mileage.toLocaleString()} KM`
+        : 'N/A',
+    },
+    {label: 'Fuel Type', value: vehicle.fuelType || 'N/A'},
+    {label: 'Transmission', value: vehicle.transmission || 'N/A'},
+    {label: 'Body Type', value: vehicle.bodyType || 'N/A'},
+    {label: 'Color', value: vehicle.color || 'N/A'},
+    {label: 'Condition', value: vehicle.condition || 'N/A'},
+    {
+      label: 'Engine',
+      value: vehicle.engineSize
+        ? `${vehicle.engineSize} cc`
+        : 'N/A',
+    },
+    {label: 'Drive Type', value: vehicle.driveType || 'N/A'},
+    {label: 'Available.City', value: vehicle.registrationCity || 'N/A'},
+    {label: 'Owners', value: vehicle.numberOfOwners || 'N/A'},
+  ];
 
   return (
     <div
@@ -201,15 +222,20 @@ function PosterDesign({
       {/* Vehicle Image */}
       <div className='absolute left-0 top-[120px] h-[500px] w-full bg-neutral-200'>
         <img
-          src={image}
+          src={imageSrc}
           alt={title}
-          crossOrigin='anonymous'
           referrerPolicy='no-referrer'
+          loading='eager'
           className='h-full w-full object-cover'
-          onError={(e) => {
-            // Swap to fallback only once to avoid infinite loop
-            if (e.currentTarget.src !== window.location.origin + FALLBACK_IMAGE) {
-              e.currentTarget.src = FALLBACK_IMAGE;
+          onError={() => {
+            // If we were using the proxy and it failed, try the raw URL
+            if (useProxyImage && imageSrc !== rawImage) {
+              setImgOverride(rawImage);
+              return;
+            }
+            // Otherwise fall back to the default image
+            if (imageSrc !== FALLBACK_IMAGE) {
+              setImgOverride(FALLBACK_IMAGE);
             }
           }}
         />
@@ -225,28 +251,28 @@ function PosterDesign({
 
       {/* Details */}
       <div className='absolute left-0 top-[640px] w-full px-12'>
-       <div className='grid grid-cols-3 gap-4'>
-  {details.map((item) => (
-    <div
-      key={item.label}
-      className='rounded-2xl border border-black/10 bg-white px-5 py-4 shadow-sm'
-    >
-      <p className='text-xl font-semibold text-black/45'>
-        {item.label}
-      </p>
-      <p className='mt-2 truncate text-3xl font-black capitalize text-black'>
-        {item.value}
-      </p>
-    </div>
-  ))}
-</div>
+        <div className='grid grid-cols-3 gap-4'>
+          {details.map((item) => (
+            <div
+              key={item.label}
+              className='rounded-2xl border border-black/10 bg-white px-5 py-4 shadow-sm'
+            >
+              <p className='text-xl font-semibold text-black/45'>
+                {item.label}
+              </p>
+              <p className='mt-2 truncate text-3xl font-black capitalize text-black'>
+                {item.value}
+              </p>
+            </div>
+          ))}
+        </div>
 
         <div className='mt-6 rounded-[28px] bg-black px-8 py-6 text-center text-white'>
-  <h3 className='text-3xl font-black'>Interested in this vehicle?</h3>
-  <p className='mt-2 text-xl font-medium text-white/70'>
-    Visit CarTradez and contact the seller directly.
-  </p>
-</div>
+          <h3 className='text-3xl font-black'>Interested in this vehicle?</h3>
+          <p className='mt-2 text-xl font-medium text-white/70'>
+            Visit CarTradez and contact the seller directly.
+          </p>
+        </div>
       </div>
 
       {/* Footer */}
@@ -288,16 +314,9 @@ export default function VehiclePngModal({
     try {
       setIsDownloading(true);
 
-      // Wait for fonts
       if (document.fonts) await document.fonts.ready;
 
-      // FIX 2: pre-load the fallback so html-to-image can embed it as base64.
-      // Without this, if the vehicle image fails and the browser swaps to the
-      // fallback, html-to-image may still see an unloaded <img> and produce a
-      // blank square or throw.
       await preloadFallback(FALLBACK_IMAGE);
-
-      // FIX 1: waitForImages now resolves on error — won't throw for broken imgs
       await waitForImages(posterRef.current);
 
       // Small settle delay — ensures any src-swap triggered by onError has
@@ -307,7 +326,8 @@ export default function VehiclePngModal({
       const filename = `${getVehicleTitle(fullVehicle)
         .replace(/\s+/g, '-')
         .toLowerCase()}-cartradez-poster.png`;
-      const exportPixelRatio = window.innerWidth <= 430 ? 1 : Math.min(window.devicePixelRatio || 1, 1.75);
+      const exportPixelRatio =
+        window.innerWidth <= 430 ? 1 : Math.min(window.devicePixelRatio || 1, 1.75);
 
       const blob = await toBlob(posterRef.current, {
         cacheBust: true,
@@ -321,6 +341,8 @@ export default function VehiclePngModal({
         const objectUrl = URL.createObjectURL(blob);
         link.href = objectUrl;
         link.download = filename;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -341,7 +363,6 @@ export default function VehiclePngModal({
       link.click();
       document.body.removeChild(link);
 
-      // Last-resort fallback for browsers that block programmatic downloads.
       if (!link.download) {
         window.open(dataUrl, '_blank', 'noopener,noreferrer');
       }
