@@ -22,9 +22,12 @@ const getVehicleUploadErrorMessage = (error: any): string => {
   const status = error?.response?.status;
   const message = String(error?.message || '').toLowerCase();
   const rawServerMessage = String(error?.response?.data?.message || '').toLowerCase();
+  const MAX_PER_IMAGE_MB = 5;
+  const MAX_TOTAL_MB = 8;
+  const MAX_IMAGE_COUNT = 9;
 
   if (status === 413 || message.includes('payload too large')) {
-    return 'Upload size is too large. Please upload fewer images or compress them and try again.';
+    return `Upload payload is too large. Max ${MAX_PER_IMAGE_MB} MB per image, max ${MAX_IMAGE_COUNT} images, and recommended total up to ${MAX_TOTAL_MB} MB.`;
   }
 
   if (
@@ -32,7 +35,7 @@ const getVehicleUploadErrorMessage = (error: any): string => {
     message.includes('file too large') ||
     rawServerMessage.includes('file too large')
   ) {
-    return 'One or more images are too large. Each image must be 5 MB or smaller.';
+    return `One or more images are too large. Max allowed per image is ${MAX_PER_IMAGE_MB} MB.`;
   }
 
   if (rawServerMessage.includes('maximum of 9 images')) {
@@ -44,7 +47,7 @@ const getVehicleUploadErrorMessage = (error: any): string => {
   }
 
   if (error?.code === 'ERR_NETWORK' || message === 'network error') {
-    return 'Upload failed due to network/server connection. Please check internet and try again with fewer or smaller images.';
+    return `Upload failed. This often happens when images are too large. Allowed: ${MAX_PER_IMAGE_MB} MB per image, up to ${MAX_IMAGE_COUNT} images, recommended total up to ${MAX_TOTAL_MB} MB.`;
   }
 
   return error?.message || 'Failed to upload vehicle. Please try again.';

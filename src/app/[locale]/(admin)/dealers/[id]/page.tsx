@@ -82,8 +82,9 @@ export default function DealerDetailPage() {
     }
   };
 
-   const canApproveDealer = (dealer: Dealer) =>
-    Boolean(dealer.showroomName?.trim()) || Boolean(dealer.ntnNo?.trim());
+  const canApproveDealer = (dealer: Dealer) =>
+    dealer.dealerStatus !== 'approved' &&
+    (Boolean(dealer.showroomName?.trim()) || Boolean(dealer.ntnNo?.trim()));
   const canRejectDealer = (dealer: Dealer) =>
     dealer.dealerStatus === 'pending' || dealer.dealerStatus === 'approved';
 

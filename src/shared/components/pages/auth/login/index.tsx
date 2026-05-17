@@ -29,6 +29,8 @@ export default function LoginForm() {
   const {t, ct} = useTranslation();
   const router = useLocaleRouter();
   const searchParams = useSearchParams();
+  const reason = searchParams.get('reason');
+  const from = searchParams.get('from');
   const {useLoginMutation} = userMutations();
 
   const createQueryString = useCallback(
@@ -94,6 +96,11 @@ export default function LoginForm() {
           subHeading={t('auth.loginSubHeading')}
           handleSubmit={handleSubmit(onSubmit)}
         >
+          {reason === 'login_required' && from === 'dealer' && (
+            <p className='rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800'>
+              Please login to access the dealer page.
+            </p>
+          )}
           <TextInput
             name='email'
             label={t('auth.emailLabel')}

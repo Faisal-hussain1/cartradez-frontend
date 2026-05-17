@@ -48,6 +48,23 @@ function EditVehicleModal({
   onClose: () => void;
   refetch?: () => void | Promise<unknown>;
 }) {
+  const normalizeCurrencyValue = (currency?: string) =>
+    String(currency || 'usd').toLowerCase();
+  const toTitleCase = (value: string) =>
+    value
+      .split(' ')
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+      .join(' ');
+  const makeOptions = Object.values(VEHICLE_MAKES).map((make: any) => {
+    const value = String(make?.value || make || '').toLowerCase();
+    return {value, label: toTitleCase(value)};
+  });
+  const fuelTypeOptions = Object.values(VEHICLE_FUEL_TYPES).map((fuel: any) => {
+    const value = String(fuel?.value || fuel || '').toLowerCase();
+    return {value, label: toTitleCase(value)};
+  });
+
    const {useFetchVehicleById} = vehiclesQueries();
 
 
@@ -83,14 +100,14 @@ function EditVehicleModal({
     engineSize: 0,
     driveType: '',
     price: '',
-    currency: 'ZMW',
+    currency: 'usd',
     listingType: '',
   });
 
   useEffect(() => {
     if (!vehicleDetail) return;
     setForm({
-      make: vehicleDetail?.make || '',
+      make: String(vehicleDetail?.make || '').toLowerCase(),
       model: vehicleDetail?.model || '',
       year: vehicleDetail?.year || '',
       variant: vehicleDetail?.variant || '',
@@ -103,13 +120,13 @@ function EditVehicleModal({
       features: vehicleDetail?.features || [],
       description: vehicleDetail?.description || '',
       bodyType: vehicleDetail?.bodyType || '',
-      fuelType: vehicleDetail?.fuelType || '',
+      fuelType: String(vehicleDetail?.fuelType || '').toLowerCase(),
       transmission: vehicleDetail?.transmission || '',
       color: vehicleDetail?.color || '',
       engineSize: vehicleDetail?.engineSize || 0,
       driveType: vehicleDetail?.driveType || '',
       price: vehicleDetail?.price || '',
-      currency: vehicleDetail?.currency || 'ZMW',
+      currency: normalizeCurrencyValue(vehicleDetail?.currency),
       listingType: vehicleDetail?.listingType || '',
     });
   }, [vehicleDetail]);
@@ -353,32 +370,23 @@ function EditVehicleModal({
             </div>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-           <div>
-  <label className='text-sm font-medium'>Make</label>
-
-  <input
-    name='make'
-    value={form.make}
-    onChange={handleChange}
-    list='vehicle-makes-list'
-    placeholder='Select or type make'
-    className='mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
-    required
-  />
-
-  <datalist id='vehicle-makes-list'>
-    {Object.values(VEHICLE_MAKES).map((make: any) => {
-      const value =
-        typeof make === 'object'
-          ? make.value || make.label
-          : make;
-
-      return (
-        <option key={value} value={value} />
-      );
-    })}
-  </datalist>
-</div>
+            <div>
+              <label className='text-sm font-medium'>Make</label>
+              <select
+                name='make'
+                value={form.make}
+                onChange={handleChange}
+                className='mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
+                required
+              >
+                <option value=''>Select make</option>
+                {makeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <div>
               <label className='text-sm font-medium'>Model</label>
@@ -471,30 +479,22 @@ function EditVehicleModal({
                 
               />
             </div>
-             <div>
-  <label className='text-sm font-medium'>Fuel Type</label>
-
-  <input
-    name='fuelType'
-    value={form.fuelType}
-    onChange={handleChange}
-    list='vehicle-fuel-types-list'
-    placeholder='Select or type fuel type'
-    className='mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
-    
-  />
-
-  <datalist id='vehicle-fuel-types-list'>
-    {Object.values(VEHICLE_FUEL_TYPES).map((fuelType: any) => {
-      const value =
-        typeof fuelType === 'object'
-          ? fuelType.value || fuelType.label
-          : fuelType;
-
-      return <option key={value} value={value} />;
-    })}
-  </datalist>
-</div>
+            <div>
+              <label className='text-sm font-medium'>Fuel Type</label>
+              <select
+                name='fuelType'
+                value={form.fuelType}
+                onChange={handleChange}
+                className='mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
+              >
+                <option value=''>Select fuel type</option>
+                {fuelTypeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <div>
               <label className='text-sm font-medium'>Year</label>
@@ -560,8 +560,8 @@ function EditVehicleModal({
                 onChange={handleChange}
                 className='mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
               >
-                <option value='ZMW'>ZMW</option>
-                <option value='USD'>USD</option>
+                <option value='zmw'>ZMW</option>
+                <option value='usd'>USD</option>
               </select>
             </div>
 

@@ -9,7 +9,8 @@ import {
 const useRouteType = () => {
   const pathName = usePathname();
 
-  const isAdminRoute = ADMIN_ROUTES_LIST.includes(pathName);
+  const isDealersRoute = pathName.startsWith('/dealers');
+  const isAdminRoute = ADMIN_ROUTES_LIST.includes(pathName) || isDealersRoute;
 
   const isAuthRoute = AUTH_ROUTES_LIST.includes(pathName);
 
@@ -21,6 +22,7 @@ const useRouteType = () => {
 
   return {
     isAdminRoute,
+    isDealersRoute,
     isAuthRoute,
     isPublicRoute,
     isManagerRoute,

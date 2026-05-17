@@ -16,6 +16,7 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
   const {
     isAuthRoute,
     isAdminRoute,
+    isDealersRoute,
     isManagerRoute,
     isUserRoute,
     isPublicRoute,
@@ -146,7 +147,10 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
 
     if (!isLoggedIn && isAuthorizeRoutes) {
       setMount(true);
-      return router.push(AUTH_ROUTES.login);
+      const loginPath = isDealersRoute
+        ? `${AUTH_ROUTES.login}?reason=login_required&from=dealer`
+        : AUTH_ROUTES.login;
+      return router.push(loginPath);
     }
 
     if (isLoggedIn && isAuthRoute) {
@@ -166,6 +170,7 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     isLoggedIn,
     isAuthRoute,
     isAdminRoute,
+    isDealersRoute,
     isManagerRoute,
     isUserRoute,
     isPublicRoute,

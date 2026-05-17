@@ -279,7 +279,7 @@ function PosterDesign({
       <div className='absolute bottom-0 left-0 w-full bg-white px-14 py-9 text-center'>
         <p className='text-2xl font-bold text-black'>www.cartradez.com</p>
         <p className='mt-3 text-xl font-medium leading-snug text-black/60'>
-          We are not selling vehicles. We only provide online ad/listing
+          We are not selling vehicles. We only provide online Ad/Listing
           packages.
         </p>
       </div>
