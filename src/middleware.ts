@@ -22,6 +22,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   if (!unprotectedRoutes && !authToken) {
     const newRequestUrl = new URL(request.nextUrl.origin);
     newRequestUrl.pathname = AUTH_ROUTES.login;
+    newRequestUrl.searchParams.set('reason', 'login_required');
+    if (newPath.startsWith('/dealers')) {
+      newRequestUrl.searchParams.set('from', 'dealer');
+    }
     const nextResponse = NextResponse.redirect(newRequestUrl);
 
     return nextResponse;

@@ -40,7 +40,8 @@ import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { showToast } from '@/shared/utils/toasts';
 import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
 
-const MAX_TOTAL_UPLOAD_SIZE_BYTES = 30 * 1024 * 1024;
+const MAX_TOTAL_UPLOAD_SIZE_BYTES = 8 * 1024 * 1024;
+const MAX_SINGLE_UPLOAD_SIZE_BYTES = 5 * 1024 * 1024;
 const LISTING_TYPE_OPTIONS = [
   { value: 'premium', label: 'Premium' },
   { value: 'quick sell', label: 'Quick Sell' },
@@ -190,16 +191,39 @@ export default function AddVehicleForm() {
       }
     }
 
+    const oversizedFiles = data.images.filter(
+      (file) => (file?.size || 0) > MAX_SINGLE_UPLOAD_SIZE_BYTES
+    );
+
+    if (oversizedFiles.length > 0) {
+      const maxFileSizeMb = MAX_SINGLE_UPLOAD_SIZE_BYTES / (1024 * 1024);
+      const fileNames = oversizedFiles
+        .slice(0, 3)
+        .map((file) => file.name || 'Unnamed file')
+        .join(', ');
+      const remainingCount = oversizedFiles.length - 3;
+
+      showToast({
+        type: 'error',
+        message:
+          remainingCount > 0
+            ? `Some images are too large. Max allowed per image is ${maxFileSizeMb} MB. Example files: ${fileNames} and ${remainingCount} more.`
+            : `Some images are too large. Max allowed per image is ${maxFileSizeMb} MB. Files: ${fileNames}.`,
+      });
+      return;
+    }
+
     const totalUploadBytes = data.images.reduce(
       (sum, file) => sum + (file?.size || 0),
       0
     );
 
     if (totalUploadBytes > MAX_TOTAL_UPLOAD_SIZE_BYTES) {
+      const totalMb = (totalUploadBytes / (1024 * 1024)).toFixed(1);
+      const allowedMb = (MAX_TOTAL_UPLOAD_SIZE_BYTES / (1024 * 1024)).toFixed(0);
       showToast({
         type: 'error',
-        message:
-          'Total upload size is too large. Please compress images or upload fewer images (recommended total: up to 30 MB).',
+        message: `Total upload size is ${totalMb} MB, but allowed total is ${allowedMb} MB. Please compress images or upload fewer files.`,
       });
       return;
     }
@@ -226,7 +250,10 @@ export default function AddVehicleForm() {
     formData.append('registrationCity', data.registrationCity);
     formData.append('registrationNumber', data.registrationNumber);
     formData.append('registrationYear', data.registrationYear);
-    formData.append('numberOfOwners', data.numberOfOwners);
+    formData.append(
+      'numberOfOwners',
+      data.numberOfOwners?.trim() || 'Freshly Imported'
+    );
 
     formData.append('description', data.description);
 
@@ -312,6 +339,9 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                           <p>
                             Standard: {monthlyUsageByType.standard}/{monthlyLimits.standard}
                             {isVehiclesLoading ? ' (loading...)' : ''}
+                          </p>
+                          <p className='mt-2 text-xs text-primary/90'>
+                            Note: Once listing type is set, you will not be able to update it later.
                           </p>
                         </div>
                       </div>
