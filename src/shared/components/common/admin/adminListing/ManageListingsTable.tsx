@@ -816,6 +816,7 @@ function DeleteHandler({
     vehicleId: vehicle._id,
     callBackFuncs: {
       onSuccessAlways: async () => {
+        await refetch?.();
         onCancel();
       },
     },
