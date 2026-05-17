@@ -6,8 +6,8 @@ import {API_ENDPOINTS} from '@/shared/constants/apiEndpoints';
 import {getQueryClient} from '@/shared/utils/queryClient';
 import {showToast} from '@/shared/utils/toasts';
 
-const buildVehicleListQueryKey = (baseKey: string, params?: Record<string, any>) => [
-  baseKey,
+const buildVehicleListQueryKey = (baseKey: string[], params?: Record<string, any>) => [
+  ...baseKey,
   params?.pageNo ?? 1,
   params?.pageLimit ?? 10,
   params?.activeOnly ?? null,
@@ -205,7 +205,7 @@ export const useDeleteVehicle = ({
           queryKey: VEHICLES.fetchVehiclesByUserId.queryKey,
         });
         queryClient.invalidateQueries({
-          queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
+          queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
         });
         showToast({
           type: 'success',

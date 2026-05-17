@@ -8,8 +8,10 @@ import { actions, getCurrentUser, getUserRole } from '@/shared/redux/slices/user
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getRequest } from '@/shared/utils/requests';
 import { AppDispatch } from '@/shared/redux/store';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 
 export default function Leftbar() {
+  const router = useLocaleRouter();
   const dispatch = useDispatch<AppDispatch>();
   const role = useSelector(getUserRole);
   const currentUser: any = useSelector(getCurrentUser);
@@ -103,13 +105,21 @@ export default function Leftbar() {
 
         {/* Logo */}
         <div className="h-[var(--topbar-height)] flex items-center justify-center">
-          <Image
-            src="/images/logo-black.png"
-            alt="Car Tradez"
-            width={90}
-            height={30}
-            priority
-          />
+          <button
+            type='button'
+            onClick={() => router.push('/')}
+            aria-label='Go to home'
+            className='cursor-pointer'
+          >
+            <Image
+              src="/images/logo-black.png"
+              alt="Car Tradez"
+              width={90}
+              height={30}
+              // style={{width: 'auto', height: 'auto'}}
+              priority
+            />
+          </button>
         </div>
 
         {/* Navigation */}

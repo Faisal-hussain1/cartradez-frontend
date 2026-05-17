@@ -55,6 +55,7 @@ export default function Navbar() {
             alt="logo"
             width={70}
             height={70}
+            style={{ height: 'auto' }}
             onClick={() => router.push('/')}
             className="cursor-pointer w-[50px] sm:w-[60px] h-auto"
           />
@@ -114,7 +115,12 @@ export default function Navbar() {
                 </button>
               </SheetTrigger>
 
-              <SheetContent side="left" className="w-64">
+              <SheetContent
+                side="left"
+                className="w-64"
+                title="Mobile navigation"
+                description="Use this menu to navigate through the site links and account actions."
+              >
 
                 <nav className="flex flex-col gap-5 mt-8 px-4">
 

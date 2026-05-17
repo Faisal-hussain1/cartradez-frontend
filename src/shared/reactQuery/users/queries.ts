@@ -62,7 +62,7 @@ export const useQueries = () => {
   callBackFuncs?: QueryCallbacks;
 }) =>
   useQueryHandler({
-    queryKey: `${USERS.fetchUserById.queryKey}-${id}`, // ✅ string dynamic
+    queryKey: [...USERS.fetchUserById.queryKey, id],
     endpoint: USERS.fetchUserById.endpoint(id),
     customQueryOptions: {
       enabled: !!id,
@@ -82,7 +82,7 @@ export const useQueries = () => {
   callBackFuncs?: QueryCallbacks;
 }) =>
   useQueryHandler({
-    queryKey: `${CHATS.fetchMessagesByUser.queryKey}-${userId}-${currentUserId}`, // ✅ string dynamic
+    queryKey: [...CHATS.fetchMessagesByUser.queryKey, userId, currentUserId],
     endpoint: CHATS.fetchMessagesByUser.endpoint(userId),
     customQueryOptions: {
       enabled: !!userId && !!currentUserId,
@@ -119,7 +119,7 @@ export const useQueries = () => {
   userId?:any;
 } = {}) =>
   useQueryHandler({
-   queryKey: CHATS.fetchUnRead.queryKey,
+   queryKey: CHATS.fetchUnRead.queryKey(userId),
     endpoint: CHATS.fetchUnRead.endpoint(userId),
     customQueryOptions: {
       enabled: !!userId,

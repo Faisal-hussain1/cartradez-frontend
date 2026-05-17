@@ -53,6 +53,19 @@ ServerSideListFiltersProps<T> & {
     'status',
     parseAsString.withDefault(ct(STATUS_OPTIONS).all.value)
   );
+  const [year, setYear] = useQueryState('year', parseAsString.withDefault(''));
+  const [listingType, setListingType] = useQueryState(
+    'listingType',
+    parseAsString.withDefault('')
+  );
+  const [minPrice, setMinPrice] = useQueryState(
+    'minPrice',
+    parseAsString.withDefault('')
+  );
+  const [maxPrice, setMaxPrice] = useQueryState(
+    'maxPrice',
+    parseAsString.withDefault('')
+  );
 
   const statusOptions = ct(STATUS_OPTIONS);
 
@@ -89,6 +102,10 @@ ServerSideListFiltersProps<T> & {
           pageToken: getCurrentPageToken(),
         }),
         ...(searchValue && {search: searchValue}),
+        ...(year && {year}),
+        ...(listingType && {listingType}),
+        ...(minPrice && {minPrice}),
+        ...(maxPrice && {maxPrice}),
         ...(requestStatus.value !== ct(STATUS_OPTIONS).all.value && {
           status: requestStatus.value,
         }),
@@ -126,10 +143,30 @@ ServerSideListFiltersProps<T> & {
         const status = updates.requestStatus as RequestsStatus;
         setRequestStatusValue(status.value);
       }
+      if ('year' in updates) {
+        setYear(updates.year || '');
+      }
+      if ('listingType' in updates) {
+        setListingType(updates.listingType || '');
+      }
+      if ('minPrice' in updates) {
+        setMinPrice(updates.minPrice || '');
+      }
+      if ('maxPrice' in updates) {
+        setMaxPrice(updates.maxPrice || '');
+      }
 
       resetPaginationOptions();
     },
-    [setSearchValue, setRequestStatusValue, resetPaginationOptions]
+    [
+      setSearchValue,
+      setRequestStatusValue,
+      setYear,
+      setListingType,
+      setMinPrice,
+      setMaxPrice,
+      resetPaginationOptions,
+    ]
   );
 
   return {
@@ -139,6 +176,10 @@ ServerSideListFiltersProps<T> & {
       pageOptions,
       searchValue,
       requestStatus,
+      year,
+      listingType,
+      minPrice,
+      maxPrice,
     },
     isLoading,
     error,

@@ -3,17 +3,17 @@ import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
 
 export function useUnRead() {
-  const user = useSelector(getCurrentUser); // ✅ get user
+  const user = useSelector(getCurrentUser);
 
   const { useFetchUnReadMessages } = userQueries();
 
   const { data, isLoading, refetch } = useFetchUnReadMessages({
-    userId: user?._id, // 🔥 pass user
+    userId: user?._id,
   });
 
   return {
     isLoading,
-    len: data || [],
+    len: Number(data) || 0,
     refetch,
   };
 }

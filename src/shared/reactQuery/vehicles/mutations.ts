@@ -66,7 +66,7 @@ export const useMutations = () => {
           ...callBackFuncs,
           onSuccessAlways: ({message}) => {
             queryClient.invalidateQueries({
-              queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
+              queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
             });
             console.log('Vehicle added successfully:', message);
             showToast({type: 'success', message});
@@ -93,7 +93,7 @@ export const useMutations = () => {
 
       onSuccessAlways: async (response: any) => {
         await queryClient.invalidateQueries({
-          queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
+          queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
         });
 
         showToast({
@@ -132,7 +132,7 @@ export const useMutations = () => {
 
       onSuccessAlways: async (response: any) => {
         await queryClient.invalidateQueries({
-          queryKey: [VEHICLES.fetchAllVehiclesList.queryKey],
+          queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
         });
 
         showToast({

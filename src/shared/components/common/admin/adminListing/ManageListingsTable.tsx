@@ -296,13 +296,15 @@ function EditVehicleModal({
                     >
                       <X size={12} />
                     </button>
-                    <Image
-                      src={preview}
-                      alt='Vehicle image'
-                      width={220}
-                      height={150}
-                      className='w-full h-28 rounded-md object-cover'
-                    />
+                    <div className='relative w-full h-28 rounded-md overflow-hidden'>
+                      <Image
+                        src={preview}
+                        alt='Vehicle image'
+                        fill
+                        className='object-cover'
+                        sizes='220px'
+                      />
+                    </div>
                     <label className='block text-center text-xs px-2 py-1 rounded border border-border cursor-pointer hover:bg-muted'>
                       Replace Image
                       <input
@@ -324,13 +326,15 @@ function EditVehicleModal({
                   >
                     <X size={12} />
                   </button>
-                  <Image
-                    src={preview}
-                    alt='New vehicle image'
-                    width={220}
-                    height={150}
-                    className='w-full h-28 rounded-md object-cover'
-                  />
+                  <div className='relative w-full h-28 rounded-md overflow-hidden'>
+                    <Image
+                      src={preview}
+                      alt='New vehicle image'
+                      fill
+                      className='object-cover'
+                      sizes='220px'
+                    />
+                  </div>
                   <p className='text-xs text-muted-foreground text-center'>New image</p>
                 </div>
               ))}
@@ -996,16 +1000,18 @@ export default function ManageListingsTable() {
             </div>
           )}
         </div>
-        <div className='px-4 flex justify-end border-t border-border'>
-          <Pagination
-            currentPage={pageNo}
-            totalPages={totalPages}
-            handlePreviousPage={() => updatePage(Math.max(1, pageNo - 1))}
-            handleNextPage={() =>
-              updatePage(Math.min(totalPages, pageNo + 1))
-            }
-          />
-        </div>
+        {listings.length > 0 && (
+          <div className='px-4 flex justify-end border-t border-border'>
+            <Pagination
+              currentPage={pageNo}
+              totalPages={totalPages}
+              handlePreviousPage={() => updatePage(Math.max(1, pageNo - 1))}
+              handleNextPage={() =>
+                updatePage(Math.min(totalPages, pageNo + 1))
+              }
+            />
+          </div>
+        )}
       </section>
     </>
   );
