@@ -15,17 +15,17 @@ export const FILTERS_CONFIG = {
 
 export const USERS = {
   fetchLoginUserInfo: {
-    queryKey: 'getLoginUser',
+    queryKey: ['getLoginUser'],
     endpoint: API_ENDPOINTS.USERS.GET_LOGIN_USER,
   },
   fetchAllUsersList: {
-    queryKey: 'getUsersList',
+    queryKey: ['getUsersList'],
     endpoint: (params: any) =>
       buildDynamicURL(API_ENDPOINTS.USERS.GET_USERS_LIST, params),
     activeServerSidePagination: true,
   },
   fetchUserById: {
-    queryKey: 'getUserById',
+    queryKey: ['getUserById'],
     endpoint: (userId: string) => `/users/${userId}`,
   },
 };
@@ -40,20 +40,20 @@ export const CHATS = {
     endpoint: '/chat/inbox',
   },
   fetchUnRead: {
-    queryKey: ['getUnreadMessages'],
+    queryKey: (userId: string) => ['getUnreadMessages', userId],
     endpoint: (userId: string) => `/chat/unread/${userId}`,
   },
 };
 
 export const VEHICLES = {
   fetchAllVehiclesList: {
-    queryKey: 'getAllVehicles',
+    queryKey: ['getAllVehicles'],
     endpoint: (params: any) =>
       buildDynamicURL(API_ENDPOINTS.VEHICLES.GET_VEHICLES_LIST, params),
   },
 
   fetchAllCartradezVehiclesList: {
-    queryKey: 'getAllCartradezVehicles',
+    queryKey: ['getAllCartradezVehicles'],
     endpoint: (params: any) =>
       buildDynamicURL(
         API_ENDPOINTS.VEHICLES.GET_CARTRADEZ_VEHICLES_LIST,
@@ -62,7 +62,7 @@ export const VEHICLES = {
   },
 
   fetchActiveListingsCount: {
-    queryKey: 'getActiveListingsCount',
+    queryKey: ['getActiveListingsCount'],
     endpoint: API_ENDPOINTS.VEHICLES.GET_ACTIVE_LISTINGS_COUNT,
   },
 

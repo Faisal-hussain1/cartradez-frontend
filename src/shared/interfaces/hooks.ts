@@ -137,7 +137,7 @@ export interface MutationCallbacks<T = any> {
 }
 
 export interface QueryRequestParams {
-  queryKey: string | string[];
+  queryKey: QueryKey;
   endpoint: string;
   isThirdParty?: boolean;
   params?: Record<string, any>;
@@ -171,7 +171,7 @@ export interface DefaultQueryOptions<TData> {
 }
 
 interface QueryToPrefetch {
-  queryKey: string;
+  queryKey: QueryKey;
   endpoint: string | ((params: any) => string);
   activeServerSidePagination?: boolean;
 }

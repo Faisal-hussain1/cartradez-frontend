@@ -298,22 +298,11 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                   heading='Basic Car Information'
                   subHeading='(Only Make, Model, Year, and Images are required)'
                 >
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12' data-field-name='listingType'>
-                      <CustomSelectInput
-                        label='Listing Type'
-                        name='listingType'
-                        placeholder='Select Listing Type'
-                        control={control}
-                        options={LISTING_TYPE_OPTIONS}
-                        isRequired={true}
-                        isCreatable={false}
-                      />
-                    </div>
-                    {shouldShowMonthlyUsage && (
-                      <div className='md:col-span-6 col-span-12 flex items-end'>
+                  {shouldShowMonthlyUsage && (
+                    <div className='grid grid-cols-12 gap-2 mt-3'>
+                      <div className='col-span-12'>
                         <div className='w-full rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm'>
-                          <p className='font-medium'>This Month Usage</p>
+                          <p className='text-[13px] font-semibold tracking-wide'>This Month Usage</p>
                           <p>
                             Premium: {monthlyUsageByType.premium}/{monthlyLimits.premium}
                           </p>
@@ -326,7 +315,21 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                           </p>
                         </div>
                       </div>
-                    )}
+                    </div>
+                  )}
+
+                  <div className='grid grid-cols-12 gap-2 mt-3'>
+                    <div className='md:col-span-6 col-span-12' data-field-name='listingType'>
+                      <CustomSelectInput
+                        label='Listing Type'
+                        name='listingType'
+                        placeholder='Select Listing Type'
+                        control={control}
+                        options={LISTING_TYPE_OPTIONS}
+                        isRequired={true}
+                        isCreatable={false}
+                      />
+                    </div>
                   </div>
 
                   <div className='grid grid-cols-12 gap-2 mt-3'>

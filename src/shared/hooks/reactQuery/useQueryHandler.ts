@@ -74,7 +74,7 @@ export const useQueryHandler = <TData = any>({
 
   const invalidateQuery = () => {
     queryClient.invalidateQueries({
-      queryKey: [queryKey],
+      queryKey,
     });
   };
 

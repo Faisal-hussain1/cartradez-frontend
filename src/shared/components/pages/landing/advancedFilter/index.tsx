@@ -19,6 +19,7 @@ import VehiclesViewBar from './vehiclesViewBar';
 import VehiclesGridView from './vehiclesGridView';
 import VehiclesListView from './vehiclesListView';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
+import { getYearsList } from '@/shared/utils/general';
 
 export default function AdvancedFilter() {
   const { useFetchAllVehicleList } = vehiclesQueries();
@@ -34,8 +35,7 @@ export default function AdvancedFilter() {
       queryToCall: useFetchAllVehicleList,
     });
 
-  const { data } = useFetchAllVehicleList();
-  const vehicles = data?.vehicles || [];
+  const vehicles = filteredData || [];
 
   const quickSell = useMemo(() => {
     return vehicles.filter((v: Vehicle) => v.listingType === 'quick sell');
@@ -52,6 +52,8 @@ export default function AdvancedFilter() {
   });
 
   if(isLoading) return <GlobalLoader/>
+
+  const yearOptions = getYearsList({start: 1900, end: 2026});
 
   return (
     <div>
@@ -127,6 +129,59 @@ export default function AdvancedFilter() {
             {/* Filter Sidebar */}
             <div className="col-span-12 md:col-span-3 bg-[#E5E7EB] p-4 rounded-2xl flex flex-col gap-3">
               <h1 className="text-lg font-semibold">Advanced Filters</h1>
+              <div>
+                <label className="block text-sm font-medium mb-1">Year</label>
+                <select
+                  value={filters.year || ''}
+                  onChange={(e) => setFilters({year: e.target.value})}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                >
+                  <option value="">All Years</option>
+                  {yearOptions.map((option: any) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Listing Type</label>
+                <select
+                  value={filters.listingType || ''}
+                  onChange={(e) => setFilters({listingType: e.target.value})}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                >
+                  <option value="">All Listing Types</option>
+                  <option value="premium">Premium</option>
+                  <option value="quick sell">Quick Sell</option>
+                  <option value="standard">Standard</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Min Price</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={filters.minPrice || ''}
+                  onChange={(e) => setFilters({minPrice: e.target.value})}
+                  placeholder="e.g. 5000"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Max Price</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={filters.maxPrice || ''}
+                  onChange={(e) => setFilters({maxPrice: e.target.value})}
+                  placeholder="e.g. 30000"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                />
+              </div>
             </div>
 
             {/* Listings */}

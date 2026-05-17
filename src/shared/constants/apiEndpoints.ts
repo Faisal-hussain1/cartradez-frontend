@@ -1,4 +1,7 @@
 export const API_ENDPOINTS = {
+  PUBLIC: {
+    CONTACT: '/public/contact',
+  },
   USERS: {
     LOGIN: '/users/login',
     SIGNUP: '/users/signup',

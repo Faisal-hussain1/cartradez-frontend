@@ -31,8 +31,8 @@ export async function prefetchQueries({
           query.activeServerSidePagination === true;
 
         const queryKey = useServerSidePagination
-          ? [query.queryKey, FILTERS_CONFIG] // Include FILTERS_CONFIG for specific queries
-          : [query.queryKey]; // Use original key for unconfigured queries
+          ? [...(query.queryKey as any[]), FILTERS_CONFIG]
+          : query.queryKey;
 
         // Determine endpoint - use function if available with optional FILTERS_CONFIG
         const requestEndpoint =
@@ -54,7 +54,7 @@ export async function prefetchQueries({
           },
         });
       } catch (_error) {
-        queryClient.invalidateQueries({queryKey: [query.queryKey]});
+        queryClient.invalidateQueries({queryKey: query.queryKey});
       }
     })
   );

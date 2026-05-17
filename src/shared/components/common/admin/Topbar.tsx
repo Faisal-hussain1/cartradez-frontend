@@ -5,33 +5,32 @@ import { Bell, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { userMutations } from "@/shared/reactQuery";
-import { connectSocket } from "@/shared/socket";
-import { useInbox } from "@/shared/hooks/useInbox";
 import { useUnRead } from "@/shared/hooks/useUnReadMessages";
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 
 export default function Topbar() {
   const user = useSelector(getCurrentUser);
+  const userId = user?._id;
   const router = useRouter();
   const { len, refetch } = useUnRead();
 
-  const socketRef = useRef<any>(null);
-
   /* ================= SOCKET ================= */
   useEffect(() => {
+    if (!userId) return;
+
     const timer = setTimeout(() => {
-      refetch();  // Adding delay to avoid over-fetching
+      refetch();
     }, 2000); // Delay of 2 seconds
 
-    return () => clearTimeout(timer); // Cleanup on unmount
-  }, [len]); // Depend on the unread messages count
+    return () => clearTimeout(timer);
+  }, [userId, len, refetch]);
 
   /* ================= REDIRECT FIX ================= */
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       router.push("/");
     }
-  }, [user]);
+  }, [userId, router]);
 
   /* ================= DROPDOWN ================= */
   const [open, setOpen] = useState(false);

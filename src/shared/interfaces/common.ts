@@ -203,6 +203,10 @@ export type RequestsStatus = {
 export type FilterProps = {
   searchValue?: string;
   requestStatus?: RequestsStatus;
+  year?: string;
+  listingType?: string;
+  minPrice?: string;
+  maxPrice?: string;
 };
 
 export interface FiltersBarProps {

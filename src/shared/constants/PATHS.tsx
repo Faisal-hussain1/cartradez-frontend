@@ -1,8 +1,6 @@
 import {
   FacebookIcon,
   InstagramIcon,
-  LinkedinIcon,
-  TwitterIcon,
   UsersIcon,
 } from '@/shared/components/icons';
 import {SidebarRoute, SiteMapLink} from '@/shared/interfaces/utils';
@@ -249,12 +247,6 @@ export const LANDING_FOOTER_LINKS = {
       label: 'Instagram',
       icon: <InstagramIcon size={20} />,
       url: `https://www.instagram.com/cartradezofficial?igsh=b2V1dml1cHgyOWN2`,
-    },
-    {
-      value: 'linkedin',
-      label: 'LinkedIn',
-      icon: <LinkedinIcon size={20} />,
-      url: `${APP_URL}/under-development`,
     },
   ],
 };
