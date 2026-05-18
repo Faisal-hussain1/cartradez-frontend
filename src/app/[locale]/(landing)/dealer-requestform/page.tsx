@@ -1,7 +1,7 @@
 'use client';
 
 import {useForm, SubmitHandler} from 'react-hook-form';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Container from '@/shared/components/common/containers';
 import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
 import BoxContainer from '@/shared/components/common/containers/boxContainer';
@@ -33,12 +33,32 @@ export default function DealerRequestForm() {
   });
   const user=useSelector(getCurrentUser);
   const router=useLocaleRouter();
-  const token=localStorage.getItem('accessToken')
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
   const usedAttempts = Number((user as any)?.requestLimit || 0);
   const maxAttempts = 3;
   const limitReached = usedAttempts >= maxAttempts;
 
+  useEffect(() => {
+    if (!token) {
+      showToast({
+        type: 'error',
+        message: 'Please log in to access the dealer request form.',
+      });
+      router.push('/auth/login');
+    }
+  }, [token, router]);
+
  const onSubmit: SubmitHandler<any> = async (data) => {
+    if (!token || !(user as any)?._id) {
+      showToast({
+        type: 'error',
+        message: 'Your session has expired. Please log in again.',
+      });
+      router.push('/auth/login');
+      return;
+    }
+
     if (limitReached) {
       showToast({
         type: 'error',
@@ -50,7 +70,7 @@ export default function DealerRequestForm() {
 
     try {
       const res = await fetch(
-        `${API_URL}/users/dealer-form/${user?._id}`,
+        `${API_URL}/users/dealer-form/${(user as any)._id}`,
         {
           method: "PATCH",
           headers: {
@@ -60,8 +80,7 @@ export default function DealerRequestForm() {
           body: JSON.stringify({
             carTypes: data.carTypes,
             experience: data.experience,
-            nrcNo: data.nrcNo,
-            ntnNo: data.ntnNo,
+            tpin: data.tpin,
             showroomAddress: data.showroomAddress,
             showroomName: data.showroomName,
             socialMedia: data.socialMedia,
@@ -79,7 +98,12 @@ export default function DealerRequestForm() {
         return;
       }
 
-      showToast({type: 'error', message: result?.message || 'Failed to submit dealer request'});
+      const apiMessage = String(result?.message || '').toLowerCase();
+      const readableError =
+        apiMessage.includes('invalid user') || apiMessage.includes('invalid user id')
+          ? 'Your session has expired. Please log in again.'
+          : result?.message || 'Failed to submit dealer request';
+      showToast({type: 'error', message: readableError});
     } catch (error: any) {
       showToast({type: 'error', message: error?.message || 'Failed to submit dealer request'});
     }
@@ -157,18 +181,18 @@ export default function DealerRequestForm() {
                 <div className='grid grid-cols-12 gap-2 mt-3'>
                   <div className='md:col-span-6 col-span-12'>
                     <CustomTextInput
-                      label='National Registration Card No (NRC)'
-                      name='nrcNo'
-                      placeholder='XXXXXX/XX/X'
+                      label='Registered Company / Showroom Name'
+                      name='showroomName'
+                      placeholder='Enter Company Name'
                       control={control}
                       isRequired
                     />
                   </div>
-                   <div className='md:col-span-6 col-span-12'>
-                    <CustomNumberInput
-                      label='Years of Experience'
-                      name='experience'
-                      placeholder='Enter Experience'
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='TPIN'
+                      name='tpin'
+                      placeholder='Enter TPIN'
                       control={control}
                       isRequired
                     />
@@ -177,26 +201,14 @@ export default function DealerRequestForm() {
 
                 <div className='grid grid-cols-12 gap-2 mt-3'>
                   <div className='md:col-span-6 col-span-12'>
-                    <CustomTextInput
-                      label='Company / Showroom Name'
-                      name='showroomName'
-                      placeholder='Enter Company Name'
-                      control={control}
-                      isRequired
-                    />
-                  </div>
-                   <div className='md:col-span-6 col-span-12'>
                     <CustomNumberInput
-                      label='NTN No'
-                      name='ntnNo'
-                      placeholder='XXXXXXX'
+                      label='Years of Experience'
+                      name='experience'
+                      placeholder='Enter Experience'
                       control={control}
                       isRequired
                     />
                   </div>
-                </div>
-
-                <div className='grid grid-cols-12 gap-2 mt-3'>
                   <div className='md:col-span-6 col-span-12'>
                     <CustomSelectInput
                       label='Types of Cars Sold'
@@ -214,7 +226,7 @@ export default function DealerRequestForm() {
                 </div>
 
                 <div className='grid grid-cols-12 gap-2 mt-3'>
-                  <div className='md:col-span-6 col-span-12'>
+                  <div className='col-span-12'>
                     <CustomTextInput
                       label='Showroom Address'
                       name='showroomAddress'
