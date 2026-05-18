@@ -13,7 +13,7 @@ type Dealer = {
   city?: string;
   address?: string;
   showroomName?: string;
-  ntnNo?: string;
+  tpin?: string;
   systemRole: string;
   dealerStatus: 'pending' | 'approved' | 'rejected';
   dealerStatusHistory?: Array<{
@@ -110,9 +110,10 @@ export default function DealersPage() {
 
   const canApproveDealer = (dealer: Dealer) =>
     dealer.dealerStatus !== 'approved' &&
-    (Boolean(dealer.showroomName?.trim()) || Boolean(dealer.ntnNo?.trim()));
+    (Boolean(dealer.showroomName?.trim()) || Boolean(dealer.tpin?.trim()));
   const canRejectDealer = (dealer: Dealer) =>
     dealer.dealerStatus === 'pending' || dealer.dealerStatus === 'approved';
+  const isRejecting = Boolean(rejectDealerId && updatingId === rejectDealerId);
 
   return (
     <div className='px-3 py-4 sm:px-4 md:px-6'>
@@ -248,13 +249,15 @@ export default function DealersPage() {
             <h2 className='text-lg font-semibold text-gray-900'>Reject Dealer</h2>
             <p className='mt-1 text-sm text-gray-600'>Please provide a rejection reason.</p>
             <textarea
-              className='mt-3 h-24 w-full rounded border border-gray-300 p-2 text-sm'
+              className='mt-3 h-24 w-full rounded border border-gray-300 p-2 text-sm disabled:bg-gray-100'
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
               placeholder='Reason for rejection'
+              disabled={isRejecting}
             />
             <div className='mt-4 flex justify-end gap-2 flex-wrap'>
               <button
+                disabled={isRejecting}
                 className='rounded border border-gray-300 px-3 py-1.5 text-sm'
                 onClick={() => {
                   setRejectDealerId(null);
@@ -264,10 +267,11 @@ export default function DealersPage() {
                 Cancel
               </button>
               <button
-                className='rounded bg-red-600 px-3 py-1.5 text-sm text-white'
+                disabled={isRejecting}
+                className='rounded bg-red-600 px-3 py-1.5 text-sm text-white disabled:opacity-50'
                 onClick={confirmReject}
               >
-                Confirm Reject
+                {isRejecting ? 'Rejecting...' : 'Confirm Reject'}
               </button>
             </div>
           </div>

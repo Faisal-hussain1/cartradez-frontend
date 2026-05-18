@@ -13,8 +13,7 @@ interface DealerRequest {
   showroomName: string;
   showroomAddress: string;
   experience: number;
-  nrcNo: string;
-  ntnNo: string;
+  tpin: string;
   carTypes: string;
   socialMedia?: string;
 }
@@ -35,8 +34,7 @@ export default function DealerRequestDetail() {
       showroomName: 'Ali Motors Showroom',
       showroomAddress: 'Main Boulevard Lahore',
       experience: 5,
-      nrcNo: '123456/12/1',
-      ntnNo: '3456789',
+      tpin: '3456789',
       carTypes: 'Used',
       socialMedia: 'facebook.com/alimotors',
     },
@@ -101,13 +99,8 @@ export default function DealerRequestDetail() {
           </div>
 
           <div className='col-span-12 md:col-span-6'>
-            <p className='text-muted-foreground'>NRC No</p>
-            <p className='font-semibold'>{dealer.nrcNo}</p>
-          </div>
-
-          <div className='col-span-12 md:col-span-6'>
-            <p className='text-muted-foreground'>NTN No</p>
-            <p className='font-semibold'>{dealer.ntnNo}</p>
+            <p className='text-muted-foreground'>TPIN</p>
+            <p className='font-semibold'>{dealer.tpin}</p>
           </div>
 
           <div className='col-span-12'>

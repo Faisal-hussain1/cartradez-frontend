@@ -21,8 +21,7 @@ type Dealer = {
   address?: string;
   showroomName?: string;
   showroomAddress?: string;
-  nrcNo?: string;
-  ntnNo?: string;
+  tpin?: string;
   experience?: number;
   carTypes?: string;
   dealerStatus: string;
@@ -84,7 +83,7 @@ export default function DealerDetailPage() {
 
   const canApproveDealer = (dealer: Dealer) =>
     dealer.dealerStatus !== 'approved' &&
-    (Boolean(dealer.showroomName?.trim()) || Boolean(dealer.ntnNo?.trim()));
+    (Boolean(dealer.showroomName?.trim()) || Boolean(dealer.tpin?.trim()));
   const canRejectDealer = (dealer: Dealer) =>
     dealer.dealerStatus === 'pending' || dealer.dealerStatus === 'approved';
 
@@ -105,8 +104,7 @@ export default function DealerDetailPage() {
           <Field label='Status' value={dealer.dealerStatus || '-'} />
           <Field label='Showroom Name' value={dealer.showroomName || '-'} />
           <Field label='Showroom Address' value={dealer.showroomAddress || '-'} />
-          <Field label='NRC No' value={dealer.nrcNo || '-'} />
-          <Field label='NTN No' value={dealer.ntnNo || '-'} />
+          <Field label='TPIN' value={dealer.tpin || '-'} />
           <Field label='Experience' value={String(dealer.experience ?? 0)} />
           <Field label='Car Types' value={dealer.carTypes || '-'} />
         </div>
