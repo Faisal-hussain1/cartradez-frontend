@@ -23,10 +23,7 @@ export const newVehicleSchema = (t: TranslateFunction) =>
     currency: Yup.string().required(
       t('vehicleListingValidation.currencyRequired')
     ),
-    price: Yup.number()
-      .typeError(t('vehicleListingValidation.priceRequired'))
-      .required(t('vehicleListingValidation.priceRequired'))
-      .min(2000, t('vehicleListingValidation.priceMin')),
+   price: Yup.number().required('Price is required'),
 
     registrationCity: Yup.string(),
     registrationNumber: Yup.string(),
