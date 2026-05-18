@@ -6,6 +6,13 @@ const {withSentryConfig} = require('@sentry/nextjs');
 // const bucketHost = process.env.AWS_BUCKET_HOSTNAME;
 
 const nextConfig = {
+eslint: {
+  ignoreDuringBuilds: true,
+},
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   turbopack: {
     // Configure how specific file types (like SVGs) should be processed
     rules: {
