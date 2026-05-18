@@ -90,7 +90,7 @@ export default function AddVehicleForm() {
         fuelType: '',
         driveType: '',
         currency: '',
-        price: 0,
+        price: '' as unknown as number,
         registrationCity: '',
         registrationNumber: '',
         registrationYear: '',
