@@ -34,6 +34,13 @@ export default function SafetyGuidelinesCard() {
           <p>• Avoid advance payments or deposits before inspection.</p>
           <p>• Report suspicious listings or sellers immediately.</p>
         </div>
+        <p className='text-sm text-gray80'>
+          CarTradz only provides a platform for users to buy and sell cars. We
+          are not involved in any transaction between the buyer and seller.
+          CarTradez is not responsible for authentication of uploaded vehicles;
+          it is the customer&apos;s responsibility to verify authenticity. Users
+          must read our Buyer &amp; Seller Safety Guide before proceeding.
+        </p>
       </CardContent>
 
       <CardFooter className='pt-0 px-6 pb-4'>

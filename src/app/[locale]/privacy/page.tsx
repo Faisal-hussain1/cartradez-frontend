@@ -75,6 +75,13 @@ export default function PrivacyPolicy() {
         <li>Pricing details</li>
         <li>Service history, where provided</li>
       </ul>
+      <p>
+        CarTradz only provides a platform for users to buy and sell cars. We
+        are not involved in any transaction between the buyer and seller.
+        CarTradez is not responsible for authentication of uploaded vehicles;
+        it is the customer&apos;s responsibility to verify authenticity. Users
+        must read our Buyer &amp; Seller Safety Guide before proceeding.
+      </p>
 
       <h3 className="font-semibold text-base mt-4">d) Transaction Information</h3>
       <p>

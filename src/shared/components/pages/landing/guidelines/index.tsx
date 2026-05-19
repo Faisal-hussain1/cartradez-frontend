@@ -69,7 +69,9 @@ export default function Guidelines() {
           directly. While we facilitate the process, all transactions and
           communications take place between users. Please follow the safety
           guidelines below to ensure a transparent, fair, and risk-free
-          experience when buying or selling a vehicle.
+          experience when buying or selling a vehicle. CarTradez is not
+          responsible for authentication of uploaded vehicles; it is the
+          customer&apos;s responsibility to verify authenticity.
         </p>
 
         {/* 🔹 Responsive Panels */}

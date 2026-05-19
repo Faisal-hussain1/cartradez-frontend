@@ -64,7 +64,7 @@ export default function VehicleDetails({
     <Container className='bg-[#F3F4F6] py-6' key={vehicleId}>
       {/* Disclaimer Section */}
       <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded text-yellow-900 text-sm">
-        <strong>Disclaimer:</strong> CarTradz only provides a platform for users to buy and sell cars. We are not involved in any transaction between the buyer and seller. Users must read our <a href="/guidelines" className="underline text-blue-700 hover:text-blue-900" target="_blank" rel="noopener noreferrer">Buyer & Seller Safety Guide</a> before proceeding.
+        <strong>Disclaimer:</strong> CarTradz only provides a platform for users to buy and sell cars. We are not involved in any transaction between the buyer and seller. CarTradez is not responsible for authentication of uploaded vehicles; it is the customer's responsibility to verify authenticity. Users must read our <a href="/guidelines" className="underline text-blue-700 hover:text-blue-900" target="_blank" rel="noopener noreferrer">Buyer & Seller Safety Guide</a> before proceeding.
       </div>
       <div className='flex flex-col gap-6'>
         <div className='grid grid-cols-12 gap-6'>

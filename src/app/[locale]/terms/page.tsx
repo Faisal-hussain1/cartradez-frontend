@@ -98,6 +98,13 @@ export default function TermsConditions() {
         <li>availability.</li>
       </ul>
       <p>
+        CarTradz only provides a platform for users to buy and sell cars. We
+        are not involved in any transaction between the buyer and seller.
+        CarTradez is not responsible for authentication of uploaded vehicles;
+        it is the customer&apos;s responsibility to verify authenticity. Users
+        must read our Buyer &amp; Seller Safety Guide before proceeding.
+      </p>
+      <p>
         CarTradez may review, edit, reject, remove, or disable any listing at
         its discretion without prior notice.
       </p>
