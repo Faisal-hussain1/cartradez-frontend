@@ -70,6 +70,9 @@ export default function SellCarChoice() {
     }
 
     const userEmail = String(currentUser?.email || '').trim();
+    const userPhone = String(
+      currentUser?.phoneNumber || currentUser?.phone || ''
+    ).trim();
     if (!userEmail) {
       showToast({
         type: 'error',
@@ -103,6 +106,7 @@ export default function SellCarChoice() {
         payload: {
           name: requesterName,
           email: userEmail,
+          phone: userPhone,
           message: composedMessage,
         },
       });
