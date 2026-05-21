@@ -17,6 +17,7 @@ const buildVehicleListQueryKey = (baseKey: string[], params?: Record<string, any
   params?.startDate ?? null,
   params?.endDate ?? null,
   params?.search ?? null,
+  params?.isManagedByCartradez ?? null,
 ];
 
 // ---------------------------------------------------------------------------
@@ -97,8 +98,10 @@ export const useFetchAllCartradezVehicleList = ({
 
 export const useFetchActiveListingsCount = ({
   callBackFuncs,
+  enabled = true,
 }: {
   callBackFuncs?: QueryCallbacks;
+  enabled?: boolean;
 } = {}) =>
   useQueryHandler({
     queryKey: VEHICLES.fetchActiveListingsCount.queryKey,
@@ -107,6 +110,49 @@ export const useFetchActiveListingsCount = ({
       staleTime: 5 * 60 * 1000,
       refetchOnWindowFocus: true,
       gcTime: 0,
+      enabled,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  });
+
+export const useFetchManagedByCartradezCount = ({
+  callBackFuncs,
+  enabled = true,
+}: {
+  callBackFuncs?: QueryCallbacks;
+  enabled?: boolean;
+} = {}) =>
+  useQueryHandler({
+    queryKey: VEHICLES.fetchManagedByCartradezCount.queryKey,
+    endpoint: VEHICLES.fetchManagedByCartradezCount.endpoint,
+    customQueryOptions: {
+      staleTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: true,
+      gcTime: 0,
+      enabled,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  });
+
+export const useFetchDashboardVehicleStats = ({
+  callBackFuncs,
+  enabled = true,
+}: {
+  callBackFuncs?: QueryCallbacks;
+  enabled?: boolean;
+} = {}) =>
+  useQueryHandler({
+    queryKey: VEHICLES.fetchDashboardVehicleStats.queryKey,
+    endpoint: VEHICLES.fetchDashboardVehicleStats.endpoint,
+    customQueryOptions: {
+      staleTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: true,
+      gcTime: 0,
+      enabled,
     },
     callbacks: {
       ...callBackFuncs,
@@ -232,6 +278,8 @@ export const useQueries = () => ({
   useFetchVehiclesByUserId,
   useFetchAllCartradezVehicleList,
   useFetchActiveListingsCount,
+  useFetchManagedByCartradezCount,
+  useFetchDashboardVehicleStats,
   useFetchVehicleById,
 });
 

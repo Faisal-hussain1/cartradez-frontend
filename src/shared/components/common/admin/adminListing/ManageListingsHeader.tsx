@@ -6,7 +6,11 @@ import {usePathname, useSearchParams} from 'next/navigation';
 import {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
-export default function ManageListingsHeader() {
+export default function ManageListingsHeader({
+  title = 'Manage Listings',
+}: {
+  title?: string;
+}) {
   const user = useSelector(getCurrentUser);
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -46,9 +50,7 @@ export default function ManageListingsHeader() {
     <section className='space-y-4'>
       {/* Top row */}
       <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-        <h1 className='text-2xl font-semibold text-[var(--blue100)]'>
-          Manage Listings
-        </h1>
+        <h1 className='text-2xl font-semibold text-[var(--blue100)]'>{title}</h1>
 
         {isAdminDealer ? <button onClick={() => router.push('/vehicles/add')}
           className='cursor-pointer

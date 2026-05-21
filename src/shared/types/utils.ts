@@ -10,6 +10,7 @@ export type BuildDynamicUrlParamsType = {
   id?: string;
   nextPageStartAfter?: string;
   activeOnly?: boolean;
+  isManagedByCartradez?: boolean;
   creatorId?: string;
   listingType?: string;
 };

@@ -162,6 +162,11 @@ export default function Leftbar() {
                 icon={<Users size={18} />}
                 label="Dealers"
               />
+              <SidebarItem
+                href="/managed-by-cartradez"
+                icon={<BadgeDollarSign size={18} />}
+                label="Managed by Cartradez"
+              />
             </>
           )}
         </nav>

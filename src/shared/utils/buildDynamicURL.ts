@@ -16,6 +16,7 @@ export const buildDynamicURL = (
     id = '',
     nextPageStartAfter = '',
     activeOnly,
+    isManagedByCartradez,
     prioritizeListingType,
     creatorId = '',
     listingType = '',
@@ -33,6 +34,12 @@ export const buildDynamicURL = (
   if (id) queryParams.append('id', id);
   if (typeof activeOnly === 'boolean') {
     queryParams.append('activeOnly', activeOnly.toString());
+  }
+  if (typeof isManagedByCartradez === 'boolean') {
+    queryParams.append(
+      'isManagedByCartradez',
+      isManagedByCartradez.toString(),
+    );
   }
   if (typeof prioritizeListingType === 'boolean') {
     queryParams.append('prioritizeListingType', prioritizeListingType.toString());

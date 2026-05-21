@@ -66,6 +66,16 @@ export const VEHICLES = {
     endpoint: API_ENDPOINTS.VEHICLES.GET_ACTIVE_LISTINGS_COUNT,
   },
 
+  fetchManagedByCartradezCount: {
+    queryKey: ['getManagedByCartradezCount'],
+    endpoint: API_ENDPOINTS.VEHICLES.GET_MANAGED_BY_CARTRADEZ_COUNT,
+  },
+
+  fetchDashboardVehicleStats: {
+    queryKey: ['getDashboardVehicleStats'],
+    endpoint: API_ENDPOINTS.VEHICLES.GET_DASHBOARD_VEHICLE_STATS,
+  },
+
   fetchVehicleById: {
     queryKey: (vehicleId: string) => ['getVehicleById', vehicleId],
     endpoint: (params: any) =>

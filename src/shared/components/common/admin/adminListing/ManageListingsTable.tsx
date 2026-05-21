@@ -35,6 +35,7 @@ interface Vehicle {
   coverImage: {key: string; url: string};
   images?: Array<{key: string; url: string}>;
   creatorId: string;
+  isManagedByCartradez?: boolean;
   createdAt?: string;
   title?: string;
 }
@@ -66,8 +67,7 @@ function EditVehicleModal({
   });
 
    const {useFetchVehicleById} = vehiclesQueries();
-
-
+   
   const {
     data,refetch: refetchVehicleDetail
   } = useFetchVehicleById({
@@ -835,7 +835,11 @@ function DeleteHandler({
 // ---------------------------------------------------------------------------
 // Main table
 // ---------------------------------------------------------------------------
-export default function ManageListingsTable() {
+export default function ManageListingsTable({
+  managedOnly = false,
+}: {
+  managedOnly?: boolean;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -853,17 +857,23 @@ export default function ManageListingsTable() {
   const startDateFilter = searchParams.get('startDate') || '';
   const endDateFilter = searchParams.get('endDate') || '';
   const shouldFetchListings = canViewAllListings || Boolean(user?._id);
+  const fetchParams = {
+    pageNo,
+    pageLimit,
+    ...(managedOnly
+      ? {isManagedByCartradez: true}
+      : {
+          activeOnly: true,
+          isManagedByCartradez: false,
+          ...(listingTypeFilter ? {listingType: listingTypeFilter} : {}),
+        }),
+    ...(startDateFilter ? {startDate: startDateFilter} : {}),
+    ...(endDateFilter ? {endDate: endDateFilter} : {}),
+    ...(!canViewAllListings && user?._id ? {creatorId: user._id} : {}),
+  };
 
   const {data, isLoading,refetch} = useFetchAllVehicleList({
-    params: {
-      pageNo,
-      pageLimit,
-      activeOnly: true,
-      ...(listingTypeFilter ? {listingType: listingTypeFilter} : {}),
-      ...(startDateFilter ? {startDate: startDateFilter} : {}),
-      ...(endDateFilter ? {endDate: endDateFilter} : {}),
-      ...(!canViewAllListings && user?._id ? {creatorId: user._id} : {}),
-    },
+    params: fetchParams,
   });
 
   const vehicles: Vehicle[] = useMemo(() => {
@@ -878,8 +888,11 @@ export default function ManageListingsTable() {
   const totalPages = paginationData?.totalPages ?? 1;
 
   const listings = useMemo(() => {
-    return vehicles.filter((v) => v.listingType !== null);
-  }, [vehicles]);
+    if (managedOnly) return vehicles;
+    return vehicles.filter(
+      (v) => v.listingType !== null && v.isManagedByCartradez !== true,
+    );
+  }, [managedOnly, vehicles]);
 
 
   const handleView = (vehicleId: string) => {
@@ -942,7 +955,12 @@ export default function ManageListingsTable() {
 
       <section className='bg-card border border-border rounded-xl overflow-hidden'>
         <div className='px-4 py-3 border-b border-border text-sm font-medium text-foreground'>
-          {canViewAllListings ? 'Total Active Listings' : 'My Listings'}:{' '}
+          {managedOnly
+            ? 'Managed by Cartradez Listings'
+            : canViewAllListings
+              ? 'Total Active Listings'
+              : 'My Listings'}
+          :{' '}
           {totalActiveListings.toLocaleString()}
         </div>
         <div className='md:hidden p-3 space-y-3'>
@@ -959,7 +977,9 @@ export default function ManageListingsTable() {
             ))
           ) : (
             <div className='p-6 text-center text-muted-foreground text-sm border border-border rounded-lg'>
-              You have no active listings yet.
+              {managedOnly
+                ? 'No managed-by-Cartradez listings found.'
+                : 'You have no active listings yet.'}
             </div>
           )}
         </div>
@@ -997,7 +1017,9 @@ export default function ManageListingsTable() {
             ))
           ) : (
             <div className='p-10 text-center text-muted-foreground text-sm border-t border-border min-w-[820px]'>
-              You have no active listings yet.
+              {managedOnly
+                ? 'No managed-by-Cartradez listings found.'
+                : 'You have no active listings yet.'}
             </div>
           )}
         </div>

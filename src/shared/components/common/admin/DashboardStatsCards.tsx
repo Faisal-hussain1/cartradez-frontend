@@ -12,27 +12,55 @@ interface StatItem {
 }
 
 export default function DashboardStatsCards() {
-  const {useFetchActiveListingsCount} = vehiclesQueries();
-  const {data, isLoading} = useFetchActiveListingsCount();
+  const {
+    useFetchActiveListingsCount,
+    useFetchDashboardVehicleStats,
+  } = vehiclesQueries();
   const role = useSelector(getUserRole);
   const isAdmin = role === 'admin';
+  const {data: activeData, isLoading: isActiveLoading} = useFetchActiveListingsCount({
+    enabled: !isAdmin,
+  });
+  const {data, isLoading: isDashboardLoading} = useFetchDashboardVehicleStats({
+    enabled: isAdmin,
+  });
 
   const activeListingsCount = useMemo(() => {
     const rawCount =
-      data?.count ??
-      data?.data?.count ??
-      data?.data?.body?.count ??
-      data?.body?.count ??
+      activeData?.count ??
+      activeData?.data?.count ??
+      activeData?.data?.body?.count ??
+      activeData?.body?.count ??
+      data?.data?.activeListingsCount ??
+      data?.body?.activeListingsCount ??
+      data?.activeListingsCount ??
+      0;
+
+    return Number(rawCount) || 0;
+  }, [activeData, data]);
+
+  const managedListingsCount = useMemo(() => {
+    const rawCount =
+      data?.data?.managedByCartradezCount ??
+      data?.body?.managedByCartradezCount ??
+      data?.managedByCartradezCount ??
       0;
 
     return Number(rawCount) || 0;
   }, [data]);
+  const isActiveCountLoading = isAdmin ? isDashboardLoading : isActiveLoading;
 
   const stats: StatItem[] = [
     {
-      title: isAdmin ? 'Active Listings' : 'Active Listings',
-      value: activeListingsCount.toLocaleString(),
+      title: 'Active Listings',
+      value: isActiveCountLoading ? '...' : activeListingsCount.toLocaleString(),
     },
+    ...(isAdmin
+      ? [{
+          title: 'Managed by Cartradez',
+          value: isDashboardLoading ? '...' : managedListingsCount.toLocaleString(),
+        }]
+      : []),
     // {title: 'Pending Listings', value: '453'},
     // {title: 'Managed Listings', value: '0'},
     // {title: 'New Users (7d)', value: '352'},
