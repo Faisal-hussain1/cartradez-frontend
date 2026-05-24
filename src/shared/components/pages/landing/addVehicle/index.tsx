@@ -343,6 +343,9 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
                           <p className='mt-2 text-xs text-primary/90'>
                             Note: Once listing type is set, you will not be able to update it later.
                           </p>
+                          <p className='mt-1 text-xs text-primary/90'>
+                            For now, uploading vehicles in all listing types is free. After a limited promotional period, upload charges will apply per vehicle: Premium $20, Quick Sell $15, and Standard $10.
+                          </p>
                         </div>
                       </div>
                     </div>
