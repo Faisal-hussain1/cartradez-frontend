@@ -19,7 +19,7 @@ export const getRoleFlags = ({role}: RoleType) => {
 export const getRedirectUrl = ({role}: RoleType): string => {
   const {isAdmin, isManager, isDealer, isUser} = getRoleFlags({role});
 
-  if (isAdmin) return ADMIN_ROUTES.temp.all;
+  if (isAdmin) return ADMIN_ROUTES.dashboard;
   if (isManager) return MANAGER_ROUTES.login;
   if (isUser || isDealer) return USER_ROUTES.listings;
 

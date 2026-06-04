@@ -39,7 +39,7 @@ export const LIST_TYPES = {
       pageNo: FILTERS_CONFIG.pageNo,
       pageLimit: FILTERS_CONFIG.pageLimit,
     },
-    path: ADMIN_ROUTES.temp.all,
+    path: ADMIN_ROUTES.dashboard,
   },
 
   homePageVehicles: {
@@ -71,7 +71,7 @@ export const LIST_TYPES = {
       pageNo: FILTERS_CONFIG.pageNo,
       pageLimit: FILTERS_CONFIG.homePageLimit,
     },
-    path: ADMIN_ROUTES.temp.all,
+    path: ADMIN_ROUTES.dashboard,
   },
 
   managedByCartradezVehicles: {
@@ -99,7 +99,7 @@ export const LIST_TYPES = {
       pageNo: FILTERS_CONFIG.pageNo,
       pageLimit: FILTERS_CONFIG.managedByCartradezPageLimit,
     },
-    path: ADMIN_ROUTES.temp.all,
+    path: ADMIN_ROUTES.dashboard,
   },
 };
 

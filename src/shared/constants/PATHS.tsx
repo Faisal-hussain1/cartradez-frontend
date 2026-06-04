@@ -40,9 +40,12 @@ export const AUTH_ROUTES = {
 };
 
 export const ADMIN_ROUTES = {
-  temp: {
-    all: path(DASHBOARD_ROOT, '/temp'),
-  },
+  dashboard: '/dash',
+  listings: '/listings',
+  dealers: '/dealers',
+  managedByCartradez: '/managed-by-cartradez',
+  roles: '/roles',
+  users: '/users',
   vehicles: path(VEHICLE_ROOT, '/'),
   addVehicle: path(VEHICLE_ROOT, '/add'),
   vehicleDetails: (vehicleId: string) =>
@@ -93,7 +96,7 @@ export const SIDEBAR_ROUTES = (
   sellers: {
     value: 'sellers',
     label: t('navigationRoutes.sellers'),
-    path: ADMIN_ROUTES.temp.all,
+    path: ADMIN_ROUTES.dashboard,
     icon: UsersIcon,
     roles: [ROLES.admin.value],
   },
