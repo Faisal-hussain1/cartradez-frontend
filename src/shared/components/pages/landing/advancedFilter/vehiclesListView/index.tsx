@@ -2,7 +2,7 @@
 
 import {Card, CardContent} from '@/shared/components/ui/card';
 import {Button} from '@/shared/components/ui/button';
-import {Calendar, Heart} from 'lucide-react';
+import {Heart} from 'lucide-react';
 import Image from 'next/image';
 import {stringToTitleCase} from '@/shared/utils/general';
 import EmptyDataPlaceholder from '@/shared/components/common/EmptyDataPlaceholder';
@@ -33,6 +33,7 @@ export default function VehiclesListView({
                     src={vehicle.coverImage.url}
                     alt={vehicle.make}
                     fill
+                    sizes='(max-width: 640px) 120px, (max-width: 1024px) 180px, 220px'
                     className='object-cover'
                   />
                 </div>

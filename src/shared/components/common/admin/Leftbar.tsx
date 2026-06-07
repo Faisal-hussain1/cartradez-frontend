@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, List, Shield, Users, X, BadgeDollarSign } from 'lucide-react';
+import {Activity, LayoutDashboard, List, Users, X, BadgeDollarSign} from 'lucide-react';
 import Image from 'next/image';
 import { SidebarItem } from './Sidebaritem';
 import { useDispatch, useSelector } from 'react-redux';
@@ -161,6 +161,11 @@ export default function Leftbar() {
                 href="/dealers"
                 icon={<Users size={18} />}
                 label="Dealers"
+              />
+              <SidebarItem
+                href="/user-activity"
+                icon={<Activity size={18} />}
+                label="User Activity"
               />
               <SidebarItem
                 href="/managed-by-cartradez"

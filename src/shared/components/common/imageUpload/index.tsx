@@ -35,6 +35,7 @@ export default function ImageUploadInput({
 
     if (images.length + newFiles.length > max) {
       setError(`You can upload a maximum of ${max} images`);
+
       return;
     }
 
@@ -43,6 +44,7 @@ export default function ImageUploadInput({
     );
     if (invalidTypeFile) {
       setError('Only JPG and PNG images are allowed.');
+
       return;
     }
 
@@ -51,6 +53,7 @@ export default function ImageUploadInput({
     );
     if (oversizedFile) {
       setError('Each image must be 5 MB or smaller.');
+
       return;
     }
 
@@ -133,6 +136,7 @@ export default function ImageUploadInput({
                 src={URL.createObjectURL(file)}
                 alt={`preview-${idx}`}
                 fill
+                sizes='(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw'
                 className='object-cover'
               />
               <button

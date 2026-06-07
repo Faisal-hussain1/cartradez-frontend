@@ -11,19 +11,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avat
 export default function Topbar() {
   const user = useSelector(getCurrentUser);
   const userId = user?._id;
+  const isBlocked = Boolean(user?.isBlocked);
   const router = useRouter();
   const { len, refetch } = useUnRead();
 
   /* ================= SOCKET ================= */
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || isBlocked) return;
 
     const timer = setTimeout(() => {
       refetch();
     }, 2000); // Delay of 2 seconds
 
     return () => clearTimeout(timer);
-  }, [userId, len, refetch]);
+  }, [userId, isBlocked, len, refetch]);
 
   /* ================= REDIRECT FIX ================= */
   useEffect(() => {
@@ -47,11 +48,13 @@ export default function Topbar() {
     };
 
     document.addEventListener("mousedown", handleOutside);
+
     return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
   const { useSignOutMutation } = userMutations();
   const { mutate: executeSignOutMutation } = useSignOutMutation();
+
   const openSidebar = () => {
     window.dispatchEvent(new CustomEvent('open-admin-sidebar'));
   };
@@ -73,8 +76,10 @@ export default function Topbar() {
       
       {/* NOTIFICATION */}
       <div
-        className="relative cursor-pointer shrink-0"
-        onClick={() => router.push("/chat/inbox")}
+        className={`relative shrink-0 ${isBlocked ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}
+        onClick={() => {
+          if (!isBlocked) router.push("/chat/inbox");
+        }}
       >
         <Bell className="w-5 h-5 text-gray-600 hover:text-[#414279]" />
 
@@ -96,11 +101,13 @@ export default function Topbar() {
           </span>
 
           <Avatar className="w-9 h-9 border shrink-0">
-            <AvatarImage
-              src={user?.profileImage || ""}
-              alt="Profile Image"
-              className="object-cover"
-            />
+            {user?.profileImage && (
+              <AvatarImage
+                src={user.profileImage}
+                alt="Profile Image"
+                className="object-cover"
+              />
+            )}
 
             <AvatarFallback>
               {user?.firstName?.[0]?.toUpperCase() || "U"}

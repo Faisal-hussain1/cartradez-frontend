@@ -163,7 +163,7 @@ export interface DefaultQueryOptions<TData> {
   refetchOnWindowFocus: boolean;
   refetchOnReconnect: boolean;
   refetchOnMount: boolean;
-  retry: number;
+  retry: number | ((failureCount: number, error: unknown) => boolean);
   retryDelay: (attemptIndex: number) => number;
   refetchInterval?: number | false;
   keepPreviousData: boolean;

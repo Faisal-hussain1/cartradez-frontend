@@ -1,8 +1,13 @@
 'use client';
 
-import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
+import {
+  useForm,
+  SubmitHandler,
+  FieldErrors,
+  Resolver,
+} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
@@ -17,13 +22,9 @@ import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFo
 import {
   DESCRIPTION_SUGGESTIONS,
   FEATURE_GROUPS_LIST,
-  VEHICLE_BODY_TYPES,
-  VEHICLE_CONDITIONS,
   VEHICLE_CURRENCY_TYPES,
-  VEHICLE_DRIVE,
   VEHICLE_FUEL_TYPES,
   VEHICLE_MAKES,
-  VEHICLE_TRANSMISSION_TYPES,
 } from '@/shared/constants/vehicles';
 import { DescriptionBox } from '@/shared/components/common/descriptionBox';
 import BoxContainer from '@/shared/components/common/containers/boxContainer';
@@ -39,9 +40,11 @@ import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { showToast } from '@/shared/utils/toasts';
 import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
+import BlockedAccountGate from '@/shared/components/common/admin/BlockedAccountGate';
 
 const MAX_TOTAL_UPLOAD_SIZE_BYTES = 8 * 1024 * 1024;
 const MAX_SINGLE_UPLOAD_SIZE_BYTES = 5 * 1024 * 1024;
+
 const LISTING_TYPE_OPTIONS = [
   { value: 'premium', label: 'Premium' },
   { value: 'quick sell', label: 'Quick Sell' },
@@ -63,17 +66,19 @@ const DEALER_MONTHLY_LIMITS: Record<string, number> = {
 export default function AddVehicleForm() {
   const { t } = useTranslation();
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const submissionLockedRef = useRef(false);
   const router = useLocaleRouter();
   const currentUser: any = useSelector(getCurrentUser);
   const role = useSelector(getUserRole);
   const isAdmin = role === 'admin';
   const isDealer = role === 'dealer';
+  const isBlocked = Boolean(currentUser?.isBlocked);
   const shouldShowMonthlyUsage = !isAdmin;
   const monthlyLimits = isDealer ? DEALER_MONTHLY_LIMITS : USER_MONTHLY_LIMITS;
 
   const { control, handleSubmit, reset, watch, setValue } =
     useForm<VehiclePayload>({
-      resolver: yupResolver(newVehicleSchema(t)),
+      resolver: yupResolver(newVehicleSchema(t)) as Resolver<VehiclePayload>,
       shouldFocusError: true,
       defaultValues: {
         listingType: '',
@@ -101,10 +106,12 @@ export default function AddVehicleForm() {
       },
     });
   const { useFetchVehiclesByUserId } = vehiclesQueries();
+
   const { data: myVehiclesData, isLoading: isVehiclesLoading } =
     useFetchVehiclesByUserId({
       params: {
-        userId: shouldShowMonthlyUsage ? currentUser?._id || '' : '',
+        userId:
+          shouldShowMonthlyUsage && !isBlocked ? currentUser?._id || '' : '',
         page: 1,
         limit: 500,
       },
@@ -157,10 +164,27 @@ export default function AddVehicleForm() {
 
   const { mutate: executeAddNewVehicleMutation, isPending } =
     useAddNewVehicleMutation({
-      callBackFuncs: { onSuccess },
+      callBackFuncs: {
+        onSuccess,
+        onError: () => {
+          submissionLockedRef.current = false;
+        },
+      },
     });
 
   const onSubmit: SubmitHandler<VehiclePayload> = (data) => {
+    if (submissionLockedRef.current) return;
+    if (isBlocked) {
+      showToast({
+        type: 'error',
+        message: currentUser?.blockReason
+          ? `Your account is blocked. Reason: ${currentUser.blockReason}`
+          : 'Your account is blocked.',
+      });
+
+      return;
+    }
+
     const selectedListingType = String(data.listingType || '').toLowerCase().trim();
     const allowedForType = monthlyLimits[selectedListingType] || 0;
     const usedForType = monthlyUsageByType[selectedListingType] || 0;
@@ -170,6 +194,7 @@ export default function AddVehicleForm() {
         type: 'error',
         message: 'Please select a valid listing type.',
       });
+
       return;
     }
 
@@ -179,6 +204,7 @@ export default function AddVehicleForm() {
           type: 'error',
           message: 'Please select a valid listing type.',
         });
+
         return;
       }
 
@@ -187,6 +213,7 @@ export default function AddVehicleForm() {
           type: 'error',
           message: `Monthly limit reached for ${data.listingType}. You have used ${usedForType}/${allowedForType} this month.`,
         });
+
         return;
       }
     }
@@ -197,6 +224,7 @@ export default function AddVehicleForm() {
 
     if (oversizedFiles.length > 0) {
       const maxFileSizeMb = MAX_SINGLE_UPLOAD_SIZE_BYTES / (1024 * 1024);
+
       const fileNames = oversizedFiles
         .slice(0, 3)
         .map((file) => file.name || 'Unnamed file')
@@ -210,6 +238,7 @@ export default function AddVehicleForm() {
             ? `Some images are too large. Max allowed per image is ${maxFileSizeMb} MB. Example files: ${fileNames} and ${remainingCount} more.`
             : `Some images are too large. Max allowed per image is ${maxFileSizeMb} MB. Files: ${fileNames}.`,
       });
+
       return;
     }
 
@@ -225,6 +254,7 @@ export default function AddVehicleForm() {
         type: 'error',
         message: `Total upload size is ${totalMb} MB, but allowed total is ${allowedMb} MB. Please compress images or upload fewer files.`,
       });
+
       return;
     }
 
@@ -267,6 +297,7 @@ export default function AddVehicleForm() {
       formData.append('files', file, file.name || `image-${idx}.jpg`);
     });
 
+    submissionLockedRef.current = true;
     executeAddNewVehicleMutation({ payload: formData });
   };
 
@@ -297,6 +328,10 @@ const onError = (errors: FieldErrors<VehiclePayload>) => {
   }, 300);
 };
   
+
+  if (isBlocked) {
+    return <BlockedAccountGate>{null}</BlockedAccountGate>;
+  }
 
   return (
    <div className="mb-10">

@@ -9,6 +9,7 @@ import { connectSocket } from "@/shared/socket";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
 import { useParams } from "next/navigation";
+import BlockedAccountGate from '@/shared/components/common/admin/BlockedAccountGate';
 
 export default function ChatPage() {
   const currentUser = useSelector(getCurrentUser);
@@ -19,9 +20,10 @@ export default function ChatPage() {
   const socketRef = useRef<any>(null);
   const params=useParams();
   const { user } = useGetUserById(params.id);
+
   const { messages: fetchedMessages } = useGetMessages(
     params.id,
-    currentUser?._id
+    currentUser?.isBlocked ? undefined : currentUser?._id
   );
 
 
@@ -38,6 +40,7 @@ export default function ChatPage() {
       if (newMessages.length > 0) {
         return [...prevMessages, ...newMessages];
       }
+
       return prevMessages; // no change if no new messages
     });
   }
@@ -45,7 +48,7 @@ export default function ChatPage() {
 
   /* ================= SOCKET ================= */
   useEffect(() => {
-  if (!currentUser?._id) return;
+  if (!currentUser?._id || currentUser.isBlocked) return;
 
   socketRef.current?.disconnect(); // 🔥 prevent duplicate
 
@@ -69,7 +72,7 @@ export default function ChatPage() {
     socketRef.current?.off("onlineUsers");
     socketRef.current?.disconnect();
   };
-}, [currentUser?._id, params.id]);
+}, [currentUser?._id, currentUser?.isBlocked, params.id]);
 
   /* ================= SEND ================= */
   const handleSend = () => {
@@ -89,11 +92,16 @@ export default function ChatPage() {
   /* ================= TIME FORMAT ================= */
   const formatTime = (date: string) => {
     if (!date) return "";
+
     return new Date(date).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
     });
   };
+
+  if (currentUser?.isBlocked) {
+    return <BlockedAccountGate>{null}</BlockedAccountGate>;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -104,10 +112,11 @@ export default function ChatPage() {
     <ArrowLeft size={20} />
   </button>
         <div className="relative">
-          <img
-            src={user?.profileImage || "/images/avatar-default.jpeg"}
-            className="w-8 h-8 rounded-full"
-          />
+	          <img
+	            src={user?.profileImage || "/images/avatar-default.jpeg"}
+	            alt={user?.firstName ? `${user.firstName}'s profile` : 'User profile'}
+	            className="w-8 h-8 rounded-full"
+	          />
 
           {/* 🔥 ONLINE DOT */}
           {isOnline && (

@@ -22,7 +22,13 @@ const DEFAULT_QUERY_OPTIONS: DefaultQueryOptions<any> = {
 
   refetchOnMount: false, // **retry** - Number of times React Query should retry a failed request before giving up. // Setting it to `2` means it will retry the request twice before throwing an error. // Useful for handling temporary network issues.
 
-  retry: 2, // **retryDelay** - The delay (in milliseconds) before each retry attempt. // A function can be used to implement exponential backoff (delaying retries longer each time).
+  retry: (failureCount: number, error: any) => {
+    const status = Number(error?.response?.status ?? error?.status);
+
+    if (status >= 400 && status < 500) return false;
+
+    return failureCount < 2;
+  }, // **retryDelay** - The delay (in milliseconds) before each retry attempt. // A function can be used to implement exponential backoff (delaying retries longer each time).
 
   retryDelay: (attemptIndex: number) =>
     Math.min(1000 * 2 ** attemptIndex, 30000), // Example: 1st retry after 1 sec, 2nd after 2 sec, 3rd after 4 sec, etc., up to 30 sec max. // **refetchInterval** - If set, React Query will automatically refetch data at this interval (in milliseconds). // If `false`, automatic polling is disabled. // Uncomment the next line if you want auto-refresh every 10 seconds: // refetchInterval: 10000, // **keepPreviousData** - If `true`, the old data remains visible while new data is being fetched. // This prevents flickering/loading spinners when pagination or filters change.
@@ -36,7 +42,6 @@ export const useQueryHandler = <TData = any>({
   queryKey,
   endpoint,
   isThirdParty = false,
-  params,
   customQueryOptions = {},
   callbacks = {},
 }: QueryRequestParams): UseQueryHandlerResultType<TData> => {

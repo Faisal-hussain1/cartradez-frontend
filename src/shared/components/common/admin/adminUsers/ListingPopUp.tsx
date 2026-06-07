@@ -1,10 +1,11 @@
 "use client";
 
 import { getCurrentUser } from "@/shared/redux/slices/users";
-import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+
 const API_URL=`${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1` as string;
+
 export default function ListingPopUp({
   vehicle,
   onClose,
@@ -14,6 +15,7 @@ export default function ListingPopUp({
 }) {
   const [listingType, setListingType] = useState("Standard");
   const user=useSelector(getCurrentUser);
+
   const listingPrices: Record<string, number> = {
   Standard: 10,
   "Quick Sell": 15,
@@ -22,9 +24,6 @@ export default function ListingPopUp({
 
 
   const price = listingPrices[listingType];
-  const publishableKey="pk_test_51RKN9FQaNfqZpifiMJskjSfmcCdVhVMks73GTE7Ti9MG5nkg9T5w4a9cdeUDckrEEYXgoTdZzgFm5aLh8cQRsMCN00IOOjP2BE"
-  
-  const stripePromise = loadStripe(publishableKey);
 
   const pay = async (listingType: any, pricing: any) => {
   try {
@@ -32,6 +31,7 @@ export default function ListingPopUp({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
       },
       body: JSON.stringify({
         userId: user?._id,

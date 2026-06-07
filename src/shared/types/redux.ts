@@ -17,6 +17,9 @@ export type User = {
   profileImage: string;
   email: string;
   isVerified: boolean;
+  isBlocked?: boolean;
+  blockReason?: string | null;
+  blockedAt?: string | null;
   organizations: Organization[];
   currentActiveOrganization: Organization;
   isSellerOnboarded: boolean;

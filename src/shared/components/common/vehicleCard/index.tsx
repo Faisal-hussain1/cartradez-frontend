@@ -11,6 +11,7 @@ import { USER_ROUTES } from '@/shared/constants/PATHS';
 
 export default function VehicleCard({ vehicle, className = '' }: VehicleCardProps) {
   const router = useLocaleRouter();
+
   const handleViewDetails = () => {
     router.push(USER_ROUTES.vehicleDetails(vehicle._id), { scroll: true });
   };
@@ -35,6 +36,7 @@ export default function VehicleCard({ vehicle, className = '' }: VehicleCardProp
           src={vehicle.coverImage?.url}
           alt={vehicle.make}
           fill
+          sizes='(max-width: 640px) 100vw, 260px'
           className="object-cover"
         />
       </div>

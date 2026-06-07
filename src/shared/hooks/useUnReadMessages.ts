@@ -8,7 +8,7 @@ export function useUnRead() {
   const { useFetchUnReadMessages } = userQueries();
 
   const { data, isLoading, refetch } = useFetchUnReadMessages({
-    userId: user?._id,
+    userId: user?.isBlocked ? undefined : user?._id,
   });
 
   return {

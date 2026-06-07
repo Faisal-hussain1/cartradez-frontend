@@ -30,6 +30,7 @@ export interface LocaleLinkProps
 export interface RequestParams {
   endpoint: string;
   payload?: any;
+  signal?: AbortSignal;
 }
 
 export interface ShowToastProps {

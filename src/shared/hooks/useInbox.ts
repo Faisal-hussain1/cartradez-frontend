@@ -1,14 +1,13 @@
-import { userQueries } from "@/shared/reactQuery";
-import { useSelector } from "react-redux";
-import { getCurrentUser } from "@/shared/redux/slices/users";
+import {userQueries} from '@/shared/reactQuery';
+import {useSelector} from 'react-redux';
+import {getCurrentUser} from '@/shared/redux/slices/users';
 
 export function useInbox() {
-  const user = useSelector(getCurrentUser); // ✅ get user
+  const user = useSelector(getCurrentUser);
+  const {useFetchInbox} = userQueries();
 
-  const { useFetchInbox } = userQueries();
-
-  const { data, isLoading, refetch } = useFetchInbox({
-    userId: user?._id, // 🔥 pass user
+  const {data, isLoading, refetch} = useFetchInbox({
+    userId: user?.isBlocked ? undefined : user?._id,
   });
 
   return {

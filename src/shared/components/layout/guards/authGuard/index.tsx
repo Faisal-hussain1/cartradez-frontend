@@ -13,6 +13,7 @@ import {getRequest} from '@/shared/utils/requests';
 
 const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
   const dispatch = useDispatch();
+
   const {
     isAuthRoute,
     isAdminRoute,
@@ -51,6 +52,7 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
       syncInFlightRef.current = true;
       try {
         const res: any = await getRequest({endpoint: '/users/me'});
+
         const latestUser =
           res?.data?.body?.user ||
           res?.data?.body ||
@@ -85,12 +87,14 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     const hydrateUser = async () => {
       if (typeof window === 'undefined') {
         setIsHydrated(true);
+
         return;
       }
 
       const token = localStorage.getItem('accessToken');
       if (!token) {
         setIsHydrated(true);
+
         return;
       }
 
@@ -103,6 +107,12 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
 
   useEffect(() => {
     if (!isHydrated || !isLoggedIn) return;
+
+    const statusSyncInterval = window.setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        syncCurrentUser();
+      }
+    }, SYNC_MIN_GAP_MS);
 
     const onFocus = () => {
       syncCurrentUser();
@@ -123,6 +133,7 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     document.addEventListener('visibilitychange', onVisibilityChange);
 
     return () => {
+      window.clearInterval(statusSyncInterval);
       window.removeEventListener('focus', onFocus);
       window.removeEventListener('online', onOnline);
       document.removeEventListener('visibilitychange', onVisibilityChange);
@@ -147,9 +158,11 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
 
     if (!isLoggedIn && isAuthorizeRoutes) {
       setMount(true);
+
       const loginPath = isDealersRoute
         ? `${AUTH_ROUTES.login}?reason=login_required&from=dealer`
         : AUTH_ROUTES.login;
+
       return router.push(loginPath);
     }
 

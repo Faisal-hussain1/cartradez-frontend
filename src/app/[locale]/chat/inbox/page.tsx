@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useInbox } from "@/shared/hooks/useInbox";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "@/shared/redux/slices/users";
 import { ArrowLeft } from "lucide-react";
+import BlockedAccountGate from '@/shared/components/common/admin/BlockedAccountGate';
 
 export default function InboxPage() {
   const router = useRouter();
@@ -13,8 +14,13 @@ export default function InboxPage() {
   const { users, isLoading, refetch } = useInbox();
 
   useEffect(() => {
+    if (user?.isBlocked) return;
     refetch();
-  }, [user?._id]);
+  }, [user?._id, user?.isBlocked, refetch]);
+
+  if (user?.isBlocked) {
+    return <BlockedAccountGate>{null}</BlockedAccountGate>;
+  }
 
   return (
     <div className="h-screen bg-gray-50">
@@ -61,10 +67,11 @@ export default function InboxPage() {
             onClick={() => router.push(`/chat/${user._id}`)}
             className="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100 transition duration-300 ease-in-out"
           >
-            <img
-              src={user.profileImage || "/images/avatar-default.jpeg"}
-              className="w-12 h-12 rounded-full object-cover"
-            />
+	            <img
+	              src={user.profileImage || "/images/avatar-default.jpeg"}
+	              alt={`${user.name || 'User'} profile`}
+	              className="w-12 h-12 rounded-full object-cover"
+	            />
             <div className="flex-1">
               <p className="text-sm font-semibold text-gray-800">{user.name}</p>
               <p className="text-xs text-gray-500 truncate">{user.lastMessage || "No messages yet"}</p>

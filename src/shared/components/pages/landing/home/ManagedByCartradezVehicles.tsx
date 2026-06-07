@@ -47,6 +47,7 @@ export default function ManagedByCartradezVehicles({
                   src={vehicle.coverImage?.url}
                   alt={vehicle._id}
                   fill
+                  sizes='(max-width: 640px) 100px, (max-width: 1024px) 120px, 130px'
                   className='object-cover'
                 />
 

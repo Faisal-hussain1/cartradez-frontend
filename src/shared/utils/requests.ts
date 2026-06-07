@@ -2,10 +2,11 @@ import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import translationUtilsValues from './translationsUtils';
 import {store} from '@/shared/redux/store';
 import {resetAllSlices} from './resetAllSlices';
-import {invalidateQueries} from './queryClient';
+import {getQueryClient, invalidateQueries} from './queryClient';
 import {RequestParams, ServerRequestParams} from '@/shared/interfaces/utils';
 import {GENERAL_ERRORS_TYPES} from '@/shared/constants/responses/errors/general';
 import {normalizeError, getErrorMessage} from './errorMessage';
+import {actions} from '@/shared/redux/slices/users';
 
 export const API_SERVER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
 
@@ -19,6 +20,34 @@ const request = axios.create({
 request.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const responseMessage = String(error?.response?.data?.message || '');
+
+    const isBlockedResponse =
+      error?.response?.status === 403 &&
+      responseMessage.toLowerCase().includes('account has been blocked');
+
+    if (isBlockedResponse) {
+      const currentUser = store.getState()?.users?.currentUser;
+      const reasonMarker = 'Reason:';
+      const reasonIndex = responseMessage.indexOf(reasonMarker);
+
+      const blockReason =
+        reasonIndex >= 0
+          ? responseMessage.slice(reasonIndex + reasonMarker.length).trim()
+          : null;
+
+      if (currentUser?._id && !currentUser.isBlocked) {
+        store.dispatch(
+          actions.setCurrentUser({
+            ...currentUser,
+            isBlocked: true,
+            blockReason,
+          })
+        );
+      }
+      getQueryClient().cancelQueries();
+    }
+
     if (
       error?.response?.data?.error?.type ===
       GENERAL_ERRORS_TYPES.invalidToken.value
@@ -28,6 +57,7 @@ request.interceptors.response.use(
     }
     const {t} = await translationUtilsValues();
     const normalizedError = normalizeError(error, t('errorResponse.message'));
+
     return Promise.reject(normalizedError);
   }
 );
@@ -56,8 +86,9 @@ export const postRequest = async <T, R = AxiosResponse<T>>({
 // Get request Call
 export const getRequest = async <T, R = AxiosResponse<T>>({
   endpoint,
+  signal,
 }: RequestParams): Promise<R> => {
-  const response: R = await request.get(endpoint);
+  const response: R = await request.get(endpoint, {signal});
 
   return response;
 };
