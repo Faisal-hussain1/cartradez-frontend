@@ -651,11 +651,10 @@ function DeleteConfirmModal({
               Delete listing?
             </h3>
             <p className='mt-1 text-sm text-muted-foreground'>
-              This will permanently remove{' '}
+              Are you sure you want to delete{' '}
               <span className='font-medium text-foreground'>
-                {vehicle.make} {vehicle.model}
+                {vehicle.make} {vehicle.model}?
               </span>{' '}
-              and all its images. This action cannot be undone.
             </p>
           </div>
           <button

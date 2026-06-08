@@ -18,6 +18,7 @@ const buildVehicleListQueryKey = (baseKey: string[], params?: Record<string, any
   params?.endDate ?? null,
   params?.search ?? null,
   params?.isManagedByCartradez ?? null,
+  params?.deletedOnly ?? null,
 ];
 
 // ---------------------------------------------------------------------------
@@ -159,6 +160,30 @@ export const useFetchDashboardVehicleStats = ({
     },
   });
 
+export const useFetchDeletedVehicles = ({
+  callBackFuncs,
+  params,
+}: {
+  callBackFuncs?: QueryCallbacks;
+  params?: any;
+} = {}) =>
+  useQueryHandler({
+    queryKey: buildVehicleListQueryKey(
+      VEHICLES.fetchDeletedVehicles.queryKey,
+      {...params, deletedOnly: true},
+    ),
+    endpoint: VEHICLES.fetchDeletedVehicles.endpoint(params),
+    params,
+    customQueryOptions: {
+      staleTime: 30 * 1000,
+      refetchOnWindowFocus: true,
+      gcTime: 0,
+    },
+    callbacks: {
+      ...callBackFuncs,
+    },
+  });
+
 export const useFetchVehicleById = ({
   callBackFuncs,
   params,
@@ -280,6 +305,7 @@ export const useQueries = () => ({
   useFetchActiveListingsCount,
   useFetchManagedByCartradezCount,
   useFetchDashboardVehicleStats,
+  useFetchDeletedVehicles,
   useFetchVehicleById,
 });
 

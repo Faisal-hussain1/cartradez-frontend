@@ -6,6 +6,7 @@ import {
 import {SidebarRoute, SiteMapLink} from '@/shared/interfaces/utils';
 import {ROLES} from './users';
 import {extractRoutes} from '@/shared/utils/general';
+import {Trash2} from 'lucide-react';
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
 
@@ -42,6 +43,7 @@ export const AUTH_ROUTES = {
 export const ADMIN_ROUTES = {
   dashboard: '/dash',
   listings: '/listings',
+  deletedVehicles: '/deleted-vehicles',
   dealers: '/dealers',
   managedByCartradez: '/managed-by-cartradez',
   roles: '/roles',
@@ -98,6 +100,13 @@ export const SIDEBAR_ROUTES = (
     label: t('navigationRoutes.sellers'),
     path: ADMIN_ROUTES.dashboard,
     icon: UsersIcon,
+    roles: [ROLES.admin.value],
+  },
+  deletedVehicles: {
+    value: 'deletedVehicles',
+    label: t('navigationRoutes.deletedVehicles'),
+    path: ADMIN_ROUTES.deletedVehicles,
+    icon: Trash2,
     roles: [ROLES.admin.value],
   },
 

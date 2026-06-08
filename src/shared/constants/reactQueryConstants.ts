@@ -76,6 +76,12 @@ export const VEHICLES = {
     endpoint: API_ENDPOINTS.VEHICLES.GET_DASHBOARD_VEHICLE_STATS,
   },
 
+  fetchDeletedVehicles: {
+    queryKey: ['getDeletedVehicles'],
+    endpoint: (params: any) =>
+      buildDynamicURL(API_ENDPOINTS.VEHICLES.GET_DELETED_VEHICLES, params),
+  },
+
   fetchVehicleById: {
     queryKey: (vehicleId: string) => ['getVehicleById', vehicleId],
     endpoint: (params: any) =>

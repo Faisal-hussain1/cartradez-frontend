@@ -30,12 +30,14 @@ export const API_ENDPOINTS = {
     GET_ACTIVE_LISTINGS_COUNT: '/vehicles/stats/active-listings-count',
     GET_MANAGED_BY_CARTRADEZ_COUNT: '/vehicles/stats/managed-by-cartradez-count',
     GET_DASHBOARD_VEHICLE_STATS: '/vehicles/stats/dashboard-vehicle-stats',
+    GET_DELETED_VEHICLES: '/vehicles/deleted',
  
   // PATCH /vehicles/:id
   UPDATE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
  
   // DELETE /vehicles/:id
   DELETE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
+    RESTORE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}/restore`,
     ADD_VEHICLE: '/vehicles/add',
     GET_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
   },

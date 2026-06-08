@@ -1,6 +1,14 @@
 'use client';
 
-import {Activity, LayoutDashboard, List, Users, X, BadgeDollarSign} from 'lucide-react';
+import {
+  Activity,
+  BadgeDollarSign,
+  LayoutDashboard,
+  List,
+  Trash2,
+  Users,
+  X,
+} from 'lucide-react';
 import Image from 'next/image';
 import { SidebarItem } from './Sidebaritem';
 import { useDispatch, useSelector } from 'react-redux';
@@ -146,6 +154,12 @@ export default function Leftbar() {
 
           {role === 'admin' && (
             <>
+              <SidebarItem
+                href="/deleted-vehicles"
+                icon={<Trash2 size={18} />}
+                label="Deleted Vehicles"
+              />
+
               {/* <SidebarItem
                 href="/roles"
                 icon={<Shield size={18} />}

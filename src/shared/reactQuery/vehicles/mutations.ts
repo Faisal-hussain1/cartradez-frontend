@@ -95,9 +95,14 @@ export const useMutations = () => {
       ...callBackFuncs,
 
       onSuccessAlways: async (response: any) => {
-        await queryClient.invalidateQueries({
-          queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
+          }),
+          queryClient.invalidateQueries({
+            queryKey: VEHICLES.fetchDeletedVehicles.queryKey,
+          }),
+        ]);
 
         showToast({
           type: 'success',
@@ -134,9 +139,14 @@ export const useMutations = () => {
       ...callBackFuncs,
 
       onSuccessAlways: async (response: any) => {
-        await queryClient.invalidateQueries({
-          queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
-        });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
+          }),
+          queryClient.invalidateQueries({
+            queryKey: VEHICLES.fetchDeletedVehicles.queryKey,
+          }),
+        ]);
 
         showToast({
           type: 'success',
@@ -159,5 +169,44 @@ export const useMutations = () => {
       },
     },
   }),
+    useRestoreVehicleMutation: ({
+      vehicleId,
+      callBackFuncs,
+    }: {
+      vehicleId: string;
+      callBackFuncs?: MutationCallbacks;
+    }) =>
+      useMutationHandler({
+        endpoint: API_ENDPOINTS.VEHICLES.RESTORE_VEHICLE({id: vehicleId}),
+        method: PATCH,
+        callBackFuncs: {
+          ...callBackFuncs,
+          onSuccessAlways: async (response: any) => {
+            await Promise.all([
+              queryClient.invalidateQueries({
+                queryKey: VEHICLES.fetchDeletedVehicles.queryKey,
+              }),
+              queryClient.invalidateQueries({
+                queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
+              }),
+            ]);
+            showToast({
+              type: 'success',
+              message: response?.message || 'Vehicle restored successfully',
+            });
+            await callBackFuncs?.onSuccessAlways?.(response);
+          },
+          onErrorAlways: (error: any) => {
+            showToast({
+              type: 'error',
+              message:
+                error?.response?.data?.message ||
+                error?.message ||
+                'Failed to restore vehicle',
+            });
+            callBackFuncs?.onErrorAlways?.(error);
+          },
+        },
+      }),
   };
 };

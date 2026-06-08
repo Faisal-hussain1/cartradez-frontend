@@ -46,7 +46,8 @@
     "message": "'An error occurred"
   },
   "navigationRoutes": {
-    "settings": "Settings"
+    "settings": "Settings",
+    "deletedVehicles": "Deleted Vehicles"
   },
   "roles": {
     "admin": "Admin",
