@@ -61,7 +61,7 @@ export default function DeletedVehiclesTable() {
   const [searchValue, setSearchValue] = useState(search);
   const pageLimit = 12;
 
-  const {data, isLoading, refetch} = useFetchDeletedVehicles({
+  const {data, isLoading, isError, refetch} = useFetchDeletedVehicles({
     params: {pageNo: page, pageLimit, search},
   });
   const vehicles: DeletedVehicle[] = data?.data?.vehicles ?? data?.vehicles ?? [];
@@ -111,7 +111,19 @@ export default function DeletedVehiclesTable() {
       </div>
 
       <section className='overflow-hidden rounded-xl border border-border bg-card'>
-        {vehicles.length === 0 ? (
+        {isError ? (
+          <div className='flex min-h-56 flex-col items-center justify-center gap-3 p-8 text-center'>
+            <Trash2 size={28} className='text-red-600' />
+            <p className='font-medium'>Could not load deleted vehicles</p>
+            <button
+              type='button'
+              onClick={() => refetch()}
+              className='h-9 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted'
+            >
+              Try again
+            </button>
+          </div>
+        ) : vehicles.length === 0 ? (
           <div className='flex min-h-56 flex-col items-center justify-center gap-3 p-8 text-center'>
             <Trash2 size={28} className='text-muted-foreground' />
             <p className='font-medium'>No deleted vehicles found</p>
