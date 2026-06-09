@@ -71,7 +71,6 @@ export const useMutations = () => {
             queryClient.invalidateQueries({
               queryKey: VEHICLES.fetchAllVehiclesList.queryKey,
             });
-            console.log('Vehicle added successfully:', message);
             showToast({type: 'success', message});
           },
           onErrorAlways: (error: any) =>
@@ -203,6 +202,42 @@ export const useMutations = () => {
                 error?.response?.data?.message ||
                 error?.message ||
                 'Failed to restore vehicle',
+            });
+            callBackFuncs?.onErrorAlways?.(error);
+          },
+        },
+      }),
+    usePermanentlyDeleteVehicleMutation: ({
+      vehicleId,
+      callBackFuncs,
+    }: {
+      vehicleId: string;
+      callBackFuncs?: MutationCallbacks;
+    }) =>
+      useMutationHandler({
+        endpoint: API_ENDPOINTS.VEHICLES.PERMANENTLY_DELETE_VEHICLE({id: vehicleId}),
+        method: DELETE,
+        callBackFuncs: {
+          ...callBackFuncs,
+          onSuccessAlways: async (response: any) => {
+            await Promise.all([
+              queryClient.invalidateQueries({
+                queryKey: VEHICLES.fetchDeletedVehicles.queryKey,
+              }),
+            ]);
+            showToast({
+              type: 'success',
+              message: response?.message || 'Vehicle permanently deleted',
+            });
+            await callBackFuncs?.onSuccessAlways?.(response);
+          },
+          onErrorAlways: (error: any) => {
+            showToast({
+              type: 'error',
+              message:
+                error?.response?.data?.message ||
+                error?.message ||
+                'Failed to permanently delete vehicle',
             });
             callBackFuncs?.onErrorAlways?.(error);
           },

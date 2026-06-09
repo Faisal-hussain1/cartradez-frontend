@@ -20,7 +20,7 @@ interface DeletedVehicle {
   currency: string;
   listingType?: string | null;
   coverImage?: {key: string; url: string};
-  deletedAt?: string;
+  updatedAt?: string;
   deletedBy?: string;
 }
 
@@ -48,6 +48,58 @@ function RestoreButton({
     >
       <RotateCcw size={14} className={isPending ? 'animate-spin' : ''} />
       {isPending ? 'Restoring' : 'Restore'}
+    </button>
+  );
+}
+
+function PermanentDeleteButton({
+  vehicleId,
+  onDeleted,
+}: {
+  vehicleId: string;
+  onDeleted: () => void | Promise<unknown>;
+}) {
+  const {usePermanentlyDeleteVehicleMutation} = useMutations();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const {mutate, isPending} = usePermanentlyDeleteVehicleMutation({
+    vehicleId,
+    callBackFuncs: {onSuccessAlways: onDeleted},
+  });
+
+  if (showConfirm) {
+    return (
+      <div className='flex gap-2'>
+        <button
+          type='button'
+          onClick={() => mutate()}
+          disabled={isPending}
+          className='inline-flex h-8 items-center gap-1.5 rounded-md border border-red-600 bg-red-50 px-2 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50'
+        >
+          <Trash2 size={14} className={isPending ? 'animate-spin' : ''} />
+          {isPending ? 'Deleting' : 'Yes, Delete'}
+        </button>
+        <button
+          type='button'
+          onClick={() => setShowConfirm(false)}
+          disabled={isPending}
+          className='h-8 rounded-md border border-border px-2 text-xs font-medium hover:bg-muted disabled:opacity-50'
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type='button'
+      onClick={() => setShowConfirm(true)}
+      title='Permanently delete vehicle'
+      className='inline-flex h-8 items-center gap-1.5 rounded-md border border-red-600 px-2 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-50'
+    >
+      <Trash2 size={14} />
+      Delete
     </button>
   );
 }
@@ -157,10 +209,13 @@ export default function DeletedVehiclesTable() {
                     {vehicle.currency?.toUpperCase() === 'USD' ? '$' : 'ZMW'} {vehicle.price?.toLocaleString()}
                   </p>
                   <p className='mt-1 text-xs text-muted-foreground'>
-                    {vehicle.deletedAt ? formatDate(new Date(vehicle.deletedAt), 'LLL dd, yyyy') : 'Unknown date'}
+                    {vehicle.updatedAt ? formatDate(new Date(vehicle.updatedAt), 'LLL dd, yyyy') : 'Unknown date'}
                   </p>
                 </div>
-                <RestoreButton vehicleId={vehicle._id} onRestored={refetch} />
+                <div className='flex gap-2'>
+                  <RestoreButton vehicleId={vehicle._id} onRestored={refetch} />
+                  <PermanentDeleteButton vehicleId={vehicle._id} onDeleted={refetch} />
+                </div>
               </div>
             ))}
           </div>

@@ -38,6 +38,7 @@ export const API_ENDPOINTS = {
   // DELETE /vehicles/:id
   DELETE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
     RESTORE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}/restore`,
+    PERMANENTLY_DELETE_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}/permanent`,
     ADD_VEHICLE: '/vehicles/add',
     GET_VEHICLE: ({id}: {id: string}) => `/vehicles/${id}`,
   },
