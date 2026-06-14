@@ -59,6 +59,7 @@ export const MANAGER_ROUTES = {
 };
 
 export const USER_ROUTES = {
+  dashboard: ADMIN_ROUTES.dashboard,
   vehicles: path(VEHICLE_ROOT, '/'),
   listings: '/listings',
   selectRole: path(ROOT_ROUTE, '/selectRole'),

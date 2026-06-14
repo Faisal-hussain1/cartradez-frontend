@@ -70,7 +70,7 @@ export default function ManagedByCartradezVehicles({
                   })}
                 </h2>
                 <p className='text-primary font-bold text-[18px] mt-1'>
-                  {`${vehicle.currency.toLocaleUpperCase()} ${vehicle.price.toLocaleString()}`}
+                  {`${vehicle.currency.toLocaleUpperCase()==='usd'?'$':'ZK'} ${vehicle.price.toLocaleString()}`}
                 </p>
               </div>
             </div>
