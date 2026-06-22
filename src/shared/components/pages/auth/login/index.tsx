@@ -24,7 +24,6 @@ import {
 } from '@/shared/components/common/containers/auth';
 import Link from '@/shared/utils/localeLink';
 import GoogleAuthButton from '../googleButton';
-import {persistAuthToken} from '@/shared/utils/authSession';
 
 export default function LoginForm() {
   const {t, ct} = useTranslation();
@@ -58,7 +57,7 @@ export default function LoginForm() {
   const onSuccess = (res: any) => {
     const token = res?.data?.token;
     if (token) {
-      persistAuthToken(token);
+      localStorage.setItem('accessToken', token);
     }
   };
 

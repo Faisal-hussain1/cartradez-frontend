@@ -2,7 +2,6 @@
 
 import {useState} from 'react';
 import {completeGoogleSignup} from '@/shared/utils/api';
-import {persistAuthToken} from '@/shared/utils/authSession';
 
 type GoogleUserData = {
   firstName: string;
@@ -72,7 +71,9 @@ export default function GoogleSignupModal({
       }
 
       const token = response.data.accessToken;
-      persistAuthToken(token);
+      localStorage.setItem('accessToken', token);
+      document.cookie = `x-auth-token=${token}; path=/; max-age=2592000; samesite=lax`;
+      document.cookie = `x-auth-token-cartradez=${token}; path=/; max-age=2592000; samesite=lax`;
       onComplete(completeUser);
     } catch (err: any) {
       setError(err?.response?.data?.message || 'Failed to complete signup');
