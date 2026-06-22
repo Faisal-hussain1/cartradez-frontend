@@ -9,7 +9,7 @@ import {MutationCallbacks} from '@/shared/interfaces/hooks';
 import {AppDispatch} from '@/shared/redux/store';
 import {showToast} from '@/shared/utils/toasts';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import {getRedirectUrl} from '@/shared/utils/auth';
+import {clearAuthSession, getRedirectUrl} from '@/shared/utils/auth';
 import {AUTH_ROUTES} from '@/shared/constants/PATHS';
 
 const {USERS} = API_ENDPOINTS;
@@ -127,6 +127,7 @@ export const useMutations = () => {
         callBackFuncs: {
           ...callBackFuncs,
           onSuccessAlways: ({message}) => {
+            clearAuthSession();
             queryClient.removeQueries();
             dispatch(resetAllSlices());
             router.push(AUTH_ROUTES.login);

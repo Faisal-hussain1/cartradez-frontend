@@ -7,6 +7,7 @@ import {RequestParams, ServerRequestParams} from '@/shared/interfaces/utils';
 import {GENERAL_ERRORS_TYPES} from '@/shared/constants/responses/errors/general';
 import {normalizeError, getErrorMessage} from './errorMessage';
 import {actions} from '@/shared/redux/slices/users';
+import {clearAuthSession} from './auth';
 
 export const API_SERVER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
 
@@ -52,6 +53,7 @@ request.interceptors.response.use(
       error?.response?.data?.error?.type ===
       GENERAL_ERRORS_TYPES.invalidToken.value
     ) {
+      clearAuthSession();
       store.dispatch(resetAllSlices());
       invalidateQueries();
     }
