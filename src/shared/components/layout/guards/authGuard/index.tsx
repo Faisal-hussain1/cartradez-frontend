@@ -10,9 +10,17 @@ import { NodeChildrenProps } from '@/shared/interfaces/common';
 import { getRedirectUrl, getRoleFlags } from '@/shared/utils/auth';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
 import {getRequest} from '@/shared/utils/requests';
+import {
+  AUTH_SESSION_EXPIRED_EVENT,
+  clearStoredAuthSession,
+  getStoredAuthToken,
+  isAuthTokenExpired,
+} from '@/shared/utils/authSession';
+import {resetAllSlices} from '@/shared/utils/resetAllSlices';
+import {AppDispatch} from '@/shared/redux/store';
 
 const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     isAuthRoute,
@@ -38,8 +46,19 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     async ({force = false}: {force?: boolean} = {}) => {
       if (typeof window === 'undefined') return;
 
-      const token = localStorage.getItem('accessToken');
-      if (!token) return;
+      const token = getStoredAuthToken();
+      if (!token) {
+        clearStoredAuthSession();
+        dispatch(resetAllSlices());
+
+        return;
+      }
+      if (isAuthTokenExpired(token)) {
+        clearStoredAuthSession();
+        dispatch(resetAllSlices());
+
+        return;
+      }
       if (syncInFlightRef.current) return;
 
       const blockedUntilRaw = localStorage.getItem('usersMeBlockedUntil');
@@ -91,8 +110,18 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
         return;
       }
 
-      const token = localStorage.getItem('accessToken');
+      const token = getStoredAuthToken();
       if (!token) {
+        clearStoredAuthSession();
+        dispatch(resetAllSlices());
+        setIsHydrated(true);
+
+        return;
+      }
+
+      if (isAuthTokenExpired(token)) {
+        clearStoredAuthSession();
+        dispatch(resetAllSlices());
         setIsHydrated(true);
 
         return;
@@ -103,7 +132,20 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     };
 
     hydrateUser();
-  }, [syncCurrentUser]);
+  }, [dispatch, syncCurrentUser]);
+
+  useEffect(() => {
+    const onSessionExpired = () => {
+      setMount(true);
+      router.push(AUTH_ROUTES.login);
+    };
+
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, onSessionExpired);
+
+    return () => {
+      window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, onSessionExpired);
+    };
+  }, [router]);
 
   useEffect(() => {
     if (!isHydrated || !isLoggedIn) return;

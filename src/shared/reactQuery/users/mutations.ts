@@ -11,6 +11,7 @@ import {showToast} from '@/shared/utils/toasts';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {getRedirectUrl} from '@/shared/utils/auth';
 import {AUTH_ROUTES} from '@/shared/constants/PATHS';
+import {clearStoredAuthSession} from '@/shared/utils/authSession';
 
 const {USERS} = API_ENDPOINTS;
 const {POST, PATCH} = HTTP_METHODS;
@@ -128,6 +129,7 @@ export const useMutations = () => {
           ...callBackFuncs,
           onSuccessAlways: ({message}) => {
             queryClient.removeQueries();
+            clearStoredAuthSession();
             dispatch(resetAllSlices());
             router.push(AUTH_ROUTES.login);
             showToast({type: 'success', message});
@@ -137,7 +139,9 @@ export const useMutations = () => {
           },
         },
       }),
-      useAcceptPrivacyMutation: ({ callBackFuncs } = {}) =>
+      useAcceptPrivacyMutation: ({
+        callBackFuncs,
+      }: {callBackFuncs?: MutationCallbacks} = {}) =>
   useMutationHandler({
     endpoint: "/users/accept-privacy",
     method: PATCH,
@@ -152,7 +156,9 @@ export const useMutations = () => {
     },
   }),
 
-useAcceptTermsMutation: ({ callBackFuncs } = {}) =>
+useAcceptTermsMutation: ({
+  callBackFuncs,
+}: {callBackFuncs?: MutationCallbacks} = {}) =>
   useMutationHandler({
     endpoint: "/users/accept-terms",
     method: PATCH,

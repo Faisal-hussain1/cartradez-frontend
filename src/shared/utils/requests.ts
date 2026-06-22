@@ -7,8 +7,28 @@ import {RequestParams, ServerRequestParams} from '@/shared/interfaces/utils';
 import {GENERAL_ERRORS_TYPES} from '@/shared/constants/responses/errors/general';
 import {normalizeError, getErrorMessage} from './errorMessage';
 import {actions} from '@/shared/redux/slices/users';
+import {
+  clearStoredAuthSession,
+  getStoredAuthToken,
+  isAuthTokenExpired,
+  notifyAuthSessionExpired,
+  persistAuthToken,
+} from './authSession';
 
 export const API_SERVER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
+
+const getTokenFromResponseHeaders = (headers: AxiosResponse['headers']) => {
+  const headerEntries = Object.entries(headers || {});
+
+  const authTokenHeader = headerEntries.find(([key]) =>
+    key.toLowerCase().startsWith('x-auth-token')
+  );
+
+  return (
+    authTokenHeader?.[1] ||
+    headers?.['authorization']?.replace(/^Bearer\s+/i, '')
+  );
+};
 
 // Create axios instance
 const request = axios.create({
@@ -18,9 +38,26 @@ const request = axios.create({
 });
 
 request.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const refreshedToken =
+      getTokenFromResponseHeaders(response.headers) ||
+      response.data?.data?.token ||
+      response.data?.accessToken;
+
+    if (refreshedToken) {
+      persistAuthToken(refreshedToken);
+    }
+
+    return response;
+  },
   async (error) => {
     const responseMessage = String(error?.response?.data?.message || '');
+    const responseStatus = Number(error?.response?.status);
+
+    const errorType =
+      error?.response?.data?.error?.type ||
+      error?.response?.data?.data?.error?.type ||
+      error?.response?.data?.type;
 
     const isBlockedResponse =
       error?.response?.status === 403 &&
@@ -49,12 +86,15 @@ request.interceptors.response.use(
     }
 
     if (
-      error?.response?.data?.error?.type ===
-      GENERAL_ERRORS_TYPES.invalidToken.value
+      errorType === GENERAL_ERRORS_TYPES.invalidToken.value ||
+      (responseStatus === 401 && responseMessage.toLowerCase().includes('token'))
     ) {
+      clearStoredAuthSession();
       store.dispatch(resetAllSlices());
       invalidateQueries();
+      notifyAuthSessionExpired();
     }
+
     const {t} = await translationUtilsValues();
     const normalizedError = normalizeError(error, t('errorResponse.message'));
 
@@ -63,9 +103,22 @@ request.interceptors.response.use(
 );
 request.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('accessToken');
+    const token = getStoredAuthToken();
 
     if (token) {
+      if (isAuthTokenExpired(token)) {
+        clearStoredAuthSession();
+        store.dispatch(resetAllSlices());
+        invalidateQueries();
+        notifyAuthSessionExpired();
+
+        return Promise.reject({
+          status: 401,
+          message: 'Session expired. Please login again.',
+          error: {type: GENERAL_ERRORS_TYPES.invalidToken.value},
+        });
+      }
+
       config.headers.Authorization = `Bearer ${token}`;
     }
   }

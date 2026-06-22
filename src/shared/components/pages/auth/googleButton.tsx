@@ -9,6 +9,7 @@ import GoogleSignupModal from './GoogleSignupModal';
 import {showToast} from '@/shared/utils/toasts';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import {getRedirectUrl} from '@/shared/utils/auth';
+import {persistAuthToken} from '@/shared/utils/authSession';
 
 type GoogleAuthButtonProps = {
   text?: string;
@@ -26,15 +27,12 @@ export default function GoogleAuthButton({
 
   const normalizeUser = (user: any) => {
     if (!user) return user;
+
     if (user._id) return user;
+
     if (user.id) return {...user, _id: user.id};
+
     return user;
-  };
-  const persistAuthToken = (token?: string) => {
-    if (!token) return;
-    localStorage.setItem('accessToken', token);
-    document.cookie = `x-auth-token=${token}; path=/; max-age=2592000; samesite=lax`;
-    document.cookie = `x-auth-token-cartradez=${token}; path=/; max-age=2592000; samesite=lax`;
   };
 
   const responseGoogle = async (authResult: any) => {
