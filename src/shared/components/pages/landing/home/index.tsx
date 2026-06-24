@@ -86,41 +86,33 @@ export default function Home() {
 
   return (
     <div>
-      <div className="w-full h-[300px] bg-[url('/images/home/banner.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center">
-        <div className='w-[85%] max-w-6xl bg-white/30 backdrop-blur-lg rounded-2xl shadow-lg border border-white/10 p-6'>
-          <div className='grid grid-cols-12'>
-            <div className='col-span-12'>
-              <p className='text-2xl text-primary font-semibold'>
-                Find the Car You’ll Love
-              </p>
-            </div>
-          </div>
+<div className="w-full h-[300px] bg-[url('/images/home/banner.png')] bg-cover bg-center bg-no-repeat flex items-center justify-center">
+  <div className='w-[85%] max-w-6xl bg-white/30 backdrop-blur-lg rounded-2xl shadow-lg border border-white/10 p-6'>
+    <div className='grid grid-cols-12'>
+      <div className='col-span-12'>
+        <h1 className='text-2xl md:text-3xl text-primary font-bold'>
+          Cars for Sale in Zambia – Buy and Sell Vehicles with CarTradez
+        </h1>
 
-          <div className='grid grid-cols-12 gap-1 md:gap-3 mt-5'>
-            <div className='col-span-12 md:col-span-9'>
-              <FiltersBar
-                setFilters={setFilters}
-                filters={filters}
-                hideSelect={true}
-                placeholder='Search by Make, Model, Price, Listing Type'
-              />
-            </div>
-
-            {/* <div className='col-span-12 md:col-span-3 flex justify-center md:justify-end'>
-              <PrimaryButton
-                buttonText={
-                  <>
-                    <FilterSearchIcon className='h-6 w-6' />
-                    {'Advanced Filters'}
-                  </>
-                }
-                styles='h-[48px] bg-white text-primary hover:text-white'
-              />
-            </div> */}
-          </div>
-        </div>
+        <p className='mt-2 text-sm md:text-base text-gray-700 max-w-3xl'>
+          Find used cars SUVs trucks and more from sellers across Zambia. Compare
+          listings contact sellers and post your vehicle for sale with CarTradez.
+        </p>
       </div>
+    </div>
 
+    <div className='grid grid-cols-12 gap-1 md:gap-3 mt-5'>
+      <div className='col-span-12 md:col-span-9'>
+        <FiltersBar
+          setFilters={setFilters}
+          filters={filters}
+          hideSelect={true}
+          placeholder='Search by Make, Model, Price, Listing Type'
+        />
+      </div>
+    </div>
+  </div>
+</div>
       <div className='flex justify-center mb-10'>
         <Container>
           <div className='grid grid-cols-12 gap-6 md:gap-6 mt-8'>
