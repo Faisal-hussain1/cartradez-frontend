@@ -124,21 +124,72 @@ export const SIDEBAR_ROUTES_LIST = (t: (key: any) => any): SidebarRoute[] =>
 
 export const SITE_MAP_LINKS: {[key: string]: SiteMapLink} = {
   home: {
-    url: ROOT_ROUTE,
+    url: '/',
     priority: 1,
     changeFrequency: 'daily',
     lastModified: new Date(),
   },
-  login: {
-    url: AUTH_ROUTES.login,
-    priority: 0.8,
+
+  vehicles: {
+    url: '/vehicles/all',
+    priority: 0.9,
     changeFrequency: 'daily',
     lastModified: new Date(),
   },
-  register: {
-    url: AUTH_ROUTES.register,
-    priority: 0.8,
+
+  managedByCartradez: {
+    url: '/vehicles/managed-by-cartradez',
+    priority: 0.9,
     changeFrequency: 'daily',
+    lastModified: new Date(),
+  },
+
+  about: {
+    url: '/about',
+    priority: 0.6,
+    changeFrequency: 'monthly',
+    lastModified: new Date(),
+  },
+
+  contact: {
+    url: '/contact',
+    priority: 0.6,
+    changeFrequency: 'monthly',
+    lastModified: new Date(),
+  },
+
+  faq: {
+    url: '/faq',
+    priority: 0.6,
+    changeFrequency: 'monthly',
+    lastModified: new Date(),
+  },
+
+  buyerSellerGuide: {
+    url: '/guidelines',
+    priority: 0.7,
+    changeFrequency: 'monthly',
+    lastModified: new Date(),
+  },
+
+  privacyPolicy: {
+    url: '/privacy',
+    priority: 0.3,
+    changeFrequency: 'yearly',
+    lastModified: new Date(),
+  },
+
+  termsAndConditions: {
+    url: '/terms',
+    priority: 0.3,
+    changeFrequency: 'yearly',
+    lastModified: new Date(),
+  },
+
+  refundPolicy: {
+    url: '/refund',
+    priority: 0.3,
+    changeFrequency: 'yearly',
     lastModified: new Date(),
   },
 };
