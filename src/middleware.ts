@@ -11,6 +11,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   const cookieStore = await cookies();
 
   const cookieToken = cookieStore.get('x-auth-token')?.value;
+
   const prefixedAuthCookie = cookieStore
     .getAll()
     .find(({name}) => name.startsWith('x-auth-token-'))?.value;

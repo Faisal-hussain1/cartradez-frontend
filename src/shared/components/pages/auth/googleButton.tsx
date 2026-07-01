@@ -26,10 +26,14 @@ export default function GoogleAuthButton({
 
   const normalizeUser = (user: any) => {
     if (!user) return user;
+
     if (user._id) return user;
+
     if (user.id) return {...user, _id: user.id};
+
     return user;
   };
+
   const persistAuthToken = (token?: string) => {
     if (!token) return;
     localStorage.setItem('accessToken', token);

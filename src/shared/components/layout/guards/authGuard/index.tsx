@@ -7,7 +7,11 @@ import { actions, getCurrentUser } from '@/shared/redux/slices/users';
 import { AUTH_ROUTES } from '@/shared/constants/PATHS';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
 import { NodeChildrenProps } from '@/shared/interfaces/common';
-import { getRedirectUrl, getRoleFlags } from '@/shared/utils/auth';
+import {
+  clearAuthSession,
+  getRedirectUrl,
+  getRoleFlags,
+} from '@/shared/utils/auth';
 import GlobalLoader from '@/shared/components/common/loaders/GlobalLoader';
 import {getRequest} from '@/shared/utils/requests';
 
@@ -93,6 +97,8 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
 
       const token = localStorage.getItem('accessToken');
       if (!token) {
+        clearAuthSession();
+        dispatch(actions.resetUserState());
         setIsHydrated(true);
 
         return;
@@ -103,7 +109,7 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     };
 
     hydrateUser();
-  }, [syncCurrentUser]);
+  }, [dispatch, syncCurrentUser]);
 
   useEffect(() => {
     if (!isHydrated || !isLoggedIn) return;

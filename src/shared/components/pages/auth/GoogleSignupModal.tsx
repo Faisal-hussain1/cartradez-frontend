@@ -35,11 +35,13 @@ export default function GoogleSignupModal({
   const onSubmit = async () => {
     if (!phoneNumber || !city || !address || !country) {
       setError('Please fill all fields.');
+
       return;
     }
 
     if (!acceptTerms || !acceptPrivacy) {
       setError('Please accept Terms & Conditions and Privacy Policy.');
+
       return;
     }
 
@@ -64,6 +66,7 @@ export default function GoogleSignupModal({
 
       if (!completeUser) {
         setError('Unable to complete signup. Please try again.');
+
         return;
       }
 
