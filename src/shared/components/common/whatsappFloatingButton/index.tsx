@@ -3,12 +3,14 @@
 import Image from 'next/image';
 import {MessageCircle} from 'lucide-react';
 import {useState} from 'react';
+import {LANDING_FOOTER_LINKS} from '@/shared/constants/PATHS';
 
 const FALLBACK_WHATSAPP_NUMBER = '+260574928425';
 const FALLBACK_WECHAT_URL = 'weixin://dl/chat';
 const FALLBACK_WECHAT_QR_IMAGE = '/images/chat/wechat-qr.jpeg';
 
 export default function WhatsAppFloatingButton() {
+  const [isChatOptionsOpen, setIsChatOptionsOpen] = useState(false);
   const [isWeChatQrOpen, setIsWeChatQrOpen] = useState(false);
   const whatsappNumber =
     (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || FALLBACK_WHATSAPP_NUMBER).replace(
@@ -24,15 +26,21 @@ export default function WhatsAppFloatingButton() {
 
   return (
     <>
-      <div className='fixed bottom-20 md:bottom-5 right-4 md:right-5 z-30 group'>
-        <div className='mb-3 flex flex-col items-end gap-2 opacity-0 translate-y-2 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto'>
+      <div className='fixed bottom-20 md:bottom-5 right-4 md:right-5 z-30 flex flex-col items-end gap-3'>
+        <div
+          className={`flex flex-row items-center justify-end gap-2 transition-all duration-200 ${
+            isChatOptionsOpen
+              ? 'translate-y-0 opacity-100 pointer-events-auto'
+              : 'translate-y-2 opacity-0 pointer-events-none'
+          }`}
+        >
           {whatsappNumber ? (
             <a
               href={`https://wa.me/${whatsappNumber}`}
               target='_blank'
               rel='noopener noreferrer'
               aria-label='Chat on WhatsApp'
-              className='rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105'
+              className='whitespace-nowrap rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105'
             >
               WhatsApp
             </a>
@@ -42,7 +50,7 @@ export default function WhatsAppFloatingButton() {
               type='button'
               onClick={() => setIsWeChatQrOpen(true)}
               aria-label='Show WeChat QR code'
-              className='rounded-full bg-[#07C160] px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105'
+              className='whitespace-nowrap rounded-full bg-[#07C160] px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105'
             >
               We Chat
             </button>
@@ -52,16 +60,33 @@ export default function WhatsAppFloatingButton() {
               target='_blank'
               rel='noopener noreferrer'
               aria-label='Chat on WeChat'
-              className='rounded-full bg-[#07C160] px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105'
+              className='whitespace-nowrap rounded-full bg-[#07C160] px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105'
             >
               We Chat
             </a>
           ) : null}
         </div>
 
+        <div className='flex flex-col items-center gap-2'>
+          {LANDING_FOOTER_LINKS.socials.map((link) => (
+            <a
+              key={link.value}
+              href={link.url}
+              aria-label={link.label}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg ring-1 ring-black/5 transition-transform hover:scale-105'
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
+
         <button
           type='button'
+          onClick={() => setIsChatOptionsOpen((isOpen) => !isOpen)}
           aria-label='Open chat options'
+          aria-expanded={isChatOptionsOpen}
           className='h-14 w-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 transition-transform flex items-center justify-center'
         >
           <MessageCircle size={26} />

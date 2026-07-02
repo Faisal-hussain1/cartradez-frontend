@@ -1,18 +1,15 @@
 'use client';
 
 import { useMemo } from 'react';
+import Image from 'next/image';
 import HomeVehicles from './vehicles';
 import useServerSideListFilters from '@/shared/hooks/listFilters/useServerSideListFilters';
 import { LIST_TYPES } from '@/shared/constants/general';
 import { vehiclesQueries } from '@/shared/reactQuery';
 import { CartradezVehicle, Vehicle } from '@/shared/interfaces/common';
 import FiltersBar from '@/shared/components/common/FilterBar';
-import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
-import { FilterSearchIcon } from '@/shared/components/icons';
 import Container from '@/shared/components/common/containers';
 import ManagedByCartradezVehicles from './ManagedByCartradezVehicles';
-import { useSelector } from 'react-redux';
-import { getCurrentUser } from '@/shared/redux/slices/users';
 
 const normalizeText = (value: any) =>
   String(value || '')
@@ -125,11 +122,24 @@ export default function Home() {
 />
             </div>
 
-            <div className='col-span-12 md:col-span-3 bg-[#E5E7EB] p-5 rounded-2xl flex flex-col gap-4'>
-              <ManagedByCartradezVehicles
-                vehicles={managedByCartradezVehicles}
-                isLoading={getCartradezVehiclesLoading}
-              />
+            <div className='col-span-12 md:col-span-3 flex flex-col gap-5'>
+              <div className='overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-black/5'>
+                <Image
+                  src='/images/home/cartradez-promo.png'
+                  alt='CarTradez Find Buy Sell promotion'
+                  width={1080}
+                  height={1440}
+                  className='h-auto w-full object-cover'
+                  priority
+                />
+              </div>
+
+              <div className='bg-[#E5E7EB] p-5 rounded-2xl'>
+                <ManagedByCartradezVehicles
+                  vehicles={managedByCartradezVehicles}
+                  isLoading={getCartradezVehiclesLoading}
+                />
+              </div>
             </div>
           </div>
         </Container>

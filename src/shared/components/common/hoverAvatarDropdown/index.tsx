@@ -61,10 +61,11 @@ export default function HoverAvatarDropdown({
       <DropdownMenu open={open} modal={false}>
         <DropdownMenuTrigger asChild>
           <div>
-            <Avatar className='h-9 w-10 cursor-pointer border border-gray-300 transition-transform hover:scale-105'>
+            <Avatar className='h-10 w-10 cursor-pointer rounded-full border border-gray-300 transition-transform hover:scale-105'>
               <AvatarImage
                 src={profileImageUrl}
                 alt='User Profile Image'
+                className='object-cover'
               />
               <AvatarFallback>{getInitials()}</AvatarFallback>
             </Avatar>
