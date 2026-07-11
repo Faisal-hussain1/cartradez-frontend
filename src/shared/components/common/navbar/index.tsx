@@ -53,11 +53,11 @@ export default function Navbar() {
           <Image
             src={'/images/logo-black.png'}
             alt="logo"
-            width={70}
-            height={70}
+            width={82}
+            height={82}
             style={{ height: 'auto' }}
             onClick={() => router.push('/')}
-            className="cursor-pointer w-[50px] sm:w-[60px] h-auto"
+            className="cursor-pointer w-[58px] sm:w-[72px] h-auto"
           />
 
           {/* Desktop Navigation */}
