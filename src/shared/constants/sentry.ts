@@ -1,5 +1,30 @@
+const getValidSentryDsn = () => {
+  const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN?.trim();
+
+  if (!dsn) return undefined;
+
+  try {
+    const parsedDsn = new URL(dsn);
+    const projectId = parsedDsn.pathname.split('/').filter(Boolean).pop();
+
+    if (
+      !['http:', 'https:'].includes(parsedDsn.protocol) ||
+      !parsedDsn.hostname ||
+      !parsedDsn.username ||
+      !projectId
+    ) {
+      return undefined;
+    }
+
+    return dsn;
+  } catch {
+    return undefined;
+  }
+};
+
 export const commonSentryConfigurations = {
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  // An invalid deployment variable must not break or pollute the live client.
+  dsn: getValidSentryDsn(),
 
   environment: process.env.NEXT_PUBLIC_ENV,
 
