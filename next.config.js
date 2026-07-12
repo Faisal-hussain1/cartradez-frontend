@@ -6,6 +6,19 @@ const {withSentryConfig} = require('@sentry/nextjs');
 // const bucketHost = process.env.AWS_BUCKET_HOSTNAME;
 
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+        ],
+      },
+    ];
+  },
 eslint: {
   ignoreDuringBuilds: true,
 },

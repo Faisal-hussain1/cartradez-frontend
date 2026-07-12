@@ -105,7 +105,7 @@ function getVehicleTitle(vehicle: Vehicle) {
   );
 }
 
-const FALLBACK_IMAGE = '/images/default-car.jpg';
+const FALLBACK_IMAGE = '/images/table-fallback.png';
 
 function makeImageUrl(url?: string) {
   if (!url) return FALLBACK_IMAGE;
@@ -228,12 +228,9 @@ function PosterDesign({
           loading='eager'
           className='h-full w-full object-cover'
           onError={() => {
-            // If we were using the proxy and it failed, try the raw URL
-            if (useProxyImage && imageSrc !== rawImage) {
-              setImgOverride(rawImage);
-              return;
-            }
-            // Otherwise fall back to the default image
+            // Never fall back from the proxy to a remote URL. Doing so makes
+            // html-to-image fetch S3 in the browser and fail when CORS is not
+            // configured on the bucket.
             if (imageSrc !== FALLBACK_IMAGE) {
               setImgOverride(FALLBACK_IMAGE);
             }
@@ -403,7 +400,7 @@ export default function VehiclePngModal({
             {/* Visible scaled preview */}
             <div className='mx-auto h-[360px] w-full max-w-[288px] overflow-hidden rounded-2xl border border-border bg-muted shadow-sm min-[390px]:h-[405px] min-[390px]:max-w-[324px] sm:h-[565px] sm:max-w-[454px]'>
               <div className='origin-top-left scale-[0.266] min-[390px]:scale-[0.3] sm:scale-[0.42]'>
-                <PosterDesign vehicle={fullVehicle} />
+                <PosterDesign vehicle={fullVehicle} useProxyImage />
               </div>
             </div>
 

@@ -3,6 +3,10 @@ import {NextRequest, NextResponse} from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+const ALLOWED_IMAGE_HOSTS = new Set([
+  'cartradez.s3.eu-north-1.amazonaws.com',
+]);
+
 export async function GET(request: NextRequest) {
   const imageUrl = request.nextUrl.searchParams.get('url');
 
@@ -14,6 +18,10 @@ export async function GET(request: NextRequest) {
     const parsedUrl = new URL(imageUrl);
     if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
       return NextResponse.json({message: 'Invalid image URL protocol'}, {status: 400});
+    }
+
+    if (!ALLOWED_IMAGE_HOSTS.has(parsedUrl.hostname)) {
+      return NextResponse.json({message: 'Image host is not allowed'}, {status: 403});
     }
 
     const upstream = await fetch(parsedUrl.toString(), {
