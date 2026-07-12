@@ -75,7 +75,13 @@ export default function WhatsAppFloatingButton() {
               aria-label={link.label}
               target='_blank'
               rel='noopener noreferrer'
-              className='flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg ring-1 ring-black/5 transition-transform hover:scale-105'
+              className={`flex h-11 w-11 items-center justify-center rounded-full text-white shadow-lg ring-1 ring-black/5 transition-transform hover:scale-105 ${
+                link.value === 'facebook'
+                  ? 'bg-[#1877F2]'
+                  : link.value === 'instagram'
+                    ? 'bg-gradient-to-br from-[#833AB4] via-[#E1306C] to-[#FCAF45]'
+                    : 'bg-primary'
+              }`}
             >
               {link.icon}
             </a>

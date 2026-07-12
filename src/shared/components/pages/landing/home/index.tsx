@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import Image from 'next/image';
+import { useSelector } from 'react-redux';
 import HomeVehicles from './vehicles';
 import useServerSideListFilters from '@/shared/hooks/listFilters/useServerSideListFilters';
 import { LIST_TYPES } from '@/shared/constants/general';
@@ -10,6 +10,9 @@ import { CartradezVehicle, Vehicle } from '@/shared/interfaces/common';
 import FiltersBar from '@/shared/components/common/FilterBar';
 import Container from '@/shared/components/common/containers';
 import ManagedByCartradezVehicles from './ManagedByCartradezVehicles';
+import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
+import { AUTH_ROUTES } from '@/shared/constants/PATHS';
+import { getCurrentUser } from '@/shared/redux/slices/users';
 
 const normalizeText = (value: any) =>
   String(value || '')
@@ -48,6 +51,19 @@ const getVehicleSearchText = (vehicle: any) => {
 };
 
 export default function Home() {
+  const router = useLocaleRouter();
+  const currentUser = useSelector(getCurrentUser);
+  const isLoggedIn = Boolean(currentUser?._id);
+
+  const handlePromoClick = () => {
+    if (!isLoggedIn) {
+      router.push(AUTH_ROUTES.login);
+      return;
+    }
+
+    window.location.reload();
+  };
+
   const { useFetchAllVehicleList, useFetchAllCartradezVehicleList } =
     vehiclesQueries();
 
@@ -123,15 +139,29 @@ export default function Home() {
             </div>
 
             <div className='col-span-12 md:col-span-3 flex flex-col gap-5'>
-              <div className='overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-black/5'>
-                <Image
-                  src='/images/home/cartradez-promo.png'
-                  alt='CarTradez Find Buy Sell promotion'
-                  width={1080}
-                  height={1440}
-                  className='h-auto w-full object-cover'
-                  priority
-                />
+              <div className='overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-black/5 md:mt-10'>
+                <button
+                  type='button'
+                  onClick={handlePromoClick}
+                  aria-label={
+                    isLoggedIn
+                      ? 'Refresh the CarTradez homepage'
+                      : 'Log in to CarTradez'
+                  }
+                  className='block w-full cursor-pointer'
+                >
+                  <video
+                    src='/videos/cartradez-promo.mp4'
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload='metadata'
+                    className='h-auto w-full object-cover'
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </button>
               </div>
 
               <div className='bg-[#E5E7EB] p-5 rounded-2xl'>

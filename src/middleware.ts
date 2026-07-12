@@ -1,14 +1,26 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {cookies} from 'next/headers';
 import {i18nConfig} from '@/i18nConfig';
-import {getRouteType} from './shared/utils/routeUtils';
-import {AUTH_ROUTES} from './shared/constants/PATHS';
+
+// Keep middleware route constants local and edge-safe. Importing PATHS here also
+// pulls its React icon definitions (including lucide/react-icons) into the edge
+// bundle, where those browser-facing modules can fail during module evaluation.
+const AUTH_ROOT = '/auth';
+const LOGIN_PATH = `${AUTH_ROOT}/login`;
+const DASHBOARD_ROOT = '/dashboard';
+
+const isUnprotectedRoute = (pathname: string) => {
+  const isDashboardRoute = pathname.startsWith(DASHBOARD_ROOT);
+  const isDealersRoute = pathname.startsWith('/dealers');
+  const isAuthRoute = pathname.startsWith(AUTH_ROOT);
+
+  return (!isDashboardRoute && !isDealersRoute && !isAuthRoute) || isAuthRoute;
+};
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const {locales, defaultLocale} = i18nConfig;
   const newURL = new URL(request.url);
   let {pathname: newPath} = request.nextUrl;
-  const cookieStore = await cookies();
+  const cookieStore = request.cookies;
 
   const cookieToken = cookieStore.get('x-auth-token')?.value;
 
@@ -17,12 +29,12 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     .find(({name}) => name.startsWith('x-auth-token-'))?.value;
   const authToken = cookieToken || prefixedAuthCookie;
 
-  const {unprotectedRoutes} = getRouteType({pathname: newPath});
+  const unprotectedRoutes = isUnprotectedRoute(newPath);
 
   // Redirect to login only if the user is trying to access a private page without a token
   if (!unprotectedRoutes && !authToken) {
     const newRequestUrl = new URL(request.nextUrl.origin);
-    newRequestUrl.pathname = AUTH_ROUTES.login;
+    newRequestUrl.pathname = LOGIN_PATH;
     newRequestUrl.searchParams.set('reason', 'login_required');
     if (newPath.startsWith('/dealers')) {
       newRequestUrl.searchParams.set('from', 'dealer');
