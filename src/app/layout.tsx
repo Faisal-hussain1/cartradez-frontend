@@ -1,6 +1,7 @@
 import './globals.css';
 import type {Metadata} from 'next';
 import {NodeChildrenProps} from '@/shared/interfaces/common';
+import MetaPixel from '@/shared/components/common/metaPixel';
 
 export const metadata: Metadata = {
   verification: {
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({children}: NodeChildrenProps) {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body>
+        {children}
+        <MetaPixel />
+      </body>
     </html>
   );
 }
