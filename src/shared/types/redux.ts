@@ -20,6 +20,11 @@ export type User = {
   isBlocked?: boolean;
   blockReason?: string | null;
   blockedAt?: string | null;
+  listingLimitOverrides?: {
+    premium?: number | null;
+    quickSell?: number | null;
+    standard?: number | null;
+  };
   organizations: Organization[];
   currentActiveOrganization: Organization;
   isSellerOnboarded: boolean;

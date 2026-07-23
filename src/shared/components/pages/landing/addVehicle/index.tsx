@@ -1,23 +1,18 @@
 'use client';
 
-import {
-  useForm,
-  SubmitHandler,
-  FieldErrors,
-  Resolver,
-} from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import {useForm, SubmitHandler, FieldErrors, Resolver} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useMemo, useRef} from 'react';
+import {useSelector} from 'react-redux';
 
 import SubmitButton from '@/shared/components/common/buttons/submitButton';
 
-import { VehiclePayload } from '@/shared/interfaces/vehicles';
+import {VehiclePayload} from '@/shared/interfaces/vehicles';
 import Container from '@/shared/components/common/containers';
-import { vehiclesMutations } from '@/shared/reactQuery';
-import { vehiclesQueries } from '@/shared/reactQuery';
+import {vehiclesMutations} from '@/shared/reactQuery';
+import {vehiclesQueries} from '@/shared/reactQuery';
 import useTranslation from '@/shared/hooks/useTranslation';
-import { newVehicleSchema } from '@/shared/schemas/vehicles';
+import {newVehicleSchema} from '@/shared/schemas/vehicles';
 import AuthFormContainer from '@/shared/components/common/containers/auth/AuthFormContainer';
 import {
   DESCRIPTION_SUGGESTIONS,
@@ -26,29 +21,29 @@ import {
   VEHICLE_FUEL_TYPES,
   VEHICLE_MAKES,
 } from '@/shared/constants/vehicles';
-import { DescriptionBox } from '@/shared/components/common/descriptionBox';
+import {DescriptionBox} from '@/shared/components/common/descriptionBox';
 import BoxContainer from '@/shared/components/common/containers/boxContainer';
 import Label from '@/shared/components/common/label';
-import { getYearsList } from '@/shared/utils/general';
+import {getYearsList} from '@/shared/utils/general';
 import CustomSelectInput from '@/shared/components/common/inputs/CustomSelectInput';
 import CustomTextInput from '@/shared/components/common/inputs/CustomTextInput';
 import CustomNumberInput from '@/shared/components/common/inputs/CustomNumberInput';
 import ImageUploadInput from '@/shared/components/common/imageUpload';
-import { useState } from 'react';
-import { CheckboxList } from '@/shared/components/common/checkboxList';
+import {useState} from 'react';
+import {CheckboxList} from '@/shared/components/common/checkboxList';
 import PrimaryButton from '@/shared/components/common/buttons/PrimaryButton';
 import useLocaleRouter from '@/shared/hooks/useLocaleRouter';
-import { showToast } from '@/shared/utils/toasts';
-import { getCurrentUser, getUserRole } from '@/shared/redux/slices/users';
+import {showToast} from '@/shared/utils/toasts';
+import {getCurrentUser, getUserRole} from '@/shared/redux/slices/users';
 import BlockedAccountGate from '@/shared/components/common/admin/BlockedAccountGate';
 
 const MAX_TOTAL_UPLOAD_SIZE_BYTES = 8 * 1024 * 1024;
 const MAX_SINGLE_UPLOAD_SIZE_BYTES = 5 * 1024 * 1024;
 
 const LISTING_TYPE_OPTIONS = [
-  { value: 'premium', label: 'Premium' },
-  { value: 'quick sell', label: 'Quick Sell' },
-  { value: 'standard', label: 'Standard' },
+  {value: 'premium', label: 'Premium'},
+  {value: 'quick sell', label: 'Quick Sell'},
+  {value: 'standard', label: 'Standard'},
 ];
 
 const USER_MONTHLY_LIMITS: Record<string, number> = {
@@ -64,7 +59,7 @@ const DEALER_MONTHLY_LIMITS: Record<string, number> = {
 };
 
 export default function AddVehicleForm() {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const submissionLockedRef = useRef(false);
   const router = useLocaleRouter();
@@ -74,9 +69,30 @@ export default function AddVehicleForm() {
   const isDealer = role === 'dealer';
   const isBlocked = Boolean(currentUser?.isBlocked);
   const shouldShowMonthlyUsage = !isAdmin;
-  const monthlyLimits = isDealer ? DEALER_MONTHLY_LIMITS : USER_MONTHLY_LIMITS;
+  const monthlyLimits = useMemo<Record<string, number>>(() => {
+    const defaults = isDealer ? DEALER_MONTHLY_LIMITS : USER_MONTHLY_LIMITS;
+    const overrides = currentUser?.listingLimitOverrides || {};
 
-  const { control, handleSubmit, reset, watch, setValue } =
+    return {
+      premium:
+        Number.isInteger(overrides.premium) &&
+        overrides.premium >= defaults.premium
+          ? overrides.premium
+          : defaults.premium,
+      'quick sell':
+        Number.isInteger(overrides.quickSell) &&
+        overrides.quickSell >= defaults['quick sell']
+          ? overrides.quickSell
+          : defaults['quick sell'],
+      standard:
+        Number.isInteger(overrides.standard) &&
+        overrides.standard >= defaults.standard
+          ? overrides.standard
+          : defaults.standard,
+    };
+  }, [currentUser?.listingLimitOverrides, isDealer]);
+
+  const {control, handleSubmit, reset, watch, setValue} =
     useForm<VehiclePayload>({
       resolver: yupResolver(newVehicleSchema(t)) as Resolver<VehiclePayload>,
       shouldFocusError: true,
@@ -105,9 +121,9 @@ export default function AddVehicleForm() {
         description: '',
       },
     });
-  const { useFetchVehiclesByUserId } = vehiclesQueries();
+  const {useFetchVehiclesByUserId} = vehiclesQueries();
 
-  const { data: myVehiclesData, isLoading: isVehiclesLoading } =
+  const {data: myVehiclesData, isLoading: isVehiclesLoading} =
     useFetchVehiclesByUserId({
       params: {
         userId:
@@ -138,7 +154,9 @@ export default function AddVehicleForm() {
     const vehicles = myVehiclesData?.vehicles || [];
 
     vehicles.forEach((vehicle: any) => {
-      const listingType = String(vehicle?.listingType || '').toLowerCase().trim();
+      const listingType = String(vehicle?.listingType || '')
+        .toLowerCase()
+        .trim();
       if (!usage.hasOwnProperty(listingType)) return;
 
       const createdAt = vehicle?.createdAt;
@@ -147,7 +165,10 @@ export default function AddVehicleForm() {
       const createdDate = new Date(createdAt);
       if (Number.isNaN(createdDate.getTime())) return;
 
-      if (createdDate.getFullYear() === year && createdDate.getMonth() === month) {
+      if (
+        createdDate.getFullYear() === year &&
+        createdDate.getMonth() === month
+      ) {
         usage[listingType] += 1;
       }
     });
@@ -155,14 +176,14 @@ export default function AddVehicleForm() {
     return usage;
   }, [myVehiclesData?.vehicles, shouldShowMonthlyUsage]);
 
-  const { useAddNewVehicleMutation } = vehiclesMutations();
+  const {useAddNewVehicleMutation} = vehiclesMutations();
 
   const onSuccess = () => {
     router.push('/dash');
     reset();
   };
 
-  const { mutate: executeAddNewVehicleMutation, isPending } =
+  const {mutate: executeAddNewVehicleMutation, isPending} =
     useAddNewVehicleMutation({
       callBackFuncs: {
         onSuccess,
@@ -185,9 +206,10 @@ export default function AddVehicleForm() {
       return;
     }
 
-    const selectedListingType = String(data.listingType || '').toLowerCase().trim();
+    const selectedListingType = String(data.listingType || '')
+      .toLowerCase()
+      .trim();
     const allowedForType = monthlyLimits[selectedListingType] || 0;
-    const usedForType = monthlyUsageByType[selectedListingType] || 0;
 
     if (!selectedListingType) {
       showToast({
@@ -203,15 +225,6 @@ export default function AddVehicleForm() {
         showToast({
           type: 'error',
           message: 'Please select a valid listing type.',
-        });
-
-        return;
-      }
-
-      if (usedForType >= allowedForType) {
-        showToast({
-          type: 'error',
-          message: `Monthly limit reached for ${data.listingType}. You have used ${usedForType}/${allowedForType} this month.`,
         });
 
         return;
@@ -249,7 +262,9 @@ export default function AddVehicleForm() {
 
     if (totalUploadBytes > MAX_TOTAL_UPLOAD_SIZE_BYTES) {
       const totalMb = (totalUploadBytes / (1024 * 1024)).toFixed(1);
-      const allowedMb = (MAX_TOTAL_UPLOAD_SIZE_BYTES / (1024 * 1024)).toFixed(0);
+      const allowedMb = (MAX_TOTAL_UPLOAD_SIZE_BYTES / (1024 * 1024)).toFixed(
+        0
+      );
       showToast({
         type: 'error',
         message: `Total upload size is ${totalMb} MB, but allowed total is ${allowedMb} MB. Please compress images or upload fewer files.`,
@@ -298,399 +313,437 @@ export default function AddVehicleForm() {
     });
 
     submissionLockedRef.current = true;
-    executeAddNewVehicleMutation({ payload: formData });
+    executeAddNewVehicleMutation({payload: formData});
   };
 
   /* Scroll to first validation error */
-const onError = (errors: FieldErrors<VehiclePayload>) => {
-  const firstError = Object.keys(errors)[0];
-  if (!firstError) return;
+  const onError = (errors: FieldErrors<VehiclePayload>) => {
+    const firstError = Object.keys(errors)[0];
+    if (!firstError) return;
 
-  const el = document.querySelector(
-    `[data-field-name="${firstError}"], [name="${firstError}"]`
-  ) as HTMLElement | null;
-
-  if (!el) return;
-
-  const y = el.getBoundingClientRect().top + window.pageYOffset - 120;
-
-  window.scrollTo({
-    top: y,
-    behavior: 'smooth',
-  });
-
-  setTimeout(() => {
-    const focusable = el.querySelector(
-      'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
+    const el = document.querySelector(
+      `[data-field-name="${firstError}"], [name="${firstError}"]`
     ) as HTMLElement | null;
 
-    focusable?.focus();
-  }, 300);
-};
-  
+    if (!el) return;
+
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 120;
+
+    window.scrollTo({
+      top: y,
+      behavior: 'smooth',
+    });
+
+    setTimeout(() => {
+      const focusable = el.querySelector(
+        'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
+      ) as HTMLElement | null;
+
+      focusable?.focus();
+    }, 300);
+  };
 
   if (isBlocked) {
     return <BlockedAccountGate>{null}</BlockedAccountGate>;
   }
 
   return (
-   <div className="mb-10">
+    <div className='mb-10'>
       {/* Disclaimer Section */}
-      <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded text-yellow-900 text-sm">
-        <strong>Disclaimer:</strong> CarTradz only provides a platform for users to buy and sell cars. We are not involved in any transaction between the buyer and seller. CarTradez is not responsible for authentication of uploaded vehicles; it is the customer&apos;s responsibility to verify authenticity. Users must read our <a href="/guidelines" className="underline text-blue-700 hover:text-blue-900" target="_blank" rel="noopener noreferrer">Buyer & Seller Safety Guide</a> before proceeding.
+      <div className='mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded text-yellow-900 text-sm'>
+        <strong>Disclaimer:</strong> CarTradz only provides a platform for users
+        to buy and sell cars. We are not involved in any transaction between the
+        buyer and seller. CarTradez is not responsible for authentication of
+        uploaded vehicles; it is the customer&apos;s responsibility to verify
+        authenticity. Users must read our{' '}
+        <a
+          href='/guidelines'
+          className='underline text-blue-700 hover:text-blue-900'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          Buyer & Seller Safety Guide
+        </a>{' '}
+        before proceeding.
       </div>
-      <div className="w-full">
+      <div className='w-full'>
         <img
-          src="/images/home/add-vehicle-banner-image.png"
-          alt="Safety Guidelines Banner"
-          className="w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover shadow-glow"
+          src='/images/home/add-vehicle-banner-image.png'
+          alt='Safety Guidelines Banner'
+          className='w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover shadow-glow'
         />
       </div>
 
-      <div className="w-full flex justify-center">
+      <div className='w-full flex justify-center'>
         <Container>
-          <div className="w-full sm:w-4/5 max-w-[1200px] mx-auto">
+          <div className='w-full sm:w-4/5 max-w-[1200px] mx-auto'>
             <AuthFormContainer
-              heading="List Your Vehicle"
+              heading='List Your Vehicle'
               handleSubmit={handleSubmit(onSubmit, onError)}
-              fromContainerStyles="bg-transparent shadow-none rounded-none"
+              fromContainerStyles='bg-transparent shadow-none rounded-none'
             >
-                {/* Basic Car Information */}
-                <BoxContainer
-                  heading='Basic Car Information'
-                  subHeading='(Only Make, Model, Year, and Images are required)'
-                >
-                  {shouldShowMonthlyUsage && (
-                    <div className='grid grid-cols-12 gap-2 mt-3'>
-                      <div className='col-span-12'>
-                        <div className='w-full rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm'>
-                          <p className='text-[13px] font-semibold tracking-wide'>This Month Usage</p>
-                          <p>
-                            Premium: {monthlyUsageByType.premium}/{monthlyLimits.premium}
-                          </p>
-                          <p>
-                            Quick Sell: {monthlyUsageByType['quick sell']}/{monthlyLimits['quick sell']}
-                          </p>
-                          <p>
-                            Standard: {monthlyUsageByType.standard}/{monthlyLimits.standard}
-                            {isVehiclesLoading ? ' (loading...)' : ''}
-                          </p>
-                          <p className='mt-2 text-xs text-primary/90'>
-                            Note: Once listing type is set, you will not be able to update it later.
-                          </p>
-                          <p className='mt-1 text-xs text-primary/90'>
-                            For now, uploading vehicles in all listing types is free. After a limited promotional period, upload charges will apply per vehicle: Premium $20, Quick Sell $15, and Standard $10.
-                          </p>
-                        </div>
+              {/* Basic Car Information */}
+              <BoxContainer
+                heading='Basic Car Information'
+                subHeading='(Only Make, Model, Year, and Images are required)'
+              >
+                {shouldShowMonthlyUsage && (
+                  <div className='grid grid-cols-12 gap-2 mt-3'>
+                    <div className='col-span-12'>
+                      <div className='w-full rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm'>
+                        <p className='text-[13px] font-semibold tracking-wide'>
+                          This Month Usage
+                        </p>
+                        <p>
+                          Premium: {monthlyUsageByType.premium}/
+                          {monthlyLimits.premium}
+                        </p>
+                        <p>
+                          Quick Sell: {monthlyUsageByType['quick sell']}/
+                          {monthlyLimits['quick sell']}
+                        </p>
+                        <p>
+                          Standard: {monthlyUsageByType.standard}/
+                          {monthlyLimits.standard}
+                          {isVehiclesLoading ? ' (loading...)' : ''}
+                        </p>
+                        <p className='mt-2 text-xs text-primary/90'>
+                          Note: Once listing type is set, you will not be able
+                          to update it later.
+                        </p>
+                        <p className='mt-1 text-xs text-primary/90'>
+                          For now, uploading vehicles in all listing types is
+                          free. After a limited promotional period, upload
+                          charges will apply per vehicle: Premium $20, Quick
+                          Sell $15, and Standard $10.
+                        </p>
                       </div>
                     </div>
-                  )}
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12' data-field-name='listingType'>
-                      <CustomSelectInput
-                        label='Listing Type'
-                        name='listingType'
-                        placeholder='Select Listing Type'
-                        control={control}
-                        options={LISTING_TYPE_OPTIONS}
-                        isRequired={true}
-                        isCreatable={false}
-                      />
-                    </div>
                   </div>
+                )}
 
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12' data-field-name='make'>
-                      <CustomSelectInput
-                        label='Make'
-                        name='make'
-                        placeholder='Select or type Make'
-                        control={control}
-                        options={Object.values(VEHICLE_MAKES)}
-                        isRequired={true}
-                        isCreatable={true}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Model'
-                        name='model'
-                        placeholder='Enter Model'
-                        control={control}
-                        isRequired={true}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12' data-field-name='year'>
-                      <CustomSelectInput
-                        label='Year'
-                        name='year'
-                        placeholder='Select or type Year'
-                        control={control}
-                        options={getYearsList({start: 1900, end: 2026})}
-                        isRequired={true}
-                        isCreatable={true}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Variant (optional)'
-                        name='variant'
-                        placeholder='Enter Variant (if applicable)'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Condition (optional)'
-                        name='condition'
-                        placeholder='Enter Condition'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Body Type (optional)'
-                        name='bodyType'
-                        placeholder='Enter Body Type'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Color (optional)'
-                        name='color'
-                        placeholder='Enter Color'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomNumberInput
-                        label='Mileage (km) (optional)'
-                        name='mileage'
-                        placeholder='Type Mileage (KM)'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomNumberInput
-                        label='Engine Capacity (cc) (optional)'
-                        name='engineSize'
-                        placeholder='Type Engine Capacity'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Transmission (optional)'
-                        name='transmission'
-                        placeholder='Enter Transmission'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Drive Type (optional)'
-                        name='driveType'
-                        placeholder='Enter Drive Type'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12' data-field-name='fuelType'>
-                      <CustomSelectInput
-                        label='Fuel Type (optional)'
-                        name='fuelType'
-                        placeholder='Select or type Fuel Type'
-                        control={control}
-                        options={Object.values(VEHICLE_FUEL_TYPES)}
-                        isRequired={false}
-                        isCreatable={true}
-                      />
-                    </div>
-                  </div>
-                </BoxContainer>
-
-                {/* Pricing Information */}
-                <BoxContainer heading='Pricing Information'>
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                     <div className='md:col-span-6 col-span-12' data-field-name='currency'>
-  <CustomSelectInput
-    label='Currency'
-    name='currency'
-    placeholder='Select or type Currency'
-    control={control}
-    options={Object.values(VEHICLE_CURRENCY_TYPES)}
-    isRequired={true}
-    isCreatable={true}
-  />
-</div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomNumberInput
-                        label='Price'
-                        name='price'
-                        placeholder='Enter Price'
-                        control={control}
-                        isRequired={true}
-                      />
-                    </div>
-                  </div>
-                </BoxContainer>
-
-                {/* Registration & Ownership */}
-                <BoxContainer heading='Registration & Ownership'>
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Available City (optional)'
-                        name='registrationCity'
-                        placeholder='Enter Available City'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Registration Year (optional)'
-                        name='registrationYear'
-                        placeholder='Enter Registration Year'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='grid grid-cols-12 gap-2 mt-3'>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Registration Number (optional)'
-                        name='registrationNumber'
-                        placeholder='Enter Registration Number'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                    <div className='md:col-span-6 col-span-12'>
-                      <CustomTextInput
-                        label='Number of Owners (optional)'
-                        name='numberOfOwners'
-                        placeholder='1,2 or Freshly imported'
-                        control={control}
-                        isRequired={false}
-                      />
-                    </div>
-                  </div>
-                </BoxContainer>
-
-                {/* Vehicle Features */}
-                <BoxContainer heading='Vehicle Features'>
-                  <div className='p-6'>
-                    <CheckboxList
-                      groups={FEATURE_GROUPS_LIST}
-                      selected={selectedFeatures}
-                      onChange={setSelectedFeatures}
-                    />
-                  </div>
-                </BoxContainer>
-
-               {/* Upload Images */}
-<BoxContainer
-  heading="Upload Vehicle Images"
-  subHeading="Please upload clear vehicle photos. Minimum 3 images and maximum 9 images are required."
-  containerStyles="border-l-primary"
->
-  <div className="mt-5 rounded-xl border border-dashed border-primary/40 bg-primary/5 p-4 md:p-5">
-    <div className="mb-4">
-      <p className="text-[15px] font-semibold text-gray90">
-        Image Upload Guidelines
-      </p>
-
-      <p className="mt-1 text-sm text-gray70">
-        Upload at least <strong>3 images</strong> and no more than{' '}
-        <strong>9 images</strong>. Only <strong>JPEG</strong>,{' '}
-        <strong>JPG</strong>, and <strong>PNG</strong> formats are allowed.
-      </p>
-    </div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-      <div className="rounded-lg bg-white border border-gray-200 p-3 text-center">
-        <p className="text-xs text-gray60">Minimum</p>
-        <p className="text-lg font-bold text-primary">3 Images</p>
-      </div>
-
-      <div className="rounded-lg bg-white border border-gray-200 p-3 text-center">
-        <p className="text-xs text-gray60">Maximum</p>
-        <p className="text-lg font-bold text-primary">9 Images</p>
-      </div>
-
-      <div className="rounded-lg bg-white border border-gray-200 p-3 text-center">
-        <p className="text-xs text-gray60">Formats</p>
-        <p className="text-lg font-bold text-primary">JPG, JPEG, PNG</p>
-      </div>
-    </div>
-
-    <ImageUploadInput
-      name="images"
-      setValue={setValue}
-      watch={watch}
-    />
-  </div>
-</BoxContainer>
-
-                {/* Description */}
-                <BoxContainer heading='Description'>
-                  <div className='mt-3'>
-                    <Label text={'Description'}/>
-                  </div>
-                  <div className='mt-1'>
-                    <DescriptionBox
-                      name={'description'}
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div
+                    className='md:col-span-6 col-span-12'
+                    data-field-name='listingType'
+                  >
+                    <CustomSelectInput
+                      label='Listing Type'
+                      name='listingType'
+                      placeholder='Select Listing Type'
                       control={control}
-                      setValue={setValue}
-                      watch={watch}
-                      suggestions={DESCRIPTION_SUGGESTIONS}
-                      placeholder='Describe your car...'
+                      options={LISTING_TYPE_OPTIONS}
+                      isRequired={true}
+                      isCreatable={false}
                     />
                   </div>
-                </BoxContainer>
+                </div>
 
-                 <div className="flex justify-end">
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div
+                    className='md:col-span-6 col-span-12'
+                    data-field-name='make'
+                  >
+                    <CustomSelectInput
+                      label='Make'
+                      name='make'
+                      placeholder='Select or type Make'
+                      control={control}
+                      options={Object.values(VEHICLE_MAKES)}
+                      isRequired={true}
+                      isCreatable={true}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Model'
+                      name='model'
+                      placeholder='Enter Model'
+                      control={control}
+                      isRequired={true}
+                    />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div
+                    className='md:col-span-6 col-span-12'
+                    data-field-name='year'
+                  >
+                    <CustomSelectInput
+                      label='Year'
+                      name='year'
+                      placeholder='Select or type Year'
+                      control={control}
+                      options={getYearsList({start: 1900, end: 2026})}
+                      isRequired={true}
+                      isCreatable={true}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Variant (optional)'
+                      name='variant'
+                      placeholder='Enter Variant (if applicable)'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Condition (optional)'
+                      name='condition'
+                      placeholder='Enter Condition'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Body Type (optional)'
+                      name='bodyType'
+                      placeholder='Enter Body Type'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Color (optional)'
+                      name='color'
+                      placeholder='Enter Color'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomNumberInput
+                      label='Mileage (km) (optional)'
+                      name='mileage'
+                      placeholder='Type Mileage (KM)'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomNumberInput
+                      label='Engine Capacity (cc) (optional)'
+                      name='engineSize'
+                      placeholder='Type Engine Capacity'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Transmission (optional)'
+                      name='transmission'
+                      placeholder='Enter Transmission'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Drive Type (optional)'
+                      name='driveType'
+                      placeholder='Enter Drive Type'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                  <div
+                    className='md:col-span-6 col-span-12'
+                    data-field-name='fuelType'
+                  >
+                    <CustomSelectInput
+                      label='Fuel Type (optional)'
+                      name='fuelType'
+                      placeholder='Select or type Fuel Type'
+                      control={control}
+                      options={Object.values(VEHICLE_FUEL_TYPES)}
+                      isRequired={false}
+                      isCreatable={true}
+                    />
+                  </div>
+                </div>
+              </BoxContainer>
+
+              {/* Pricing Information */}
+              <BoxContainer heading='Pricing Information'>
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div
+                    className='md:col-span-6 col-span-12'
+                    data-field-name='currency'
+                  >
+                    <CustomSelectInput
+                      label='Currency'
+                      name='currency'
+                      placeholder='Select or type Currency'
+                      control={control}
+                      options={Object.values(VEHICLE_CURRENCY_TYPES)}
+                      isRequired={true}
+                      isCreatable={true}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomNumberInput
+                      label='Price'
+                      name='price'
+                      placeholder='Enter Price'
+                      control={control}
+                      isRequired={true}
+                    />
+                  </div>
+                </div>
+              </BoxContainer>
+
+              {/* Registration & Ownership */}
+              <BoxContainer heading='Registration & Ownership'>
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Available City (optional)'
+                      name='registrationCity'
+                      placeholder='Enter Available City'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Registration Year (optional)'
+                      name='registrationYear'
+                      placeholder='Enter Registration Year'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-12 gap-2 mt-3'>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Registration Number (optional)'
+                      name='registrationNumber'
+                      placeholder='Enter Registration Number'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                  <div className='md:col-span-6 col-span-12'>
+                    <CustomTextInput
+                      label='Number of Owners (optional)'
+                      name='numberOfOwners'
+                      placeholder='1,2 or Freshly imported'
+                      control={control}
+                      isRequired={false}
+                    />
+                  </div>
+                </div>
+              </BoxContainer>
+
+              {/* Vehicle Features */}
+              <BoxContainer heading='Vehicle Features'>
+                <div className='p-6'>
+                  <CheckboxList
+                    groups={FEATURE_GROUPS_LIST}
+                    selected={selectedFeatures}
+                    onChange={setSelectedFeatures}
+                  />
+                </div>
+              </BoxContainer>
+
+              {/* Upload Images */}
+              <BoxContainer
+                heading='Upload Vehicle Images'
+                subHeading='Please upload clear vehicle photos. Minimum 3 images and maximum 9 images are required.'
+                containerStyles='border-l-primary'
+              >
+                <div className='mt-5 rounded-xl border border-dashed border-primary/40 bg-primary/5 p-4 md:p-5'>
+                  <div className='mb-4'>
+                    <p className='text-[15px] font-semibold text-gray90'>
+                      Image Upload Guidelines
+                    </p>
+
+                    <p className='mt-1 text-sm text-gray70'>
+                      Upload at least <strong>3 images</strong> and no more than{' '}
+                      <strong>9 images</strong>. Only <strong>JPEG</strong>,{' '}
+                      <strong>JPG</strong>, and <strong>PNG</strong> formats are
+                      allowed.
+                    </p>
+                  </div>
+
+                  <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5'>
+                    <div className='rounded-lg bg-white border border-gray-200 p-3 text-center'>
+                      <p className='text-xs text-gray60'>Minimum</p>
+                      <p className='text-lg font-bold text-primary'>3 Images</p>
+                    </div>
+
+                    <div className='rounded-lg bg-white border border-gray-200 p-3 text-center'>
+                      <p className='text-xs text-gray60'>Maximum</p>
+                      <p className='text-lg font-bold text-primary'>9 Images</p>
+                    </div>
+
+                    <div className='rounded-lg bg-white border border-gray-200 p-3 text-center'>
+                      <p className='text-xs text-gray60'>Formats</p>
+                      <p className='text-lg font-bold text-primary'>
+                        JPG, JPEG, PNG
+                      </p>
+                    </div>
+                  </div>
+
+                  <ImageUploadInput
+                    name='images'
+                    setValue={setValue}
+                    watch={watch}
+                  />
+                </div>
+              </BoxContainer>
+
+              {/* Description */}
+              <BoxContainer heading='Description'>
+                <div className='mt-3'>
+                  <Label text={'Description'} />
+                </div>
+                <div className='mt-1'>
+                  <DescriptionBox
+                    name={'description'}
+                    control={control}
+                    setValue={setValue}
+                    watch={watch}
+                    suggestions={DESCRIPTION_SUGGESTIONS}
+                    placeholder='Describe your car...'
+                  />
+                </div>
+              </BoxContainer>
+
+              <div className='flex justify-end'>
                 <div>
                   <PrimaryButton
                     loading={isPending}
-                    buttonText="Cancel"
-                    styles="w-[60px] md:w-[80px] bg-white text-primary border-1 border-primary hover:bg-gray-100"
+                    buttonText='Cancel'
+                    styles='w-[60px] md:w-[80px] bg-white text-primary border-1 border-primary hover:bg-gray-100'
                   />
                   <SubmitButton
                     loading={isPending}
-                    buttonText="Submit Now"
-                    styles="w-[100px] md:w-[140px] ml-3"
+                    buttonText='Submit Now'
+                    styles='w-[100px] md:w-[140px] ml-3'
                   />
                 </div>
               </div>
-
             </AuthFormContainer>
           </div>
         </Container>
