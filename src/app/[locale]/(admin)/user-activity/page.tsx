@@ -5,6 +5,7 @@ import {
   Ban,
   Car,
   Search,
+  Settings2,
   ShieldCheck,
   Store,
   UserRound,
@@ -42,6 +43,7 @@ type ActivityUser = {
   createdAt?: string;
   lastActivityAt?: string;
   vehicleUsage: Record<ListingType, Usage>;
+  listingLimitOverrides: Record<ListingType, number | null>;
 };
 
 type ActivityResponse = {
@@ -73,6 +75,10 @@ const LISTING_TYPES: Array<{key: ListingType; label: string}> = [
   {key: 'premium', label: 'Premium'},
   {key: 'quick sell', label: 'Quick Sell'},
 ];
+const ROLE_DEFAULT_LIMITS: Record<UserRole, Record<ListingType, number>> = {
+  user: {premium: 1, 'quick sell': 1, standard: 1},
+  dealer: {premium: 2, 'quick sell': 3, standard: 5},
+};
 
 const formatDate = (value?: string) => {
   if (!value) return 'No activity yet';
@@ -85,7 +91,13 @@ const formatDate = (value?: string) => {
   }).format(date);
 };
 
-function UsageCell({usage, compact = false}: {usage: Usage; compact?: boolean}) {
+function UsageCell({
+  usage,
+  compact = false,
+}: {
+  usage: Usage;
+  compact?: boolean;
+}) {
   const percentage = usage.limit
     ? Math.min((usage.uploaded / usage.limit) * 100, 100)
     : 0;
@@ -123,6 +135,12 @@ export default function UserActivityPage() {
   } | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [blockReason, setBlockReason] = useState('');
+  const [limitUser, setLimitUser] = useState<ActivityUser | null>(null);
+  const [limitValues, setLimitValues] = useState<Record<ListingType, string>>({
+    premium: '',
+    'quick sell': '',
+    standard: '',
+  });
   const actionInFlightRef = useRef(new Set<string>());
   const requestSequenceRef = useRef(0);
   const debouncedSearch = useDebounce(search.trim(), 400);
@@ -205,6 +223,60 @@ export default function UserActivityPage() {
     }
   };
 
+  const openLimitEditor = (user: ActivityUser) => {
+    setLimitValues({
+      premium: String(user.vehicleUsage.premium.limit),
+      'quick sell': String(user.vehicleUsage['quick sell'].limit),
+      standard: String(user.vehicleUsage.standard.limit),
+    });
+    setLimitUser(user);
+  };
+
+  const saveListingLimits = async (restoreDefaults = false) => {
+    if (!limitUser || actionInFlightRef.current.has(limitUser._id)) return;
+
+    const limits = restoreDefaults
+      ? {premium: null, 'quick sell': null, standard: null}
+      : Object.fromEntries(
+          LISTING_TYPES.map(({key}) => [key, Number(limitValues[key])])
+        );
+
+    if (
+      !restoreDefaults &&
+      Object.values(limits).some(
+        (value) => typeof value !== 'number' || !Number.isInteger(value)
+      )
+    ) {
+      showToast({type: 'error', message: 'Limits must be whole numbers'});
+      return;
+    }
+
+    actionInFlightRef.current.add(limitUser._id);
+    setUpdatingId(limitUser._id);
+    try {
+      await patchRequest({
+        endpoint: `/users/activity/${limitUser._id}/listing-limits`,
+        payload: {limits},
+      });
+      showToast({
+        type: 'success',
+        message: restoreDefaults
+          ? 'Role defaults restored'
+          : 'Listing limits updated successfully',
+      });
+      setLimitUser(null);
+      setRefreshKey((value) => value + 1);
+    } catch (error: any) {
+      showToast({
+        type: 'error',
+        message: error?.message || 'Failed to update listing limits',
+      });
+    } finally {
+      actionInFlightRef.current.delete(limitUser._id);
+      setUpdatingId(null);
+    }
+  };
+
   const summaryCards = useMemo(
     () => [
       {label: 'Total Accounts', value: data.summary.total, icon: Users},
@@ -217,19 +289,26 @@ export default function UserActivityPage() {
 
   const renderActions = (user: ActivityUser) => (
     <div className='flex flex-wrap justify-end gap-2'>
+      <button
+        type='button'
+        disabled={updatingId === user._id}
+        onClick={() => openLimitEditor(user)}
+        className='inline-flex items-center gap-1 rounded-md bg-[#414279] px-3 py-1.5 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-50'
+      >
+        <Settings2 size={13} />
+        Limits
+      </button>
       {user.systemRole === 'user' && (
         <button
           type='button'
           disabled={updatingId === user._id}
-          onClick={() =>
-            {
-              setBlockReason('');
-              setPendingAction({
-                user,
-                action: user.isBlocked ? 'unblock' : 'block',
-              });
-            }
-          }
+          onClick={() => {
+            setBlockReason('');
+            setPendingAction({
+              user,
+              action: user.isBlocked ? 'unblock' : 'block',
+            });
+          }}
           className={`rounded-md px-3 py-1.5 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-50 ${
             user.isBlocked ? 'bg-emerald-600' : 'bg-red-600'
           }`}
@@ -270,13 +349,18 @@ export default function UserActivityPage() {
 
       <div className='grid grid-cols-2 gap-3 xl:grid-cols-4'>
         {summaryCards.map(({label, value, icon: Icon}) => (
-          <div key={label} className='rounded-2xl border border-gray-200 bg-white p-4 shadow-sm'>
+          <div
+            key={label}
+            className='rounded-2xl border border-gray-200 bg-white p-4 shadow-sm'
+          >
             <div className='flex items-center gap-3'>
               <div className='rounded-xl bg-[#414279]/10 p-2.5 text-[#414279]'>
                 <Icon className='h-4 w-4 sm:h-5 sm:w-5' />
               </div>
               <div>
-                <p className='text-xs font-medium text-gray-500 sm:text-sm'>{label}</p>
+                <p className='text-xs font-medium text-gray-500 sm:text-sm'>
+                  {label}
+                </p>
                 <p className='text-2xl font-semibold text-gray-900'>{value}</p>
               </div>
             </div>
@@ -326,7 +410,10 @@ export default function UserActivityPage() {
       <div className='space-y-3 xl:hidden'>
         {!loading &&
           data.users.map((user) => (
-            <article key={user._id} className='rounded-xl border border-gray-200 bg-white p-4'>
+            <article
+              key={user._id}
+              className='rounded-xl border border-gray-200 bg-white p-4'
+            >
               <div className='flex items-start justify-between gap-3'>
                 <div className='min-w-0'>
                   <p className='truncate font-semibold text-gray-900'>
@@ -373,33 +460,47 @@ export default function UserActivityPage() {
           <tbody>
             {!loading &&
               data.users.map((user) => (
-                <tr key={user._id} className='border-t border-gray-100 align-middle transition hover:bg-gray-50/70'>
+                <tr
+                  key={user._id}
+                  className='border-t border-gray-100 align-middle transition hover:bg-gray-50/70'
+                >
                   <td className='px-5 py-4'>
                     <p className='truncate font-semibold text-gray-900'>
                       {user.firstName} {user.lastName}
                     </p>
-                    <p className='truncate text-xs text-gray-500'>{user.email}</p>
+                    <p className='truncate text-xs text-gray-500'>
+                      {user.email}
+                    </p>
                     <p className='mt-1 truncate text-xs text-gray-400'>
                       {user.city || user.phoneNumber || 'No location provided'}
                     </p>
                   </td>
                   <td className='px-4 py-4'>
                     <div className='flex items-center gap-1.5 font-medium capitalize text-gray-800'>
-                      {user.systemRole === 'dealer' ? <Store size={14} /> : <UserRound size={14} />}
+                      {user.systemRole === 'dealer' ? (
+                        <Store size={14} />
+                      ) : (
+                        <UserRound size={14} />
+                      )}
                       {user.systemRole}
                     </div>
-                    <span className={`mt-2 inline-flex rounded-full px-2 py-1 text-xs ${
-                      user.isBlocked
-                        ? 'bg-red-50 text-red-700'
-                        : 'bg-emerald-50 text-emerald-700'
-                    }`}>
+                    <span
+                      className={`mt-2 inline-flex rounded-full px-2 py-1 text-xs ${
+                        user.isBlocked
+                          ? 'bg-red-50 text-red-700'
+                          : 'bg-emerald-50 text-emerald-700'
+                      }`}
+                    >
                       {user.isBlocked ? 'Blocked' : 'Active'}
                     </span>
                   </td>
                   <td className='px-4 py-4'>
                     <div className='grid grid-cols-3 gap-3'>
                       {LISTING_TYPES.map(({key, label}) => (
-                        <div key={key} className='rounded-lg border border-gray-100 bg-gray-50 p-2.5'>
+                        <div
+                          key={key}
+                          className='rounded-lg border border-gray-100 bg-gray-50 p-2.5'
+                        >
                           <p className='mb-1.5 text-[11px] font-semibold text-gray-500'>
                             {label}
                           </p>
@@ -426,7 +527,9 @@ export default function UserActivityPage() {
       {!loading && !data.users.length && (
         <div className='rounded-xl border border-gray-200 bg-white p-8 text-center'>
           <Activity className='mx-auto h-8 w-8 text-gray-300' />
-          <p className='mt-2 text-sm text-gray-500'>No matching accounts found.</p>
+          <p className='mt-2 text-sm text-gray-500'>
+            No matching accounts found.
+          </p>
         </div>
       )}
 
@@ -436,9 +539,13 @@ export default function UserActivityPage() {
             currentPage={page}
             totalPages={data.pagination.totalPages}
             paginationType={PAGINATION_TYPES.pageBased.value}
-            handlePreviousPage={() => setPage((value) => Math.max(value - 1, 1))}
+            handlePreviousPage={() =>
+              setPage((value) => Math.max(value - 1, 1))
+            }
             handleNextPage={() =>
-              setPage((value) => Math.min(value + 1, data.pagination.totalPages))
+              setPage((value) =>
+                Math.min(value + 1, data.pagination.totalPages)
+              )
             }
           />
         </div>
@@ -449,10 +556,16 @@ export default function UserActivityPage() {
           <div className='w-full max-w-md rounded-xl bg-white p-5 shadow-xl'>
             <div className='flex items-center gap-3'>
               <div className='rounded-full bg-amber-50 p-2 text-amber-700'>
-                {pendingAction.action === 'demote' ? <ShieldCheck size={20} /> : <Car size={20} />}
+                {pendingAction.action === 'demote' ? (
+                  <ShieldCheck size={20} />
+                ) : (
+                  <Car size={20} />
+                )}
               </div>
               <div>
-                <h2 className='font-semibold text-gray-900'>Confirm account update</h2>
+                <h2 className='font-semibold text-gray-900'>
+                  Confirm account update
+                </h2>
                 <p className='text-sm text-gray-500'>
                   {pendingAction.user.firstName} {pendingAction.user.lastName}
                 </p>
@@ -467,7 +580,10 @@ export default function UserActivityPage() {
             </p>
             {pendingAction.action === 'block' && (
               <div className='mt-4'>
-                <label className='text-sm font-medium text-gray-800' htmlFor='block-reason'>
+                <label
+                  className='text-sm font-medium text-gray-800'
+                  htmlFor='block-reason'
+                >
                   Block reason
                 </label>
                 <textarea
@@ -503,6 +619,78 @@ export default function UserActivityPage() {
                 className='rounded-lg bg-[#414279] px-4 py-2 text-sm font-medium text-white disabled:opacity-50'
               >
                 {updatingId ? 'Updating...' : 'Confirm'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {limitUser && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4'>
+          <div className='w-full max-w-md rounded-xl bg-white p-5 shadow-xl'>
+            <div className='flex items-center gap-3'>
+              <div className='rounded-full bg-[#414279]/10 p-2 text-[#414279]'>
+                <Settings2 size={20} />
+              </div>
+              <div>
+                <h2 className='font-semibold text-gray-900'>
+                  Monthly listing limits
+                </h2>
+                <p className='text-sm text-gray-500'>
+                  {limitUser.firstName} {limitUser.lastName}
+                </p>
+              </div>
+            </div>
+            <div className='mt-4 grid gap-3'>
+              {LISTING_TYPES.map(({key, label}) => (
+                <label key={key} className='text-sm font-medium text-gray-800'>
+                  {label}
+                  <input
+                    type='number'
+                    min={ROLE_DEFAULT_LIMITS[limitUser.systemRole][key]}
+                    max={100}
+                    step={1}
+                    value={limitValues[key]}
+                    disabled={Boolean(updatingId)}
+                    onChange={(event) =>
+                      setLimitValues((current) => ({
+                        ...current,
+                        [key]: event.target.value,
+                      }))
+                    }
+                    className='mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#414279] disabled:bg-gray-100'
+                  />
+                </label>
+              ))}
+            </div>
+            <p className='mt-3 text-xs text-gray-500'>
+              Limits apply per UTC calendar month. Existing usage is not
+              changed.
+            </p>
+            <div className='mt-5 flex flex-wrap justify-end gap-2'>
+              <button
+                type='button'
+                disabled={Boolean(updatingId)}
+                onClick={() => saveListingLimits(true)}
+                className='mr-auto rounded-lg border border-amber-300 px-3 py-2 text-sm text-amber-700 disabled:opacity-50'
+              >
+                Restore defaults
+              </button>
+              <button
+                type='button'
+                disabled={Boolean(updatingId)}
+                onClick={() => setLimitUser(null)}
+                className='rounded-lg border border-gray-300 px-4 py-2 text-sm disabled:opacity-50'
+              >
+                Cancel
+              </button>
+              <button
+                type='button'
+                disabled={Boolean(updatingId)}
+                onClick={() => saveListingLimits()}
+                className='rounded-lg bg-[#414279] px-4 py-2 text-sm font-medium text-white disabled:opacity-50'
+              >
+                {updatingId ? 'Saving...' : 'Save limits'}
               </button>
             </div>
           </div>

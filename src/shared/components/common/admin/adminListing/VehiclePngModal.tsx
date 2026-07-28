@@ -52,6 +52,7 @@ function shouldFetchVehicleDetail(vehicle: Vehicle) {
 function formatPrice(currency?: string, price?: number) {
   const symbol = currency?.toUpperCase() === 'USD' ? '$' : 'ZMW';
   if (!price && price !== 0) return `${symbol} —`;
+
   return `${symbol} ${Number(price).toLocaleString()}`;
 }
 
@@ -84,6 +85,7 @@ function preloadFallback(src: string): Promise<void> {
   return new Promise((resolve) => {
     const timeoutId = setTimeout(() => resolve(), 2000);
     const img = new Image();
+
     img.onload = () => {
       clearTimeout(timeoutId);
       resolve();
@@ -131,6 +133,7 @@ function makeImageUrl(url?: string) {
 
 function getProxyImageUrl(url: string) {
   if (!url.startsWith('http://') && !url.startsWith('https://')) return url;
+
   return `/api/image-proxy?url=${encodeURIComponent(url)}`;
 }
 
@@ -148,6 +151,7 @@ function getVehicleImage(vehicle: Vehicle, useProxy = false) {
   const imageUrl = makeImageUrl(
     coverImage || firstGalleryImage || vehicle.image || FALLBACK_IMAGE,
   );
+
 
   return useProxy ? getProxyImageUrl(imageUrl) : imageUrl;
 }
@@ -319,10 +323,12 @@ export default function VehiclePngModal({
       // Small settle delay — ensures any src-swap triggered by onError has
       // finished re-rendering before we capture
       await new Promise((r) => setTimeout(r, 150));
+      await waitForImages(posterRef.current);
 
       const filename = `${getVehicleTitle(fullVehicle)
         .replace(/\s+/g, '-')
         .toLowerCase()}-cartradez-poster.png`;
+
       const exportPixelRatio =
         window.innerWidth <= 430 ? 1 : Math.min(window.devicePixelRatio || 1, 1.75);
 
@@ -343,7 +349,10 @@ export default function VehiclePngModal({
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(objectUrl);
+
+        // Revoking synchronously can cancel the download in Safari/WebKit.
+        window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+
         return;
       }
 
@@ -400,7 +409,7 @@ export default function VehiclePngModal({
             {/* Visible scaled preview */}
             <div className='mx-auto h-[360px] w-full max-w-[288px] overflow-hidden rounded-2xl border border-border bg-muted shadow-sm min-[390px]:h-[405px] min-[390px]:max-w-[324px] sm:h-[565px] sm:max-w-[454px]'>
               <div className='origin-top-left scale-[0.266] min-[390px]:scale-[0.3] sm:scale-[0.42]'>
-                <PosterDesign vehicle={fullVehicle} useProxyImage />
+                <PosterDesign vehicle={fullVehicle} />
               </div>
             </div>
 
