@@ -5,7 +5,12 @@ import initializeTranslations from '@/i18n';
 import {i18nConfig, i18nNamespaces} from '@/i18nConfig';
 import AuthGuard from '@/shared/components/layout/guards/authGuard';
 import SuspenseWrapper from '@/shared/components/layout/SuspenseWrapper';
-import {generateMetadata} from '@/shared/utils/metadataUtils';
+import type {Metadata} from 'next';
+
+import {
+  generateMetadata as buildMetadata,
+} from '@/shared/utils/metadataUtils';
+
 import {
   ReduxProvider,
   TranslationsProvider,
@@ -64,4 +69,6 @@ export default async function LocaleLayout({
   );
 }
 
-export const metadata = async () => await generateMetadata();
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata('mainPageTitle');
+}

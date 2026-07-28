@@ -20,9 +20,14 @@ import {
   VEHICLE_TRANSMISSION_TYPES,
 } from '@/shared/constants/vehicles';
 
+type VehicleDetailsProps = vehicleDetailsLinkProps & {
+  initialVehicle?: any;
+};
+
 export default function VehicleDetails({
   vehicleId,
-}: vehicleDetailsLinkProps): JSX.Element {
+  initialVehicle,
+}: VehicleDetailsProps): JSX.Element {
   const {useFetchVehicleById} = vehiclesQueries();
 
   const router = useLocaleRouter();
@@ -34,7 +39,7 @@ export default function VehicleDetails({
     params: {vehicleId},
   });
 
-  const vehicle = vehicleDetail?.vehicle;
+  const vehicle = vehicleDetail?.vehicle || initialVehicle;
   const naValue = (value: unknown): string => {
     if (value === null || value === undefined) return 'N/A';
     if (typeof value === 'string' && !value.trim()) return 'N/A';
@@ -58,7 +63,7 @@ export default function VehicleDetails({
       ? `${vehicle.currency === 'usd' ? '$' : 'ZK'} ${vehicle.price.toLocaleString()}`
       : 'N/A';
 
-  if (isPending) return <GlobalLoader />;
+  if (isPending && !initialVehicle) return <GlobalLoader />;
 
   return (
     <Container className='bg-[#F3F4F6] py-6' key={vehicleId}>

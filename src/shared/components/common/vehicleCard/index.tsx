@@ -13,8 +13,11 @@ export default function VehicleCard({ vehicle, className = '' }: VehicleCardProp
   const router = useLocaleRouter();
 
   const handleViewDetails = () => {
-    router.push(USER_ROUTES.vehicleDetails(vehicle._id), { scroll: true });
-  };
+  router.push(
+    USER_ROUTES.vehicleDetails(vehicle.slug || vehicle._id),
+    {scroll: true},
+  );
+};
 
 
   return (

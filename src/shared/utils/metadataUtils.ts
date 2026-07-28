@@ -93,11 +93,11 @@ export const generateMetadata = async (
       ? t(`${pageName}.description`)
       : websiteDescription);
 
-  const finalPath = options.path || seoConfig?.path || '/';
+  const finalPath = options.path || seoConfig?.path;
   const finalImage = options.image || seoConfig?.image || '/images/og/home.jpg';
   const finalKeywords = options.keywords || seoConfig?.keywords || [];
 
-  const fullUrl = makeAbsoluteUrl(finalPath);
+  const fullUrl = finalPath ? makeAbsoluteUrl(finalPath) : undefined;
   const imageUrl = makeAbsoluteUrl(finalImage);
 
   return {
@@ -107,9 +107,11 @@ export const generateMetadata = async (
     description: finalDescription,
     keywords: finalKeywords,
 
-    alternates: {
-      canonical: finalPath,
-    },
+   ...(finalPath && {
+  alternates: {
+    canonical: finalPath,
+  },
+}),
 
     robots: options.noIndex
       ? {
@@ -124,7 +126,7 @@ export const generateMetadata = async (
     openGraph: {
       title: finalTitle,
       description: finalDescription,
-      url: fullUrl,
+      ...(fullUrl && {url: fullUrl}),
       siteName: websiteName,
       type: 'website',
       images: [

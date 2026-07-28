@@ -55,16 +55,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const vehiclePages: MetadataRoute.Sitemap = vehicles
     .map((vehicle: any) => {
-      const vehicleId =
-        vehicle?._id ||
-        vehicle?.id ||
-        vehicle?.vehicleId ||
-        vehicle?.slug;
+      const vehicleIdentifier =
+  vehicle?.slug ||
+  vehicle?._id ||
+  vehicle?.id ||
+  vehicle?.vehicleId;
 
-      if (!vehicleId) return null;
-
+if (!vehicleIdentifier) return null;
       return {
-        url: `${BASE_URL}/vehicles/detail/${vehicleId}`,
+        url: `${BASE_URL}/vehicles/detail/${vehicleIdentifier}`,
         lastModified: vehicle?.updatedAt
           ? new Date(vehicle.updatedAt)
           : new Date(),

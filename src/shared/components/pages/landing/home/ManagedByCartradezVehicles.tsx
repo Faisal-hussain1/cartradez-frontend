@@ -36,7 +36,9 @@ export default function ManagedByCartradezVehicles({
             <div
               key={vehicle._id}
               onClick={() =>
-                router.push(USER_ROUTES.vehicleDetails(vehicle._id), {
+                router.push(
+  USER_ROUTES.vehicleDetails(vehicle.slug || vehicle._id),
+  {
                   scroll: true,
                 })
               }

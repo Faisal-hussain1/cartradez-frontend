@@ -177,6 +177,7 @@ export interface BannerProps {
 export interface Vehicle {
   _id: string;
   make: string;
+  slug?: string;
   model: string;
   year: number;
   currency: string;
@@ -189,6 +190,8 @@ export interface Vehicle {
 export interface CartradezVehicle {
   _id: string;
   make: string;
+  slug?: string;
+
   model: string;
   currency: string;
   price: number;

@@ -26,6 +26,7 @@ import Pagination from '@/shared/components/common/pagination';
 interface Vehicle {
   _id: string;
   id?: string;
+  slug?: string;
   make: string;
   model: string;
   year?: number;
@@ -768,8 +769,7 @@ function VehicleRow({
     type='view'
     icon={<Eye size={14} />}
     label='View listing'
-    onClick={() => onView(item._id)}
-  />
+onClick={() => onView(item.slug || item._id)}  />
 
   <ActionButton
     type='edit'
@@ -1090,8 +1090,7 @@ function MobileVehicleCard({
           type='view'
           icon={<Eye size={14} />}
           label='View'
-          onClick={() => onView(item._id)}
-        />
+onClick={() => onView(item.slug || item._id)}        />
         <ActionButton
           type='edit'
           icon={<Pencil size={14} />}
