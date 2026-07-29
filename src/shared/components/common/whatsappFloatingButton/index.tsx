@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import {MessageCircle} from 'lucide-react';
+import {usePathname} from 'next/navigation';
 import {useState} from 'react';
 import {LANDING_FOOTER_LINKS} from '@/shared/constants/PATHS';
 
@@ -10,6 +11,7 @@ const FALLBACK_WECHAT_URL = 'weixin://dl/chat';
 const FALLBACK_WECHAT_QR_IMAGE = '/images/chat/wechat-qr.jpeg';
 
 export default function WhatsAppFloatingButton() {
+  const pathname = usePathname();
   const [isChatOptionsOpen, setIsChatOptionsOpen] = useState(false);
   const [isWeChatQrOpen, setIsWeChatQrOpen] = useState(false);
   const whatsappNumber =
@@ -21,8 +23,11 @@ export default function WhatsAppFloatingButton() {
   const weChatQrImage =
     process.env.NEXT_PUBLIC_WECHAT_QR_IMAGE || FALLBACK_WECHAT_QR_IMAGE;
   const hasQrImage = Boolean(weChatQrImage);
+  const isHomepage = pathname === '/';
 
-  if (!whatsappNumber && !weChatUrl && !hasQrImage) return null;
+  if (!isHomepage || (!whatsappNumber && !weChatUrl && !hasQrImage)) {
+    return null;
+  }
 
   return (
     <>
