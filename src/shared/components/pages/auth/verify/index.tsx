@@ -21,6 +21,7 @@ const UserVerificationHandler = ({token}: {token: string}) => {
   if (isTokenExpired)
     return (
       <VerificationMessage
+        heading={t('auth.verificationLinkExpired')}
         email={unVerifiedEmail}
         message={t('unverifiedVerfication.message')}
       />
@@ -29,6 +30,7 @@ const UserVerificationHandler = ({token}: {token: string}) => {
   if (tokenError)
     return (
       <VerificationMessage
+        heading={t('auth.verificationFailed')}
         email={unVerifiedEmail}
         message={t('unVerifiedEmail.message')}
       />
@@ -37,6 +39,7 @@ const UserVerificationHandler = ({token}: {token: string}) => {
   if (isUserVerified)
     return (
       <VerificationMessage
+        heading={t('auth.accountVerified')}
         successful={<p>{t('successfulAccountVerified.message')}</p>}
       />
     );
@@ -44,6 +47,7 @@ const UserVerificationHandler = ({token}: {token: string}) => {
   if (isUserVerified === false)
     return (
       <VerificationMessage
+        heading={t('auth.verificationFailed')}
         unsuccessful={<p>{t('unSuccessfulAccountVerified.message')}</p>}
         email={unVerifiedEmail}
       />
