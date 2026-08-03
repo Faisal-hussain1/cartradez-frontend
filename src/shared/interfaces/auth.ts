@@ -48,6 +48,7 @@ export interface VerifyPageProps {
 }
 
 export interface VerificationMessageProps {
+  heading: string;
   message?: string;
   unsuccessful?: ReactNode;
   successful?: ReactNode;

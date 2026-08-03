@@ -6,6 +6,7 @@ import { VerificationMessageProps } from '@/shared/interfaces/auth';
 import { useParams } from 'next/navigation';
 
 const VerificationMessage = ({
+  heading,
   message,
   unsuccessful,
   successful,
@@ -38,9 +39,7 @@ const VerificationMessage = ({
       
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8 text-center space-y-6">
         
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Account Verified!
-        </h2>
+        <h2 className="text-2xl font-semibold text-gray-800">{heading}</h2>
 
         {message && (
           <div className="space-y-4">

@@ -2,6 +2,17 @@ import * as Yup from 'yup';
 import {TranslateFunction} from '@/shared/types/common';
 import {commonFieldsSchema} from './common';
 
+const registrationDetailsFields = (t: TranslateFunction) => ({
+  phoneNumber: Yup.string()
+    .required(t('authValidation.phoneRequired'))
+    .min(12, t('authValidation.phoneMin')),
+  acceptTerms: Yup.boolean().oneOf(
+    [true],
+    'You must accept Terms & Conditions'
+  ),
+  acceptPrivacy: Yup.boolean().oneOf([true], 'You must accept Privacy Policy'),
+});
+
 // Login Schema
 export const loginUserSchema = (t: TranslateFunction) =>
   Yup.object().shape({
@@ -30,14 +41,15 @@ export const registerUserSchema = (t: TranslateFunction) =>
     lastName: Yup.string().required(t('authValidation.lastNameRequired'))
       .min(3, t('authValidation.lastNameMin'))
       .max(255, t('authValidation.lastNameMax')),
-    phoneNumber: Yup.string().required(t('authValidation.phoneRequired'))
-      .min(12, t('authValidation.phoneMin')),
-      acceptTerms: Yup.boolean()
-    .oneOf([true], 'You must accept Terms & Conditions'),
+    ...registrationDetailsFields(t),
+  });
 
-  acceptPrivacy: Yup
-    .boolean()
-    .oneOf([true], 'You must accept Privacy Policy'),
+export const googleSignupDetailsSchema = (t: TranslateFunction) =>
+  Yup.object().shape({
+    ...registrationDetailsFields(t),
+    country: Yup.string().trim().required(t('Country is required')),
+    city: Yup.string().trim().required(t('City is required')),
+    address: Yup.string().trim().required(t('Address is required')),
   });
 
 // Send Reset Password Link Schema
