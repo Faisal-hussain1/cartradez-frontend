@@ -334,6 +334,10 @@ export default function VehiclePngModal({
 
       const blob = await toBlob(posterRef.current, {
         cacheBust: true,
+        // Each vehicle is identified by the `url` query parameter of the
+        // image proxy. Without this, html-to-image strips the query string
+        // from its cache key and can reuse a previously exported car photo.
+        includeQueryParams: true,
         pixelRatio: exportPixelRatio,
         backgroundColor: '#ffffff',
         skipAutoScale: true,
@@ -358,6 +362,7 @@ export default function VehiclePngModal({
 
       const dataUrl = await toPng(posterRef.current, {
         cacheBust: true,
+        includeQueryParams: true,
         pixelRatio: exportPixelRatio,
         backgroundColor: '#ffffff',
         skipAutoScale: true,

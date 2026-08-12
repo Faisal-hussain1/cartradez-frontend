@@ -10,11 +10,13 @@ const configuredBucketHost = process.env.NEXT_PUBLIC_AWS_BUCKET_HOSTNAME
   .replace(/\/.*$/, '')
   .toLowerCase();
 
-// Keep the proxy restricted to CarTradez storage, but support both the
-// global and regional S3 hostnames used by existing vehicle records.
+// Keep the proxy restricted to the image providers used by CarTradez.
+// New uploads are stored in Cloudinary, while older vehicle records can
+// still point at either of the legacy S3 hostnames.
 const ALLOWED_IMAGE_HOSTS = new Set(
   [
     configuredBucketHost,
+    'res.cloudinary.com',
     'cartradez.s3.amazonaws.com',
     'cartradez.s3.eu-north-1.amazonaws.com',
   ].filter((host): host is string => Boolean(host)),
