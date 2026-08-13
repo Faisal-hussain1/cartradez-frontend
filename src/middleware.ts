@@ -84,5 +84,5 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 }
 
 export const config = {
-  matcher: ['/:locale((?!api|_next|static|.*\\..*).*)'],
+  matcher: ['/:locale((?!api|poster-image|_next|static|.*\\..*).*)'],
 };
