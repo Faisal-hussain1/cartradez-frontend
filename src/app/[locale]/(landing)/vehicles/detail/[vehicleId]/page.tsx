@@ -1,4 +1,6 @@
 import type {Metadata} from 'next';
+import {notFound, permanentRedirect} from 'next/navigation';
+
 import {vehicleDetailsPageProps} from '@/shared/interfaces/vehicles';
 import VehicleDetails from '@/shared/components/pages/landing/VehicleDetails';
 
@@ -38,14 +40,13 @@ function getVehicle(response: any) {
 async function fetchVehicle(vehicleId: string) {
   try {
     const res = await fetch(`${API_SERVER_URL}/vehicles/${vehicleId}`, {
-      next: {
-        revalidate: 3600,
-      },
+      cache: 'no-store',
     });
 
     if (!res.ok) return null;
 
     const response = await res.json();
+
     return getVehicle(response);
   } catch {
     return null;
@@ -60,15 +61,11 @@ export async function generateMetadata({
 
   if (!vehicle) {
     return {
-      title: 'Vehicle for Sale in Zambia | CarTradez',
-      description:
-        'View vehicle details, photos, price, specifications and seller information on CarTradez.',
-      alternates: {
-        canonical: `/vehicles/detail/${vehicleId}`,
-      },
+      title: 'Vehicle Not Found | CarTradez',
+      description: 'The requested vehicle listing could not be found.',
       robots: {
-        index: true,
-        follow: true,
+        index: false,
+        follow: false,
       },
     };
   }
@@ -119,7 +116,10 @@ export async function generateMetadata({
     vehicle?.images?.[0]?.url ||
     `${SITE_URL}/images/og/vehicles.jpg`;
 
-  const canonicalPath = `/vehicles/detail/${vehicleId}`;
+  // IMPORTANT:
+  // Canonical hamesha SEO slug URL hoga.
+  const canonicalIdentifier = vehicle.slug || vehicleId;
+  const canonicalPath = `/vehicles/detail/${canonicalIdentifier}`;
   const fullUrl = `${SITE_URL}${canonicalPath}`;
 
   const keywords = [
@@ -142,13 +142,16 @@ export async function generateMetadata({
     title: seoTitle,
     description: metaDescription,
     keywords,
+
     alternates: {
       canonical: canonicalPath,
     },
+
     robots: {
       index: true,
       follow: true,
     },
+
     openGraph: {
       title: seoTitle,
       description: metaDescription,
@@ -164,6 +167,7 @@ export async function generateMetadata({
         },
       ],
     },
+
     twitter: {
       card: 'summary_large_image',
       title: seoTitle,
@@ -178,5 +182,22 @@ export default async function VehicleDetailsPage({
 }: vehicleDetailsPageProps) {
   const {vehicleId} = await params;
 
-  return <VehicleDetails vehicleId={vehicleId} />;
+  const vehicle = await fetchVehicle(vehicleId);
+
+  if (!vehicle) {
+    notFound();
+  }
+
+  // Agar URL mein old MongoDB ID hai aur vehicle ke paas slug hai,
+  // old URL ko permanently SEO URL par redirect karo.
+  if (vehicle.slug && vehicleId !== vehicle.slug) {
+    permanentRedirect(`/vehicles/detail/${vehicle.slug}`);
+  }
+
+  return (
+    <VehicleDetails
+      vehicleId={vehicle.slug || vehicleId}
+      initialVehicle={vehicle}
+    />
+  );
 }
