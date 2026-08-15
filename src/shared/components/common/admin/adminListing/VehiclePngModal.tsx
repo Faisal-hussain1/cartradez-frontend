@@ -4,6 +4,7 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import {Download, X} from 'lucide-react';
 import {toBlob, toPng} from 'html-to-image';
 import {vehiclesQueries} from '@/shared/reactQuery';
+import PosterDesign from './VehiclePosterDesign';
 
 interface Vehicle {
   _id: string;
@@ -156,7 +157,9 @@ function getVehicleImage(vehicle: Vehicle, useProxy = false) {
   return useProxy ? getProxyImageUrl(imageUrl) : imageUrl;
 }
 
-function PosterDesign({
+// Retained temporarily to keep the previous layout easy to compare during rollout.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function LegacyPosterDesign({
   vehicle,
   useProxyImage = false,
 }: {
@@ -334,6 +337,7 @@ export default function VehiclePngModal({
 
       const blob = await toBlob(posterRef.current, {
         cacheBust: true,
+
         // Each vehicle is identified by the `url` query parameter of the
         // image proxy. Without this, html-to-image strips the query string
         // from its cache key and can reuse a previously exported car photo.
