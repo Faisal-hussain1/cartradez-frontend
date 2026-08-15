@@ -1,11 +1,17 @@
-import {generateMetadata} from '@/shared/utils/metadataUtils';
+import type {Metadata} from 'next';
+
 import ActionMessage from '@/shared/components/pages/auth/linkSent';
-import {LinkSentPageProps} from '@/shared/interfaces/auth';
+import {
+  generateMetadata as buildMetadata,
+} from '@/shared/utils/metadataUtils';
 
-export default async function LinkSentPage({params}: LinkSentPageProps) {
-  const {action} = await params;
-
-  return <ActionMessage action={action} />;
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata({
+    pageName: 'linkSent',
+    noIndex: true,
+  });
 }
 
-export const metadata = async () => await generateMetadata('linkSent');
+export default function LinkSentPage() {
+  return <ActionMessage />;
+}
