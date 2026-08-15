@@ -1,8 +1,17 @@
-import AddVehicleForm from '@/shared/components/pages/landing/addVehicle';
-import {generateMetadata} from '@/shared/utils/metadataUtils';
+import type {Metadata} from 'next';
 
-export default function page() {
-  return <AddVehicleForm />;
+import AddVehicleForm from '@/shared/components/pages/landing/addVehicle';
+import {
+  generateMetadata as buildMetadata,
+} from '@/shared/utils/metadataUtils';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata({
+    pageName: 'addVehicles',
+    noIndex: true,
+  });
 }
 
-export const metadata = async () => await generateMetadata('addVehicles');
+export default function Page() {
+  return <AddVehicleForm />;
+}
