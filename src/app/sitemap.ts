@@ -19,21 +19,41 @@ function extractVehicles(response: any): any[] {
 
 async function getVehiclesForSitemap() {
   try {
-    const res = await fetch(
-      `${API_SERVER_URL}/vehicles?pageNo=1&pageLimit=1000&activeOnly=true`,
-      {
-        next: {
-          revalidate: 3600,
-        },
-      },
-    );
+    const allVehicles: any[] = [];
+    const limit = 50;
+    let page = 1;
 
-    if (!res.ok) {
-      return [];
+    while (true) {
+      const res = await fetch(
+        `${API_SERVER_URL}/vehicles?page=${page}&limit=${limit}&activeOnly=true`,
+        {
+          next: {
+            revalidate: 3600,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        break;
+      }
+
+      const response = await res.json();
+      const vehicles = extractVehicles(response);
+
+      if (vehicles.length === 0) {
+        break;
+      }
+
+      allVehicles.push(...vehicles);
+
+      if (vehicles.length < limit) {
+        break;
+      }
+
+      page += 1;
     }
 
-    const response = await res.json();
-    return extractVehicles(response);
+    return allVehicles;
   } catch (error) {
     return [];
   }
