@@ -198,11 +198,17 @@ const AuthGuard = ({ children }: NodeChildrenProps): JSX.Element => {
     currentUser,
   ]);
 
-  if (!mount) {
-    return <GlobalLoader />;
-  }
-
+  // Public SEO pages should render immediately.
+// They should not wait for authentication hydration.
+if (isPublicRoute && !isAuthRoute) {
   return <>{children}</>;
+}
+
+if (!mount) {
+  return <GlobalLoader />;
+}
+
+return <>{children}</>;
 };
 
 export default AuthGuard;
