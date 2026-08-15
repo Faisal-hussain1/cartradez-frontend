@@ -1,8 +1,17 @@
+import type {Metadata} from 'next';
+
 import LoginForm from '@/shared/components/pages/auth/login';
-import {generateMetadata} from '@/shared/utils/metadataUtils';
+import {
+  generateMetadata as buildMetadata,
+} from '@/shared/utils/metadataUtils';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata({
+    pageName: 'login',
+    noIndex: true,
+  });
+}
 
 export default function LoginPage() {
   return <LoginForm />;
 }
-
-export const metadata = async () => await generateMetadata('login');
